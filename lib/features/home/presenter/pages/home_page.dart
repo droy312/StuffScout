@@ -27,39 +27,38 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const SizedBox(width: Nums.horizontalPaddingWidth),
-                SizedBox(
-                  height: _userImageSize + 16,
-                  child: FittedBox(
-                    fit: BoxFit.fitHeight,
-                    child: Text(
-                      'Welcome\nDhritiman',
-                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                    ),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              const SizedBox(width: Nums.horizontalPaddingWidth),
+              SizedBox(
+                height: _userImageSize + 16,
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Text(
+                    'Welcome\nDhritiman',
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
-                const Spacer(),
-                const UserImageWidget(size: _userImageSize),
-                const SizedBox(width: Nums.horizontalPaddingWidth),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Nums.horizontalPaddingWidth),
-              child: SearchBarWidget(
-                context: context,
-                hintText: 'Search Rooms, Containers, Items...',
               ),
+              const Spacer(),
+              const UserImageWidget(size: _userImageSize),
+              const SizedBox(width: Nums.horizontalPaddingWidth),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: Nums.horizontalPaddingWidth),
+            child: SearchBarWidget(
+              context: context,
+              hintText: 'Search Rooms, Containers, Items...',
             ),
-            const SizedBox(height: 12),
-            ListView(
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: ListView(
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
               children: [
@@ -79,8 +78,8 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

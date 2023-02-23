@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
+import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
 
 class HouseCardWidget extends StatelessWidget {
@@ -22,8 +23,7 @@ class HouseCardWidget extends StatelessWidget {
         .25;
     final double containerHeight = imageContainerSize + 2 * _cardPadding;
 
-    return InkWell(
-      overlayColor: MaterialStateProperty.all(Colors.transparent),
+    return UnsplashInkWell(
       onTap: () {
         Navigator.pushNamed(context, HousePage.routeName);
       },

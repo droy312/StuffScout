@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
 
 class RoomCardWidget extends StatelessWidget {
@@ -14,7 +15,7 @@ class RoomCardWidget extends StatelessWidget {
     final Color borderColor =
         Theme.of(context).colorScheme.onBackground.withOpacity(.2);
 
-    return InkWell(
+    return UnsplashInkWell(
       onTap: () {
         Navigator.pushNamed(context, RoomPage.routeName);
       },
