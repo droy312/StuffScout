@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:stuff_scout/features/room/presenter/pages/widgets/container_item_card_widget.dart';
+import 'package:stuff_scout/core/widgets/container_item_card_widget.dart';
+import 'package:stuff_scout/features/container/presenter/pages/container_page.dart';
 
-import '../../../../../core/widgets/unsplash_ink_well.dart';
+import 'unsplash_ink_well.dart';
 
 class ContainerCardWidget extends StatelessWidget {
   const ContainerCardWidget({
@@ -18,7 +19,9 @@ class ContainerCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UnsplashInkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, ContainerPage.routeName);
+      },
       child: ContainerItemCardWidget(
         label: containerName,
         imageUrl: imageUrl,

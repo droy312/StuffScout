@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stuff_scout/features/room/presenter/pages/widgets/container_item_card_widget.dart';
+import 'package:stuff_scout/core/widgets/container_item_card_widget.dart';
 
-import '../../../../../core/widgets/unsplash_ink_well.dart';
+import 'unsplash_ink_well.dart';
 
 class ItemCardWidget extends StatelessWidget {
   const ItemCardWidget({
