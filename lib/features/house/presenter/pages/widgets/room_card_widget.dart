@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
+
+class RoomCardWidget extends StatelessWidget {
+  const RoomCardWidget({
+    Key? key,
+    required this.roomName,
+  }) : super(key: key);
+
+  final String roomName;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color borderColor =
+        Theme.of(context).colorScheme.onBackground.withOpacity(.2);
+
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, RoomPage.routeName);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          border: Border.all(color: borderColor),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              roomName,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onBackground),
+            ),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 20,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

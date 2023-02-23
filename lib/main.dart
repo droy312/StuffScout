@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stuff_scout/core/color_scheme.dart';
-import 'package:stuff_scout/features/home/presenter/pages/home.dart';
+import 'package:stuff_scout/features/home/presenter/pages/home_page.dart';
 import 'package:stuff_scout/route_generator.dart';
 
 void main() {
@@ -10,8 +10,9 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
-  static TextStyle _textStyle(double size, [FontWeight weight = FontWeight.w400]) {
+
+  static TextStyle _textStyle(double size,
+      [FontWeight weight = FontWeight.w400]) {
     return GoogleFonts.poppins(
       fontSize: size,
       fontWeight: weight,
@@ -26,7 +27,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightColorScheme,
-        appBarTheme: const AppBarTheme(elevation: 0),
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          scrolledUnderElevation: 0,
+        ),
         textTheme: TextTheme(
           displayLarge: _textStyle(57),
           displayMedium: _textStyle(45),

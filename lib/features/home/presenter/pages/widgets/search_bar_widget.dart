@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
 
-class SearchBar extends TextField {
-  SearchBar({
+class SearchBarWidget extends TextField {
+  SearchBarWidget({
     Key? key,
     required BuildContext context,
     TextEditingController? controller,

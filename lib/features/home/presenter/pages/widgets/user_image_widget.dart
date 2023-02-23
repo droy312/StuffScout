@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class UserImage extends StatelessWidget {
-  const UserImage({
+class UserImageWidget extends StatelessWidget {
+  const UserImageWidget({
     Key? key,
     this.imageUrl,
     this.size = 80,

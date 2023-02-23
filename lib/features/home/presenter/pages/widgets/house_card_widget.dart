@@ -2,18 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
+import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
 
-class HouseCard extends StatelessWidget {
-  const HouseCard({Key? key}) : super(key: key);
+class HouseCardWidget extends StatelessWidget {
+  const HouseCardWidget({Key? key}) : super(key: key);
 
   static const String _testImageUrl =
       'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   static const String _testHomeDescription =
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitiamolestiaequas vel sint commodi repudiandae consequuntur voluptatum laboru numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium';
 
-
-  static const double _imageContainerBorderRadius =
-      Nums.borderRadius * .75;
+  static const double _imageContainerBorderRadius = Nums.borderRadius * .75;
   static const double _cardPadding = 12;
 
   @override
@@ -23,8 +22,11 @@ class HouseCard extends StatelessWidget {
         .25;
     final double containerHeight = imageContainerSize + 2 * _cardPadding;
 
-    return GestureDetector(
-      onTap: () {},
+    return InkWell(
+      overlayColor: MaterialStateProperty.all(Colors.transparent),
+      onTap: () {
+        Navigator.pushNamed(context, HousePage.routeName);
+      },
       child: Container(
         height: containerHeight,
         decoration: BoxDecoration(

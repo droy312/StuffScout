@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:stuff_scout/features/home/presenter/pages/home.dart';
+import 'package:stuff_scout/features/home/presenter/pages/home_page.dart';
+import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
+import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
 
 class RouteGenerator {
   static Route generateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case HomePage.routeName:
         return MaterialPageRoute(builder: (_) => const HomePage());
+      case HousePage.routeName:
+        return MaterialPageRoute(builder: (_) => const HousePage());
+      case RoomPage.routeName:
+        return MaterialPageRoute(builder: (_) => const RoomPage());
       default:
         return MaterialPageRoute(
             builder: (_) => _NoRoutePage(settings: settings));
