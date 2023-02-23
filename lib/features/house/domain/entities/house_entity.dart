@@ -1,7 +1,7 @@
-import 'package:stuff_scout/features/room/data/models/room_model.dart';
+import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
-class HouseModel {
-  const HouseModel({
+class HouseEntity {
+  const HouseEntity({
     required this.id,
     required this.name,
     this.imageUrl,
@@ -12,6 +12,6 @@ class HouseModel {
   final String id;
   final String name;
   final String? imageUrl;
-  final List<RoomModel> roomList;
+  final List<RoomEntity> roomList;
   final String? mapLocationLink;
 }

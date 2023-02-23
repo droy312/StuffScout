@@ -1,9 +1,9 @@
 import 'package:stuff_scout/core/models/location_model.dart';
 
-import '../../../item/data/models/item_model.dart';
+import '../../../item/domain/entities/item_entity.dart';
 
-class ContainerModel {
-  const ContainerModel({
+class ContainerEntity {
+  const ContainerEntity({
     required this.id,
     required this.name,
     required this.locationModel,
@@ -16,6 +16,6 @@ class ContainerModel {
   final String name;
   final LocationModel locationModel;
   final String? imageUrl;
-  final List<ContainerModel> containerList;
-  final List<ItemModel> itemList;
+  final List<ContainerEntity> containerList;
+  final List<ItemEntity> itemList;
 }
