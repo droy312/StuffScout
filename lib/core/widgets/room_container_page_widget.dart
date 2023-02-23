@@ -3,6 +3,8 @@ import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/widgets/container_card_widget.dart';
 import 'package:stuff_scout/core/widgets/item_card_widget.dart';
 
+import 'back_search_notification_app_bar.dart';
+
 class RoomContainerPageWidget extends StatelessWidget {
   const RoomContainerPageWidget({
     Key? key,
@@ -34,40 +36,7 @@ class RoomContainerPageWidget extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          shadowColor: Colors.transparent,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Theme.of(context).colorScheme.onPrimary,
-              size: Nums.iconSize,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                color: Theme.of(context).colorScheme.onPrimary,
-                size: Nums.iconSize,
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.notifications,
-                color: Theme.of(context).colorScheme.onPrimary,
-                size: Nums.iconSize,
-              ),
-            ),
-          ],
-        ),
+        appBar: BackSearchNotificationAppBar(context: context),
         body: Column(
           children: [
             Container(

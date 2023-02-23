@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stuff_scout/features/container/presenter/pages/container_page.dart';
 import 'package:stuff_scout/features/home/presenter/pages/home_page.dart';
 import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
+import 'package:stuff_scout/features/item/presenter/pages/item_page.dart';
 import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
 
 class RouteGenerator {
@@ -15,6 +16,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const RoomPage());
       case ContainerPage.routeName:
         return MaterialPageRoute(builder: (_) => const ContainerPage());
+      case ItemPage.routeName:
+        return MaterialPageRoute(builder: (_) => const ItemPage());
       default:
         return MaterialPageRoute(
             builder: (_) => _NoRoutePage(settings: settings));
