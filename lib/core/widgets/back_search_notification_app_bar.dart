@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../nums.dart';
+import 'package:stuff_scout/core/widgets/back_icon_button.dart';
+import 'package:stuff_scout/core/widgets/notification_icon_button.dart';
+import 'package:stuff_scout/core/widgets/search_icon_button.dart';
 
 class BackSearchNotificationAppBar extends AppBar {
   BackSearchNotificationAppBar({
@@ -12,32 +13,18 @@ class BackSearchNotificationAppBar extends AppBar {
           scrolledUnderElevation: 0,
           shadowColor: Colors.transparent,
           backgroundColor: Theme.of(context).colorScheme.primary,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Theme.of(context).colorScheme.onPrimary,
-              size: Nums.iconSize,
-            ),
+          leading: BackIconButton(
+            context: context,
+            iconColor: Theme.of(context).colorScheme.onPrimary,
           ),
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                color: Theme.of(context).colorScheme.onPrimary,
-                size: Nums.iconSize,
-              ),
+            SearchIconButton(
+              context: context,
+              iconColor: Theme.of(context).colorScheme.onPrimary,
             ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.notifications,
-                color: Theme.of(context).colorScheme.onPrimary,
-                size: Nums.iconSize,
-              ),
+            NotificationIconButton(
+              context: context,
+              iconColor: Theme.of(context).colorScheme.onPrimary,
             ),
           ],
         );

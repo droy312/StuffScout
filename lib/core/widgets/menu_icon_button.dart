@@ -7,12 +7,13 @@ class MenuIconButton extends IconButton {
     required BuildContext context,
     Function()? onPressed,
     double size = Nums.iconSize,
+    Color? iconColor,
   }) : super(
           key: key,
           onPressed: onPressed,
           icon: Icon(
             Icons.menu,
-            color: Theme.of(context).colorScheme.primary,
+            color: iconColor ?? Theme.of(context).colorScheme.primary,
             size: size,
           ),
         );

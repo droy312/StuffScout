@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/widgets/back_search_notification_app_bar.dart';
+import 'package:stuff_scout/features/house/domain/entities/house_entity.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/room_card_widget.dart';
 
+import '../../../../core/widgets/add_floating_action_button.dart';
+
 class HousePage extends StatelessWidget {
-  const HousePage({Key? key}) : super(key: key);
+  const HousePage({
+    Key? key,
+    required this.housePageArguments,
+  }) : super(key: key);
 
   static const String routeName = '/house';
 
   static const double _titleContainerTopAndBottomPadding = 16;
-
-  static const String _testHouseDescription =
-      'This is the description of my house. My house is located in Haldia, West Bengal, India. It is a industrial town with many chemical, oil and sugar industries.';
+  
+  final HousePageArguments housePageArguments;
 
   @override
   Widget build(BuildContext context) {
@@ -29,23 +34,24 @@ class HousePage extends StatelessWidget {
               children: [
                 const SizedBox(height: _titleContainerTopAndBottomPadding),
                 Text(
-                  'House Name',
+                  housePageArguments.houseEntity.name,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  _testHouseDescription,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onPrimary
-                            .withOpacity(.6),
-                      ),
-                ),
+                if (housePageArguments.houseEntity.description != null)
+                  Text(
+                    housePageArguments.houseEntity.description!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimary
+                          .withOpacity(.6),
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 Text(
                   'Location',
@@ -86,11 +92,16 @@ class HousePage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: AddFloatingActionButton(
+        context: context,
         onPressed: () {},
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimaryContainer),
       ),
     );
   }
+}
+
+class HousePageArguments {
+  const HousePageArguments({required this.houseEntity});
+
+  final HouseEntity houseEntity;
 }

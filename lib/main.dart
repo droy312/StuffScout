@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stuff_scout/core/color_scheme.dart';
+import 'package:stuff_scout/core/service_locator.dart';
 import 'package:stuff_scout/features/home/presenter/pages/home_page.dart';
 import 'package:stuff_scout/route_generator.dart';
 
 void main() {
+  setUpServices();
   runApp(const MyApp());
 }
 

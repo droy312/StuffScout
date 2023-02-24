@@ -16,6 +16,7 @@ class SearchBarWidget extends TextField {
           onChanged: onChanged,
           obscureText: obscureText,
           cursorColor: Theme.of(context).colorScheme.primary,
+          cursorRadius: const Radius.circular(10),
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
@@ -38,7 +39,7 @@ class SearchBarWidget extends TextField {
 
   static OutlineInputBorder _border(BuildContext context, double width) {
     return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(Radius.circular(Nums.borderRadius)),
+      borderRadius: const BorderRadius.all(Radius.circular(Nums.textFieldElevatedButtonBorderRadius)),
       borderSide: BorderSide(
         width: width,
         color: Theme.of(context).colorScheme.primary,

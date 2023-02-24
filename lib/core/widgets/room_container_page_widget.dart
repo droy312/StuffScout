@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
+import 'package:stuff_scout/core/widgets/add_floating_action_button.dart';
 import 'package:stuff_scout/core/widgets/container_card_widget.dart';
 import 'package:stuff_scout/core/widgets/item_card_widget.dart';
 
@@ -104,11 +105,9 @@ class RoomContainerPageWidget extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: AddFloatingActionButton(
+          context: context,
           onPressed: () {},
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          child: Icon(Icons.add,
-              color: Theme.of(context).colorScheme.onPrimaryContainer),
         ),
       ),
     );

@@ -7,12 +7,13 @@ class NotificationIconButton extends IconButton {
     Function()? onPressed,
     required BuildContext context,
     double size = Nums.iconSize,
+    Color? iconColor,
   }) : super(
           key: key,
           onPressed: onPressed,
           icon: Icon(
             Icons.notifications_rounded,
-            color: Theme.of(context).colorScheme.primary,
+            color: iconColor ?? Theme.of(context).colorScheme.primary,
             size: size,
           ),
         );

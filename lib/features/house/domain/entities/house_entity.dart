@@ -4,6 +4,7 @@ class HouseEntity {
   const HouseEntity({
     required this.id,
     required this.name,
+    this.description,
     this.imageUrl,
     this.roomList = const [],
     this.mapLocationLink,
@@ -11,6 +12,7 @@ class HouseEntity {
 
   final String id;
   final String name;
+  final String? description;
   final String? imageUrl;
   final List<RoomEntity> roomList;
   final String? mapLocationLink;
