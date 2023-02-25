@@ -11,27 +11,28 @@ import '../../../../core/service_locator.dart';
 import '../../../../core/widgets/back_icon_button.dart';
 import '../../../house/domain/entities/house_entity.dart';
 
-class AddHousePage extends StatefulWidget {
-  const AddHousePage({
+class AddHousePageArguments {
+  const AddHousePageArguments({required this.homeCubit});
+
+  final HomeCubit homeCubit;
+}
+
+class AddHousePage extends StatelessWidget {
+  AddHousePage({
     Key? key,
     required this.addHousePageArguments,
   }) : super(key: key);
 
   static const String routeName = '/add_house';
 
-  final AddHousePageArguments addHousePageArguments;
-
-  @override
-  State<AddHousePage> createState() => _AddHousePageState();
-}
-
-class _AddHousePageState extends State<AddHousePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   final IdService _idService = sl<IdService>();
 
   final AddHouseCubit _addHouseCubit = AddHouseCubit();
+
+  final AddHousePageArguments addHousePageArguments;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +106,7 @@ class _AddHousePageState extends State<AddHousePage> {
                                         ? _descriptionController.text
                                         : null,
                               );
-                              widget.addHousePageArguments.homeCubit
+                              addHousePageArguments.homeCubit
                                   .addHouse(houseEntity);
                               Navigator.pop(context);
                             }
@@ -131,10 +132,4 @@ class _AddHousePageState extends State<AddHousePage> {
       ),
     );
   }
-}
-
-class AddHousePageArguments {
-  const AddHousePageArguments({required this.homeCubit});
-
-  final HomeCubit homeCubit;
 }

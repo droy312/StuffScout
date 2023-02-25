@@ -7,12 +7,14 @@ import 'back_search_notification_app_bar.dart';
 class RoomContainerPageWidget extends StatelessWidget {
   const RoomContainerPageWidget({
     Key? key,
-    required this.roomContainerPageWidgetArguments,
+    required this.title,
+    required this.locationModel,
   }) : super(key: key);
 
   static const double _titleContainerTopAndBottomPadding = 16;
 
-  final RoomContainerPageWidgetArguments roomContainerPageWidgetArguments;
+  final String title;
+  final LocationModel locationModel;
 
   Widget _listOfWidgetsInGridView(List<Widget> list) {
     return GridView.count(
@@ -48,7 +50,7 @@ class RoomContainerPageWidget extends StatelessWidget {
 
                   // Title
                   Text(
-                    roomContainerPageWidgetArguments.title,
+                    title,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
@@ -102,14 +104,4 @@ class RoomContainerPageWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-class RoomContainerPageWidgetArguments {
-  const RoomContainerPageWidgetArguments({
-    required this.title,
-    required this.locationModel,
-  });
-
-  final String title;
-  final LocationModel locationModel;
 }

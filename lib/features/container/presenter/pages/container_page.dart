@@ -21,10 +21,8 @@ class ContainerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RoomContainerPageWidget(
-      roomContainerPageWidgetArguments: RoomContainerPageWidgetArguments(
-        title: containerPageArguments.containerEntity.name,
-        locationModel: containerPageArguments.containerEntity.locationModel,
-      ),
+      title: containerPageArguments.containerEntity.name,
+      locationModel: containerPageArguments.containerEntity.locationModel,
     );
   }
 }

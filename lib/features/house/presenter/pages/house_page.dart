@@ -95,9 +95,7 @@ class HousePage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                                 horizontal: Nums.horizontalPaddingWidth)
                             .copyWith(bottom: 16),
-                        child: RoomCardWidget(
-                            roomCardWidgetArguments: RoomCardWidgetArguments(
-                                roomEntity: roomEntity)),
+                        child: RoomCardWidget(roomEntity: roomEntity),
                       );
                     },
                   );
