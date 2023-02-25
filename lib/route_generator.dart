@@ -6,6 +6,8 @@ import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
 import 'package:stuff_scout/features/item/presenter/pages/item_page.dart';
 import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
 
+import 'features/house/presenter/pages/add_room.dart';
+
 class RouteGenerator {
   static Route generateRoutes(RouteSettings settings) {
     switch (settings.name) {
@@ -16,9 +18,14 @@ class RouteGenerator {
             builder: (_) => HousePage(
                 housePageArguments: settings.arguments as HousePageArguments));
       case RoomPage.routeName:
-        return MaterialPageRoute(builder: (_) => const RoomPage());
+        return MaterialPageRoute(
+            builder: (_) => RoomPage(
+                roomPageArguments: settings.arguments as RoomPageArguments));
       case ContainerPage.routeName:
-        return MaterialPageRoute(builder: (_) => const ContainerPage());
+        return MaterialPageRoute(
+            builder: (_) => ContainerPage(
+                containerPageArguments:
+                    settings.arguments as ContainerPageArguments));
       case ItemPage.routeName:
         return MaterialPageRoute(builder: (_) => const ItemPage());
       case AddHousePage.routeName:
@@ -26,6 +33,11 @@ class RouteGenerator {
             builder: (_) => AddHousePage(
                 addHousePageArguments:
                     settings.arguments as AddHousePageArguments));
+      case AddRoomPage.routeName:
+        return MaterialPageRoute(
+            builder: (_) => AddRoomPage(
+                addRoomPageArguments:
+                    settings.arguments as AddRoomPageArguments));
       default:
         return MaterialPageRoute(
             builder: (_) => _NoRoutePage(settings: settings));

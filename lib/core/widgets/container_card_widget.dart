@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/widgets/container_item_card_widget.dart';
+import 'package:stuff_scout/features/container/domain/entities/container_entity.dart';
 import 'package:stuff_scout/features/container/presenter/pages/container_page.dart';
 
 import 'unsplash_ink_well.dart';
@@ -8,12 +9,12 @@ class ContainerCardWidget extends StatelessWidget {
   const ContainerCardWidget({
     Key? key,
     this.size = 40,
-    required this.containerName,
+    required this.containerEntity,
     this.imageUrl,
   }) : super(key: key);
 
   final double size;
-  final String containerName;
+  final ContainerEntity containerEntity;
   final String? imageUrl;
 
   @override
@@ -23,7 +24,7 @@ class ContainerCardWidget extends StatelessWidget {
         Navigator.pushNamed(context, ContainerPage.routeName);
       },
       child: ContainerItemCardWidget(
-        label: containerName,
+        label: containerEntity.name,
         imageUrl: imageUrl,
       ),
     );

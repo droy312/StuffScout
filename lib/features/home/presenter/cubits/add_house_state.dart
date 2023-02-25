@@ -2,7 +2,7 @@ part of 'add_house_cubit.dart';
 
 @immutable
 class AddHouseState {
-  const AddHouseState({required this.name});
+  const AddHouseState({this.name});
 
-  final String name;
+  final String? name;
 }

@@ -1,42 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
-import 'package:stuff_scout/features/home/presenter/cubits/add_house_cubit.dart';
-import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
+import 'package:stuff_scout/features/house/presenter/cubits/add_room_cubit.dart';
+import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
+import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
 import '../../../../core/service_locator.dart';
 import '../../../../core/widgets/back_icon_button.dart';
 import '../../../house/domain/entities/house_entity.dart';
 
-class AddHousePage extends StatefulWidget {
-  const AddHousePage({
+class AddRoomPage extends StatelessWidget {
+  AddRoomPage({
     Key? key,
-    required this.addHousePageArguments,
+    required this.addRoomPageArguments,
   }) : super(key: key);
 
-  static const String routeName = '/add_house';
+  static const String routeName = '/add_room';
 
-  final AddHousePageArguments addHousePageArguments;
+  final AddRoomPageArguments addRoomPageArguments;
 
-  @override
-  State<AddHousePage> createState() => _AddHousePageState();
-}
-
-class _AddHousePageState extends State<AddHousePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   final IdService _idService = sl<IdService>();
 
-  final AddHouseCubit _addHouseCubit = AddHouseCubit();
+  final AddRoomCubit _addRoomCubit = AddRoomCubit();
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AddHouseCubit>.value(
-      value: _addHouseCubit,
+    return BlocProvider<AddRoomCubit>.value(
+      value: _addRoomCubit,
       child: Scaffold(
         appBar: AppBar(
           leading: BackIconButton(
@@ -44,7 +41,7 @@ class _AddHousePageState extends State<AddHousePage> {
             iconColor: Theme.of(context).colorScheme.primary,
           ),
           title: Text(
-            'Add House',
+            'Add Room',
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
@@ -65,9 +62,9 @@ class _AddHousePageState extends State<AddHousePage> {
                   controller: _nameController,
                   context: context,
                   onChanged: (name) {
-                    _addHouseCubit.addHouseName(name);
+                    _addRoomCubit.addRoomName(name);
                   },
-                  hintText: 'Enter house name',
+                  hintText: 'Enter room name',
                 ),
                 const SizedBox(height: 4),
                 Padding(
@@ -85,10 +82,10 @@ class _AddHousePageState extends State<AddHousePage> {
                 InputTextField(
                   controller: _descriptionController,
                   context: context,
-                  hintText: 'Enter house description',
+                  hintText: 'Enter room description',
                 ),
                 const SizedBox(height: 32),
-                BlocBuilder<AddHouseCubit, AddHouseState>(
+                BlocBuilder<AddRoomCubit, AddRoomState>(
                   builder: (context, state) {
                     final bool isAddButtonEnabled = state.name != null;
 
@@ -97,22 +94,26 @@ class _AddHousePageState extends State<AddHousePage> {
                       context: context,
                       onPressed: isAddButtonEnabled
                           ? () {
-                              final HouseEntity houseEntity = HouseEntity(
+                              final RoomEntity roomEntity = RoomEntity(
                                 id: _idService.generateRandomId(),
                                 name: _nameController.text,
                                 description:
                                     _descriptionController.text.isNotEmpty
                                         ? _descriptionController.text
                                         : null,
+                                locationModel: LocationModel(
+                                  id: _idService.generateRandomId(),
+                                  house: addRoomPageArguments.houseEntity.name,
+                                ),
                               );
-                              widget.addHousePageArguments.homeCubit
-                                  .addHouse(houseEntity);
+                              addRoomPageArguments.houseCubit
+                                  .addRoom(roomEntity);
                               Navigator.pop(context);
                             }
                           : null,
                       child: Center(
                         child: Text(
-                          'Add House',
+                          'Add Room',
                           style: Theme.of(context)
                               .textTheme
                               .labelLarge!
@@ -133,8 +134,12 @@ class _AddHousePageState extends State<AddHousePage> {
   }
 }
 
-class AddHousePageArguments {
-  const AddHousePageArguments({required this.homeCubit});
+class AddRoomPageArguments {
+  const AddRoomPageArguments({
+    required this.houseEntity,
+    required this.houseCubit,
+  });
 
-  final HomeCubit homeCubit;
+  final HouseEntity houseEntity;
+  final HouseCubit houseCubit;
 }

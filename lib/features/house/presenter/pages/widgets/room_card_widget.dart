@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
+import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
 
 class RoomCardWidget extends StatelessWidget {
   const RoomCardWidget({
     Key? key,
-    required this.roomName,
+    required this.roomCardWidgetArguments,
   }) : super(key: key);
 
-  final String roomName;
+  final RoomCardWidgetArguments roomCardWidgetArguments;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,12 @@ class RoomCardWidget extends StatelessWidget {
 
     return UnsplashInkWell(
       onTap: () {
-        Navigator.pushNamed(context, RoomPage.routeName);
+        Navigator.pushNamed(
+          context,
+          RoomPage.routeName,
+          arguments:
+              RoomPageArguments(roomEntity: roomCardWidgetArguments.roomEntity),
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -30,7 +36,7 @@ class RoomCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              roomName,
+              roomCardWidgetArguments.roomEntity.name,
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
@@ -46,4 +52,10 @@ class RoomCardWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class RoomCardWidgetArguments {
+  const RoomCardWidgetArguments({required this.roomEntity});
+
+  final RoomEntity roomEntity;
 }

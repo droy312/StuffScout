@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/widgets/add_floating_action_button.dart';
-import 'package:stuff_scout/core/widgets/container_card_widget.dart';
-import 'package:stuff_scout/core/widgets/item_card_widget.dart';
-
 import 'back_search_notification_app_bar.dart';
 
 class RoomContainerPageWidget extends StatelessWidget {
   const RoomContainerPageWidget({
     Key? key,
-    required this.title,
-    required this.location,
+    required this.roomContainerPageWidgetArguments,
   }) : super(key: key);
 
   static const double _titleContainerTopAndBottomPadding = 16;
 
-  final String title;
-  final String location;
+  final RoomContainerPageWidgetArguments roomContainerPageWidgetArguments;
 
   Widget _listOfWidgetsInGridView(List<Widget> list) {
     return GridView.count(
@@ -49,21 +45,25 @@ class RoomContainerPageWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: _titleContainerTopAndBottomPadding),
+
+                  // Title
                   Text(
-                    title,
+                    roomContainerPageWidgetArguments.title,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                   ),
                   const SizedBox(height: 16),
+
+                  // Location
                   Text(
-                    'Location',
+                    'Location', // TODO: Get location from service
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    location,
+                    'Get location from service',
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context)
                             .colorScheme
@@ -85,21 +85,11 @@ class RoomContainerPageWidget extends StatelessWidget {
               ],
             ),
             Expanded(
+              // Containers and Items
               child: TabBarView(
                 children: [
-                  _listOfWidgetsInGridView(List.generate(
-                    10,
-                    (index) {
-                      return const ContainerCardWidget(
-                          containerName: 'Container Name');
-                    },
-                  )),
-                  _listOfWidgetsInGridView(List.generate(
-                    10,
-                    (index) {
-                      return const ItemCardWidget(itemName: 'Item Name');
-                    },
-                  )),
+                  _listOfWidgetsInGridView([]),
+                  _listOfWidgetsInGridView([]),
                 ],
               ),
             ),
@@ -112,4 +102,14 @@ class RoomContainerPageWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class RoomContainerPageWidgetArguments {
+  const RoomContainerPageWidgetArguments({
+    required this.title,
+    required this.locationModel,
+  });
+
+  final String title;
+  final LocationModel locationModel;
 }
