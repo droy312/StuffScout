@@ -59,13 +59,13 @@ class RoomContainerPageWidget extends StatelessWidget {
 
                   // Location
                   Text(
-                    'Location', // TODO: Get location from service
+                    'Location',
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Get location from service',
+                    locationModel.toLocationString(),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context)
                             .colorScheme
