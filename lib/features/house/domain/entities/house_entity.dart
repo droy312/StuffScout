@@ -1,7 +1,7 @@
 import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
 class HouseEntity {
-  const HouseEntity({
+  HouseEntity({
     required this.id,
     required this.name,
     this.description,
@@ -14,6 +14,15 @@ class HouseEntity {
   final String name;
   final String? description;
   final String? imageUrl;
-  final List<RoomEntity> roomList;
+  List<RoomEntity> roomList;
   final String? mapLocationLink;
+
+  void addRoom(RoomEntity roomEntity) {
+    List<RoomEntity> newRoomList = [];
+    for (final roomEntity in roomList) {
+      newRoomList.add(roomEntity);
+    }
+    newRoomList.add(roomEntity);
+    roomList = newRoomList;
+  }
 }

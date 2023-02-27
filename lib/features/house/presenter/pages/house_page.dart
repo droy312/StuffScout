@@ -17,13 +17,15 @@ class HousePage extends StatelessWidget {
   HousePage({
     Key? key,
     required this.housePageArguments,
-  }) : super(key: key);
+  }) : super(key: key) {
+    _houseCubit = HouseCubit(houseEntity: housePageArguments.houseEntity);
+  }
 
   static const String routeName = '/house';
 
   static const double _titleContainerTopAndBottomPadding = 16;
 
-  final HouseCubit _houseCubit = HouseCubit();
+  late final HouseCubit _houseCubit;
 
   final IdService _idService = sl<IdService>();
 
@@ -88,14 +90,14 @@ class HousePage extends StatelessWidget {
                 builder: (context, state) {
                   return ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: state.roomList.length + 1,
+                    itemCount: state.houseEntity.roomList.length + 1,
                     // 1 extra for the top SizedBox
                     itemBuilder: (_, index) {
                       if (index == 0) {
                         return const SizedBox(height: 16);
                       }
                       index--;
-                      final RoomEntity roomEntity = state.roomList[index];
+                      final RoomEntity roomEntity = state.houseEntity.roomList[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                                 horizontal: Nums.horizontalPaddingWidth)
@@ -112,7 +114,7 @@ class HousePage extends StatelessWidget {
         floatingActionButton: AddFloatingActionButton(
           context: context,
           onPressed: () {
-            final LocationModel locationModel = LocationModel(
+            final LocationModel roomLocationModel = LocationModel(
               id: _idService.generateRandomId(),
               house: housePageArguments.houseEntity.name,
             );
@@ -121,8 +123,10 @@ class HousePage extends StatelessWidget {
               context,
               AddRoomPage.routeName,
               arguments: AddRoomPageArguments(
-                houseCubit: _houseCubit,
-                locationModel: locationModel,
+                onAddRoomPressed: (roomEntity) {
+                  _houseCubit.addRoom(roomEntity);
+                },
+                roomLocationModel: roomLocationModel,
               ),
             );
           },

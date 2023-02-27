@@ -8,7 +8,7 @@ part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit()
-      : super(const HomeState(houseList: [
+      : super(HomeState(houseList: [
           HouseEntity(
             id: '123',
             name: 'Dummy House',

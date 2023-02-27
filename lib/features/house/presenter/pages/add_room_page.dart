@@ -6,7 +6,6 @@ import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/add_room_cubit.dart';
-import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
 import '../../../../core/service_locator.dart';
@@ -14,14 +13,12 @@ import '../../../../core/widgets/back_icon_button.dart';
 
 class AddRoomPageArguments {
   const AddRoomPageArguments({
-    /// Location Model is the location of the Room that is being added
-    /// in the House
-    required this.locationModel,
-    required this.houseCubit,
+    required this.onAddRoomPressed,
+    required this.roomLocationModel,
   });
 
-  final LocationModel locationModel;
-  final HouseCubit houseCubit;
+  final Function(RoomEntity) onAddRoomPressed;
+  final LocationModel roomLocationModel;
 }
 
 class AddRoomPage extends StatelessWidget {
@@ -112,10 +109,9 @@ class AddRoomPage extends StatelessWidget {
                                     _descriptionController.text.isNotEmpty
                                         ? _descriptionController.text
                                         : null,
-                                locationModel: addRoomPageArguments.locationModel,
+                                locationModel: addRoomPageArguments.roomLocationModel,
                               );
-                              addRoomPageArguments.houseCubit
-                                  .addRoom(roomEntity);
+                              addRoomPageArguments.onAddRoomPressed(roomEntity);
                               Navigator.pop(context);
                             }
                           : null,

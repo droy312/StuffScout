@@ -1,4 +1,5 @@
 import 'package:stuff_scout/core/models/location_model.dart';
+import 'package:stuff_scout/features/item/domain/entities/item_entity.dart';
 
 import '../../../container/domain/entities/container_entity.dart';
 
@@ -10,6 +11,7 @@ class RoomEntity {
     required this.locationModel,
     this.imageUrl,
     this.containerList = const [],
+    this.itemList = const [],
   });
 
   final String id;
@@ -18,4 +20,5 @@ class RoomEntity {
   final LocationModel locationModel;
   final String? imageUrl;
   final List<ContainerEntity> containerList;
+  final List<ItemEntity> itemList;
 }

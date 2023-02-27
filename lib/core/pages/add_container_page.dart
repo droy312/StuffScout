@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stuff_scout/core/cubits/add_container_cubit.dart';
 import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
 import 'package:stuff_scout/features/container/domain/entities/container_entity.dart';
-import 'package:stuff_scout/features/house/presenter/cubits/add_room_cubit.dart';
-import 'package:stuff_scout/features/room/presenter/cubits/room_cubit.dart';
 
-import '../../../../core/service_locator.dart';
-import '../../../../core/widgets/back_icon_button.dart';
+import '../service_locator.dart';
+import '../widgets/back_icon_button.dart';
 
 class AddContainerPageArguments {
   const AddContainerPageArguments({
-    required this.roomCubit,
-    required this.locationModel,
+    required this.onAddContainerPressed,
+    required this.containerLocationModel,
   });
 
-  final RoomCubit roomCubit;
-  final LocationModel locationModel;
+  final Function(ContainerEntity) onAddContainerPressed;
+  final LocationModel containerLocationModel;
 }
 
 class AddContainerPage extends StatelessWidget {
@@ -30,19 +29,19 @@ class AddContainerPage extends StatelessWidget {
 
   static const String routeName = '/add_container';
 
-  final AddContainerPageArguments addContainerPageArguments;
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   final IdService _idService = sl<IdService>();
 
-  final AddRoomCubit _addRoomCubit = AddRoomCubit();
+  final AddContainerCubit _addContainerCubit = AddContainerCubit();
+
+  final AddContainerPageArguments addContainerPageArguments;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AddRoomCubit>.value(
-      value: _addRoomCubit,
+    return BlocProvider<AddContainerCubit>.value(
+      value: _addContainerCubit,
       child: Scaffold(
         appBar: AppBar(
           leading: BackIconButton(
@@ -71,7 +70,7 @@ class AddContainerPage extends StatelessWidget {
                   controller: _nameController,
                   context: context,
                   onChanged: (name) {
-                    _addRoomCubit.addRoomName(name);
+                    _addContainerCubit.addContainerName(name);
                   },
                   hintText: 'Enter container name',
                 ),
@@ -94,7 +93,7 @@ class AddContainerPage extends StatelessWidget {
                   hintText: 'Enter container description',
                 ),
                 const SizedBox(height: 32),
-                BlocBuilder<AddRoomCubit, AddRoomState>(
+                BlocBuilder<AddContainerCubit, AddContainerState>(
                   builder: (context, state) {
                     final bool isAddButtonEnabled = state.name != null;
 
@@ -110,10 +109,9 @@ class AddContainerPage extends StatelessWidget {
                           _descriptionController.text.isNotEmpty
                               ? _descriptionController.text
                               : null,
-                          locationModel: addContainerPageArguments.locationModel,
+                          locationModel: addContainerPageArguments.containerLocationModel,
                         );
-                        addContainerPageArguments.roomCubit
-                            .addContainer(containerEntity);
+                        addContainerPageArguments.onAddContainerPressed(containerEntity);
                         Navigator.pop(context);
                       }
                           : null,

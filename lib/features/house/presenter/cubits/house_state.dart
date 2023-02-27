@@ -2,7 +2,7 @@ part of 'house_cubit.dart';
 
 @immutable
 class HouseState {
-  const HouseState({this.roomList = const []});
+  const HouseState({required this.houseEntity});
 
-  final List<RoomEntity> roomList;
+  final HouseEntity houseEntity;
 }
