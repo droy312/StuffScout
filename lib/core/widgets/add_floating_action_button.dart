@@ -8,6 +8,7 @@ class AddFloatingActionButton extends FloatingActionButton {
   }) : super(
           key: key,
           onPressed: onPressed,
+          elevation: 4,
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           child: Icon(Icons.add,
               color: Theme.of(context).colorScheme.onPrimaryContainer),

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
+import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/back_search_notification_app_bar.dart';
 import 'package:stuff_scout/features/house/domain/entities/house_entity.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/room_card_widget.dart';
 
+import '../../../../core/service_locator.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../room/domain/entities/room_entity.dart';
-import 'add_room.dart';
+import 'add_room_page.dart';
 
 class HousePage extends StatelessWidget {
   HousePage({
@@ -20,9 +23,11 @@ class HousePage extends StatelessWidget {
 
   static const double _titleContainerTopAndBottomPadding = 16;
 
-  final HousePageArguments housePageArguments;
-
   final HouseCubit _houseCubit = HouseCubit();
+
+  final IdService _idService = sl<IdService>();
+
+  final HousePageArguments housePageArguments;
 
   @override
   Widget build(BuildContext context) {
@@ -107,12 +112,17 @@ class HousePage extends StatelessWidget {
         floatingActionButton: AddFloatingActionButton(
           context: context,
           onPressed: () {
+            final LocationModel locationModel = LocationModel(
+              id: _idService.generateRandomId(),
+              house: housePageArguments.houseEntity.name,
+            );
+
             Navigator.pushNamed(
               context,
               AddRoomPage.routeName,
               arguments: AddRoomPageArguments(
                 houseCubit: _houseCubit,
-                houseEntity: housePageArguments.houseEntity,
+                locationModel: locationModel,
               ),
             );
           },

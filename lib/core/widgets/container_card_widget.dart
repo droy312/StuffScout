@@ -21,7 +21,11 @@ class ContainerCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return UnsplashInkWell(
       onTap: () {
-        Navigator.pushNamed(context, ContainerPage.routeName);
+        Navigator.pushNamed(
+          context,
+          ContainerPage.routeName,
+          arguments: ContainerPageArguments(containerEntity: containerEntity),
+        );
       },
       child: ContainerItemCardWidget(
         label: containerEntity.name,

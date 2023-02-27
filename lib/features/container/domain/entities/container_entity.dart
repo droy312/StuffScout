@@ -6,6 +6,7 @@ class ContainerEntity {
   const ContainerEntity({
     required this.id,
     required this.name,
+    this.description,
     required this.locationModel,
     this.imageUrl,
     this.containerList = const [],
@@ -14,6 +15,7 @@ class ContainerEntity {
 
   final String id;
   final String name;
+  final String? description;
   final LocationModel locationModel;
   final String? imageUrl;
   final List<ContainerEntity> containerList;

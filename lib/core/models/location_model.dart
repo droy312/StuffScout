@@ -1,3 +1,9 @@
+import 'package:stuff_scout/core/services/id_service.dart';
+import 'package:stuff_scout/features/container/domain/entities/container_entity.dart';
+import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
+
+import '../service_locator.dart';
+
 class LocationModel {
   const LocationModel({
     required this.id,
@@ -29,5 +35,29 @@ class LocationModel {
     }
 
     return location;
+  }
+
+  LocationModel addRoom(RoomEntity roomEntity) {
+    final IdService idService = sl<IdService>();
+
+    return LocationModel(
+      id: idService.generateRandomId(),
+      house: house,
+      room: roomEntity.name,
+    );
+  }
+
+  LocationModel addContainer(ContainerEntity containerEntity) {
+    final IdService idService = sl<IdService>();
+    final List<String> newContainerListInOrder =
+        containerListInOrder != null ? containerListInOrder! : [];
+    newContainerListInOrder.add(containerEntity.name);
+
+    return LocationModel(
+      id: idService.generateRandomId(),
+      house: house,
+      room: room,
+      containerListInOrder: newContainerListInOrder,
+    );
   }
 }

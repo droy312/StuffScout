@@ -4,9 +4,10 @@ import 'package:stuff_scout/features/home/presenter/pages/add_house_page.dart';
 import 'package:stuff_scout/features/home/presenter/pages/home_page.dart';
 import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
 import 'package:stuff_scout/features/item/presenter/pages/item_page.dart';
+import 'package:stuff_scout/features/room/presenter/pages/add_container_page.dart';
 import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
 
-import 'features/house/presenter/pages/add_room.dart';
+import 'features/house/presenter/pages/add_room_page.dart';
 
 class RouteGenerator {
   static Route generateRoutes(RouteSettings settings) {
@@ -38,6 +39,11 @@ class RouteGenerator {
             builder: (_) => AddRoomPage(
                 addRoomPageArguments:
                     settings.arguments as AddRoomPageArguments));
+      case AddContainerPage.routeName:
+        return MaterialPageRoute(
+            builder: (_) => AddContainerPage(
+                addContainerPageArguments:
+                    settings.arguments as AddContainerPageArguments));
       default:
         return MaterialPageRoute(
             builder: (_) => _NoRoutePage(settings: settings));
