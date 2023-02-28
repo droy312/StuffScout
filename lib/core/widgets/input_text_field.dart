@@ -10,6 +10,7 @@ class InputTextField extends TextField {
     String? hintText,
     TextStyle? hintStyle,
     bool obscureText = false,
+    TextInputType? keyboardType,
   }) : super(
     key: key,
     controller: controller,
@@ -17,6 +18,7 @@ class InputTextField extends TextField {
     obscureText: obscureText,
     cursorColor: Theme.of(context).colorScheme.primary,
     cursorRadius: const Radius.circular(10),
+    keyboardType: keyboardType,
     decoration: InputDecoration(
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 12,

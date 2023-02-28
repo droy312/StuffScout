@@ -49,7 +49,7 @@ class AddContainerPage extends StatelessWidget {
             iconColor: Theme.of(context).colorScheme.primary,
           ),
           title: Text(
-            'Add Room',
+            'Add Container',
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!

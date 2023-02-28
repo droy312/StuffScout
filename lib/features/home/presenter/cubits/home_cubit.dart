@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import 'package:stuff_scout/core/models/location_model.dart';
+import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
 import '../../../house/domain/entities/house_entity.dart';
 
@@ -13,6 +15,16 @@ class HomeCubit extends Cubit<HomeState> {
             id: '123',
             name: 'Dummy House',
             description: 'Some description of the house',
+            roomList: [
+              RoomEntity(
+                id: '123',
+                name: 'Dummy Room',
+                locationModel: const LocationModel(
+                  id: '123',
+                  house: 'Dummy House',
+                ),
+              ),
+            ],
           )
         ]));
 

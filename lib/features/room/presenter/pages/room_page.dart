@@ -5,6 +5,7 @@ import 'package:stuff_scout/features/room/presenter/cubits/room_cubit.dart';
 
 import '../../../../core/nums.dart';
 import '../../../../core/pages/add_container_page.dart';
+import '../../../../core/pages/add_item_page.dart';
 import '../../../../core/widgets/add_container_item_alert_dialog.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../../core/widgets/back_search_notification_app_bar.dart';
@@ -166,8 +167,22 @@ class _RoomPageState extends State<RoomPage>
                       );
                       _tabController.animateTo(0);
                     },
-                    // TODO: Add functionality for adding item in room
-                    onItemPressed: () {},
+                    onItemPressed: () async {
+                      Navigator.pop(context);
+                      await Navigator.pushNamed(
+                        context,
+                        AddItemPage.routeName,
+                        arguments: AddItemPageArguments(
+                          onAddItemPressed: (itemEntity) {
+                            _roomCubit.addItem(itemEntity);
+                          },
+                          itemLocationModel: widget
+                              .roomPageArguments.roomEntity.locationModel
+                              .addRoom(widget.roomPageArguments.roomEntity),
+                        ),
+                      );
+                      _tabController.animateTo(1);
+                    },
                   );
                 },
               );

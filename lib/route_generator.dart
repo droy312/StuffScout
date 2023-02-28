@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stuff_scout/core/pages/add_item_page.dart';
 import 'package:stuff_scout/features/container/presenter/pages/container_page.dart';
 import 'package:stuff_scout/features/home/presenter/pages/add_house_page.dart';
 import 'package:stuff_scout/features/home/presenter/pages/home_page.dart';
@@ -44,6 +45,11 @@ class RouteGenerator {
             builder: (_) => AddContainerPage(
                 addContainerPageArguments:
                     settings.arguments as AddContainerPageArguments));
+      case AddItemPage.routeName:
+        return MaterialPageRoute(
+            builder: (_) => AddItemPage(
+                addItemPageArguments:
+                settings.arguments as AddItemPageArguments));
       default:
         return MaterialPageRoute(
             builder: (_) => _NoRoutePage(settings: settings));
