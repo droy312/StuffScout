@@ -33,7 +33,7 @@ class RoomPage extends StatefulWidget {
 
 class _RoomPageState extends State<RoomPage>
     with SingleTickerProviderStateMixin {
-  final RoomCubit _roomCubit = RoomCubit();
+  late final RoomCubit _roomCubit;
 
   late final TabController _tabController;
 
@@ -55,6 +55,7 @@ class _RoomPageState extends State<RoomPage>
   void initState() {
     super.initState();
 
+    _roomCubit = RoomCubit(roomEntity: widget.roomPageArguments.roomEntity);
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -126,12 +127,12 @@ class _RoomPageState extends State<RoomPage>
                       controller: _tabController,
                       children: [
                         _listOfWidgetsInGridView(
-                            state.containerList.map((containerEntity) {
+                            state.roomEntity.containerList.map((containerEntity) {
                           return ContainerCardWidget(
                               containerEntity: containerEntity);
                         }).toList()),
                         _listOfWidgetsInGridView(
-                            state.itemList.map((itemEntity) {
+                            state.roomEntity.itemList.map((itemEntity) {
                           return ItemCardWidget(itemEntity: itemEntity);
                         }).toList()),
                       ],
