@@ -23,19 +23,13 @@ class RoomEntity {
   List<ItemEntity> itemList;
 
   void addContainer(ContainerEntity containerEntity) {
-    List<ContainerEntity> newContainerList = [];
-    for (final containerEntity in containerList) {
-      newContainerList.add(containerEntity);
-    }
+    List<ContainerEntity> newContainerList = containerList.toList();
     newContainerList.add(containerEntity);
     containerList = newContainerList;
   }
 
   void addItem(ItemEntity itemEntity) {
-    List<ItemEntity> newItemList = [];
-    for (final itemEntity in itemList) {
-      newItemList.add(itemEntity);
-    }
+    List<ItemEntity> newItemList = itemList.toList();
     newItemList.add(itemEntity);
     itemList = newItemList;
   }

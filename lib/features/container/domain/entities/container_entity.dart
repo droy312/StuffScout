@@ -3,7 +3,7 @@ import 'package:stuff_scout/core/models/location_model.dart';
 import '../../../item/domain/entities/item_entity.dart';
 
 class ContainerEntity {
-  const ContainerEntity({
+  ContainerEntity({
     required this.id,
     required this.name,
     this.description,
@@ -18,6 +18,18 @@ class ContainerEntity {
   final String? description;
   final LocationModel locationModel;
   final String? imageUrl;
-  final List<ContainerEntity> containerList;
-  final List<ItemEntity> itemList;
+  List<ContainerEntity> containerList;
+  List<ItemEntity> itemList;
+
+  void addContainer(ContainerEntity containerEntity) {
+    List<ContainerEntity> newContainerList = containerList.toList();
+    newContainerList.add(containerEntity);
+    containerList = newContainerList;
+  }
+
+  void addItem(ItemEntity itemEntity) {
+    List<ItemEntity> newItemList = itemList.toList();
+    newItemList.add(itemEntity);
+    itemList = newItemList;
+  }
 }

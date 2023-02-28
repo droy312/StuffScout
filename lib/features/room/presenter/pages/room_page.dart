@@ -87,6 +87,21 @@ class _RoomPageState extends State<RoomPage>
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                     ),
+                    const SizedBox(height: 4),
+
+                    // Description
+                    if (widget.roomPageArguments.roomEntity.description != null)
+                      Text(
+                        widget.roomPageArguments.roomEntity.description!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onPrimary
+                              .withOpacity(.6),
+                        ),
+                      ),
                     const SizedBox(height: 16),
 
                     // Location

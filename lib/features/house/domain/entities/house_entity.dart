@@ -18,10 +18,7 @@ class HouseEntity {
   final String? mapLocationLink;
 
   void addRoom(RoomEntity roomEntity) {
-    List<RoomEntity> newRoomList = [];
-    for (final roomEntity in roomList) {
-      newRoomList.add(roomEntity);
-    }
+    List<RoomEntity> newRoomList = roomList.toList();
     newRoomList.add(roomEntity);
     roomList = newRoomList;
   }

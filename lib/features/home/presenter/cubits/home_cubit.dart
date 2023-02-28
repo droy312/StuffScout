@@ -29,10 +29,7 @@ class HomeCubit extends Cubit<HomeState> {
         ]));
 
   void addHouse(HouseEntity houseEntity) {
-    final List<HouseEntity> houseList = [];
-    for (final houseEntity in state.houseList) {
-      houseList.add(houseEntity);
-    }
+    final List<HouseEntity> houseList = state.houseList.toList();
     houseList.add(houseEntity);
     emit(HomeState(houseList: houseList));
   }

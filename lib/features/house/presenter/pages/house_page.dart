@@ -55,6 +55,8 @@ class HousePage extends StatelessWidget {
                         ),
                   ),
                   const SizedBox(height: 4),
+
+                  // Description
                   if (housePageArguments.houseEntity.description != null)
                     Text(
                       housePageArguments.houseEntity.description!,

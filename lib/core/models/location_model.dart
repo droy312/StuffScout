@@ -50,7 +50,7 @@ class LocationModel {
   LocationModel addContainer(ContainerEntity containerEntity) {
     final IdService idService = sl<IdService>();
     final List<String> newContainerListInOrder =
-        containerListInOrder != null ? containerListInOrder! : [];
+        containerListInOrder != null ? containerListInOrder!.toList() : [];
     newContainerListInOrder.add(containerEntity.name);
 
     return LocationModel(
