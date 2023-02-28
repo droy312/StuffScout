@@ -7,7 +7,7 @@ import '../../../../core/nums.dart';
 import '../../../../core/pages/add_container_page.dart';
 import '../../../../core/widgets/add_container_item_alert_dialog.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
-import '../../../../core/widgets/back_search_notification_app_bar.dart';
+import '../../../../core/widgets/back_search_edit_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
 import '../../domain/entities/container_entity.dart';
@@ -68,7 +68,7 @@ class _ContainerPageState extends State<ContainerPage>
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: BackSearchNotificationAppBar(context: context),
+          appBar: BackSearchEditAppBar(context: context),
           body: Column(
             children: [
               Container(

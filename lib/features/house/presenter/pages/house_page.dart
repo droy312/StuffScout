@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
-import 'package:stuff_scout/core/widgets/back_search_notification_app_bar.dart';
+import 'package:stuff_scout/core/widgets/back_search_edit_app_bar.dart';
 import 'package:stuff_scout/features/house/domain/entities/house_entity.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/room_card_widget.dart';
@@ -36,7 +36,7 @@ class HousePage extends StatelessWidget {
     return BlocProvider<HouseCubit>.value(
       value: _houseCubit,
       child: Scaffold(
-        appBar: BackSearchNotificationAppBar(context: context),
+        appBar: BackSearchEditAppBar(context: context),
         body: Column(
           children: [
             Container(
