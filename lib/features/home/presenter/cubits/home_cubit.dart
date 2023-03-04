@@ -36,7 +36,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(isLoading: true));
 
     List<HouseModel> houseList = [];
-    final result = await _homeUsecase.getHouseEntityList();
+    final result = await _homeUsecase.getHouseModelList();
     result.fold((l) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l.message ?? Strs.thereWasSomeProblem)));
@@ -47,10 +47,10 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeState(houseList: houseList));
   }
 
-  void addHouse(HouseModel houseEntity) {
+  void addHouse(HouseModel houseModel) {
     final List<HouseModel> houseList = state.houseList.toList();
-    houseList.add(houseEntity);
+    houseList.add(houseModel);
     emit(state.copyWith(houseList: houseList));
-    _homeUsecase.putHouseEntity(houseEntity);
+    _homeUsecase.putHouseModel(houseModel);
   }
 }

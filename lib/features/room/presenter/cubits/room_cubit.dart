@@ -8,16 +8,16 @@ import '../../../item/data/models/item_model.dart';
 part 'room_state.dart';
 
 class RoomCubit extends Cubit<RoomState> {
-  RoomCubit({required RoomModel roomEntity})
-      : super(RoomState(roomEntity: roomEntity));
+  RoomCubit({required RoomModel roomModel})
+      : super(RoomState(roomModel: roomModel));
 
-  void addContainer(ContainerModel containerEntity) {
-    state.roomEntity.addContainer(containerEntity);
-    emit(RoomState(roomEntity: state.roomEntity));
+  void addContainer(ContainerModel containerModel) {
+    state.roomModel.addContainer(containerModel);
+    emit(RoomState(roomModel: state.roomModel));
   }
 
-  void addItem(ItemModel itemEntity) {
-    state.roomEntity.addItem(itemEntity);
-    emit(RoomState(roomEntity: state.roomEntity));
+  void addItem(ItemModel itemModel) {
+    state.roomModel.addItem(itemModel);
+    emit(RoomState(roomModel: state.roomModel));
   }
 }

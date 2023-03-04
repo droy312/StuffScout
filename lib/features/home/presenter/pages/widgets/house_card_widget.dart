@@ -10,7 +10,7 @@ import '../../../../house/data/models/house_model.dart';
 class HouseCardWidget extends StatelessWidget {
   const HouseCardWidget({
     Key? key,
-    required this.houseEntity,
+    required this.houseModel,
   }) : super(key: key);
 
   static const String _testImageUrl =
@@ -20,7 +20,7 @@ class HouseCardWidget extends StatelessWidget {
       Nums.textFieldElevatedButtonBorderRadius * .75;
   static const double _cardPadding = 12;
 
-  final HouseModel houseEntity;
+  final HouseModel houseModel;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class HouseCardWidget extends StatelessWidget {
         Navigator.pushNamed(
           context,
           HousePage.routeName,
-          arguments: HousePageArguments(houseEntity: houseEntity),
+          arguments: HousePageArguments(houseModel: houseModel),
         );
       },
       child: Container(
@@ -78,16 +78,16 @@ class HouseCardWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
-                      houseEntity.name,
+                      houseModel.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 4),
-                    if (houseEntity.description != null)
+                    if (houseModel.description != null)
                       Expanded(
                         child: Text(
-                          houseEntity.description!,
+                          houseModel.description!,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodyMedium,

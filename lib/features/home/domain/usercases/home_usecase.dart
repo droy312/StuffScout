@@ -9,14 +9,14 @@ import '../../../house/data/models/house_model.dart';
 class HomeUsecase {
   final HomeRepo _homeRepo = sl<HomeRepo>();
 
-  Future<Either<Failure, List<HouseModel>>> getHouseEntityList() async {
+  Future<Either<Failure, List<HouseModel>>> getHouseModelList() async {
     final List<String> houseIdList = await _homeRepo.getHouseIdList();
 
     final List<HouseModel> houseList = [];
     for (final houseId in houseIdList) {
       try {
-        final HouseModel houseEntity = await _homeRepo.getHouseModel(houseId);
-        houseList.add(houseEntity);
+        final HouseModel houseModel = await _homeRepo.getHouseModel(houseId);
+        houseList.add(houseModel);
       } on CustomException catch (e) {
         return Left(Failure(
           code: e.code,
@@ -28,7 +28,7 @@ class HomeUsecase {
     return Right(houseList);
   }
 
-  Future<void> putHouseEntity(HouseModel houseEntity) async {
-    await _homeRepo.putHouseModel(houseEntity);
+  Future<void> putHouseModel(HouseModel houseModel) async {
+    await _homeRepo.putHouseModel(houseModel);
   }
 }

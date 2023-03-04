@@ -17,9 +17,9 @@ class HouseModel {
   List<RoomModel> roomList;
   final String? mapLocationLink;
 
-  void addRoom(RoomModel roomEntity) {
+  void addRoom(RoomModel roomModel) {
     List<RoomModel> newRoomList = roomList.toList();
-    newRoomList.add(roomEntity);
+    newRoomList.add(roomModel);
     roomList = newRoomList;
   }
 

@@ -37,21 +37,21 @@ class LocationModel {
     return location;
   }
 
-  LocationModel addRoom(RoomModel roomEntity) {
+  LocationModel addRoom(RoomModel roomModel) {
     final IdService idService = sl<IdService>();
 
     return LocationModel(
       id: idService.generateRandomId(),
       house: house,
-      room: roomEntity.name,
+      room: roomModel.name,
     );
   }
 
-  LocationModel addContainer(ContainerModel containerEntity) {
+  LocationModel addContainer(ContainerModel containerModel) {
     final IdService idService = sl<IdService>();
     final List<String> newContainerListInOrder =
         containerListInOrder != null ? containerListInOrder!.toList() : [];
-    newContainerListInOrder.add(containerEntity.name);
+    newContainerListInOrder.add(containerModel.name);
 
     return LocationModel(
       id: idService.generateRandomId(),

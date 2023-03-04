@@ -21,15 +21,15 @@ class ContainerModel {
   List<ContainerModel> containerList;
   List<ItemModel> itemList;
 
-  void addContainer(ContainerModel containerEntity) {
+  void addContainer(ContainerModel containerModel) {
     List<ContainerModel> newContainerList = containerList.toList();
-    newContainerList.add(containerEntity);
+    newContainerList.add(containerModel);
     containerList = newContainerList;
   }
 
-  void addItem(ItemModel itemEntity) {
+  void addItem(ItemModel itemModel) {
     List<ItemModel> newItemList = itemList.toList();
-    newItemList.add(itemEntity);
+    newItemList.add(itemModel);
     itemList = newItemList;
   }
 }

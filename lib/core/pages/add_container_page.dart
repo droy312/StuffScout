@@ -102,7 +102,7 @@ class AddContainerPage extends StatelessWidget {
                       context: context,
                       onPressed: isAddButtonEnabled
                           ? () {
-                        final ContainerModel containerEntity = ContainerModel(
+                        final ContainerModel containerModel = ContainerModel(
                           id: _idService.generateRandomId(),
                           name: _nameController.text,
                           description:
@@ -111,7 +111,7 @@ class AddContainerPage extends StatelessWidget {
                               : null,
                           locationModel: addContainerPageArguments.containerLocationModel,
                         );
-                        addContainerPageArguments.onAddContainerPressed(containerEntity);
+                        addContainerPageArguments.onAddContainerPressed(containerModel);
                         Navigator.pop(context);
                       }
                           : null,

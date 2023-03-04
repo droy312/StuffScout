@@ -13,9 +13,9 @@ import '../../../../core/widgets/container_card_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
 
 class RoomPageArguments {
-  const RoomPageArguments({required this.roomEntity});
+  const RoomPageArguments({required this.roomModel});
 
-  final RoomModel roomEntity;
+  final RoomModel roomModel;
 }
 
 class RoomPage extends StatefulWidget {
@@ -56,7 +56,7 @@ class _RoomPageState extends State<RoomPage>
   void initState() {
     super.initState();
 
-    _roomCubit = RoomCubit(roomEntity: widget.roomPageArguments.roomEntity);
+    _roomCubit = RoomCubit(roomModel: widget.roomPageArguments.roomModel);
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -82,7 +82,7 @@ class _RoomPageState extends State<RoomPage>
 
                     // Title
                     Text(
-                      widget.roomPageArguments.roomEntity.name,
+                      widget.roomPageArguments.roomModel.name,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
@@ -90,9 +90,9 @@ class _RoomPageState extends State<RoomPage>
                     const SizedBox(height: 4),
 
                     // Description
-                    if (widget.roomPageArguments.roomEntity.description != null)
+                    if (widget.roomPageArguments.roomModel.description != null)
                       Text(
-                        widget.roomPageArguments.roomEntity.description!,
+                        widget.roomPageArguments.roomModel.description!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -112,7 +112,7 @@ class _RoomPageState extends State<RoomPage>
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      widget.roomPageArguments.roomEntity.locationModel
+                      widget.roomPageArguments.roomModel.locationModel
                           .toLocationString(),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Theme.of(context)
@@ -143,13 +143,13 @@ class _RoomPageState extends State<RoomPage>
                       controller: _tabController,
                       children: [
                         _listOfWidgetsInGridView(
-                            state.roomEntity.containerList.map((containerEntity) {
+                            state.roomModel.containerList.map((containerModel) {
                           return ContainerCardWidget(
-                              containerEntity: containerEntity);
+                              containerModel: containerModel);
                         }).toList()),
                         _listOfWidgetsInGridView(
-                            state.roomEntity.itemList.map((itemEntity) {
-                          return ItemCardWidget(itemEntity: itemEntity);
+                            state.roomModel.itemList.map((itemModel) {
+                          return ItemCardWidget(itemModel: itemModel);
                         }).toList()),
                       ],
                     );
@@ -172,12 +172,12 @@ class _RoomPageState extends State<RoomPage>
                         context,
                         AddContainerPage.routeName,
                         arguments: AddContainerPageArguments(
-                          onAddContainerPressed: (containerEntity) {
-                            _roomCubit.addContainer(containerEntity);
+                          onAddContainerPressed: (containerModel) {
+                            _roomCubit.addContainer(containerModel);
                           },
                           containerLocationModel: widget
-                              .roomPageArguments.roomEntity.locationModel
-                              .addRoom(widget.roomPageArguments.roomEntity),
+                              .roomPageArguments.roomModel.locationModel
+                              .addRoom(widget.roomPageArguments.roomModel),
                         ),
                       );
                       _tabController.animateTo(0);
@@ -188,12 +188,12 @@ class _RoomPageState extends State<RoomPage>
                         context,
                         AddItemPage.routeName,
                         arguments: AddItemPageArguments(
-                          onAddItemPressed: (itemEntity) {
-                            _roomCubit.addItem(itemEntity);
+                          onAddItemPressed: (itemModel) {
+                            _roomCubit.addItem(itemModel);
                           },
                           itemLocationModel: widget
-                              .roomPageArguments.roomEntity.locationModel
-                              .addRoom(widget.roomPageArguments.roomEntity),
+                              .roomPageArguments.roomModel.locationModel
+                              .addRoom(widget.roomPageArguments.roomModel),
                         ),
                       );
                       _tabController.animateTo(1);

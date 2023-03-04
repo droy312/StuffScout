@@ -109,13 +109,13 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             const SizedBox(height: 12),
-                            ...state.houseList.map((houseEntity) {
+                            ...state.houseList.map((houseModel) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                         horizontal: Nums.horizontalPaddingWidth)
                                     .copyWith(bottom: 16),
                                 child:
-                                    HouseCardWidget(houseEntity: houseEntity),
+                                    HouseCardWidget(houseModel: houseModel),
                               );
                             })
                           ],

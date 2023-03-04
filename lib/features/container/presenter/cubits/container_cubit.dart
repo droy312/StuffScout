@@ -7,16 +7,16 @@ import '../../../item/data/models/item_model.dart';
 part 'container_state.dart';
 
 class ContainerCubit extends Cubit<ContainerState> {
-  ContainerCubit({required ContainerModel containerEntity})
-      : super(ContainerState(containerEntity: containerEntity));
+  ContainerCubit({required ContainerModel containerModel})
+      : super(ContainerState(containerModel: containerModel));
 
-  void addContainer(ContainerModel containerEntity) {
-    state.containerEntity.addContainer(containerEntity);
-    emit(ContainerState(containerEntity: state.containerEntity));
+  void addContainer(ContainerModel containerModel) {
+    state.containerModel.addContainer(containerModel);
+    emit(ContainerState(containerModel: state.containerModel));
   }
 
-  void addItem(ItemModel itemEntity) {
-    state.containerEntity.addItem(itemEntity);
-    emit(ContainerState(containerEntity: state.containerEntity));
+  void addItem(ItemModel itemModel) {
+    state.containerModel.addItem(itemModel);
+    emit(ContainerState(containerModel: state.containerModel));
   }
 }

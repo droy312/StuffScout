@@ -13,9 +13,9 @@ import '../../../../core/widgets/item_card_widget.dart';
 import '../../data/models/container_model.dart';
 
 class ContainerPageArguments {
-  const ContainerPageArguments({required this.containerEntity});
+  const ContainerPageArguments({required this.containerModel});
 
-  final ContainerModel containerEntity;
+  final ContainerModel containerModel;
 }
 
 class ContainerPage extends StatefulWidget {
@@ -57,7 +57,7 @@ class _ContainerPageState extends State<ContainerPage>
     super.initState();
 
     _containerCubit = ContainerCubit(
-        containerEntity: widget.containerPageArguments.containerEntity);
+        containerModel: widget.containerPageArguments.containerModel);
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -83,7 +83,7 @@ class _ContainerPageState extends State<ContainerPage>
 
                     // Title
                     Text(
-                      widget.containerPageArguments.containerEntity.name,
+                      widget.containerPageArguments.containerModel.name,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
@@ -91,9 +91,9 @@ class _ContainerPageState extends State<ContainerPage>
                     const SizedBox(height: 4),
 
                     // Description
-                    if (widget.containerPageArguments.containerEntity.description != null)
+                    if (widget.containerPageArguments.containerModel.description != null)
                       Text(
-                        widget.containerPageArguments.containerEntity.description!,
+                        widget.containerPageArguments.containerModel.description!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -114,7 +114,7 @@ class _ContainerPageState extends State<ContainerPage>
                     const SizedBox(height: 4),
                     Text(
                       widget
-                          .containerPageArguments.containerEntity.locationModel
+                          .containerPageArguments.containerModel.locationModel
                           .toLocationString(),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Theme.of(context)
@@ -145,14 +145,14 @@ class _ContainerPageState extends State<ContainerPage>
                       controller: _tabController,
                       children: [
                         _listOfWidgetsInGridView(state
-                            .containerEntity.containerList
-                            .map((containerEntity) {
+                            .containerModel.containerList
+                            .map((containerModel) {
                           return ContainerCardWidget(
-                              containerEntity: containerEntity);
+                              containerModel: containerModel);
                         }).toList()),
                         _listOfWidgetsInGridView(
-                            state.containerEntity.itemList.map((itemEntity) {
-                          return ItemCardWidget(itemEntity: itemEntity);
+                            state.containerModel.itemList.map((itemModel) {
+                          return ItemCardWidget(itemModel: itemModel);
                         }).toList()),
                       ],
                     );
@@ -175,13 +175,13 @@ class _ContainerPageState extends State<ContainerPage>
                         context,
                         AddContainerPage.routeName,
                         arguments: AddContainerPageArguments(
-                          onAddContainerPressed: (containerEntity) {
-                            _containerCubit.addContainer(containerEntity);
+                          onAddContainerPressed: (containerModel) {
+                            _containerCubit.addContainer(containerModel);
                           },
                           containerLocationModel: widget.containerPageArguments
-                              .containerEntity.locationModel
+                              .containerModel.locationModel
                               .addContainer(widget
-                                  .containerPageArguments.containerEntity),
+                                  .containerPageArguments.containerModel),
                         ),
                       );
                       _tabController.animateTo(0);
@@ -192,13 +192,13 @@ class _ContainerPageState extends State<ContainerPage>
                         context,
                         AddItemPage.routeName,
                         arguments: AddItemPageArguments(
-                          onAddItemPressed: (itemEntity) {
-                            _containerCubit.addItem(itemEntity);
+                          onAddItemPressed: (itemModel) {
+                            _containerCubit.addItem(itemModel);
                           },
                           itemLocationModel: widget.containerPageArguments
-                              .containerEntity.locationModel
+                              .containerModel.locationModel
                               .addContainer(widget
-                              .containerPageArguments.containerEntity),
+                              .containerPageArguments.containerModel),
                         ),
                       );
                       _tabController.animateTo(1);

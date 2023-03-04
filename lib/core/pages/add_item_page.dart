@@ -151,7 +151,7 @@ class AddItemPage extends StatelessWidget {
                           ? () {
                               final int? quantity = int.tryParse(_quantityController.text);
                               final double? pricePerItem = double.tryParse(_pricePerItemController.text);
-                              final ItemModel itemEntity = ItemModel(
+                              final ItemModel itemModel = ItemModel(
                                 id: _idService.generateRandomId(),
                                 name: _nameController.text,
                                 description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,
@@ -162,7 +162,7 @@ class AddItemPage extends StatelessWidget {
                                 pricePerItem: pricePerItem,
                                 locationModel: addItemPageArguments.itemLocationModel,
                               );
-                              addItemPageArguments.onAddItemPressed(itemEntity);
+                              addItemPageArguments.onAddItemPressed(itemModel);
                               Navigator.pop(context);
                             }
                           : null,

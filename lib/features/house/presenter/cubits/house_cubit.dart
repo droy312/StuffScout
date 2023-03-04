@@ -7,11 +7,11 @@ import '../../data/models/house_model.dart';
 part 'house_state.dart';
 
 class HouseCubit extends Cubit<HouseState> {
-  HouseCubit({required HouseModel houseEntity})
-      : super(HouseState(houseEntity: houseEntity));
+  HouseCubit({required HouseModel houseModel})
+      : super(HouseState(houseModel: houseModel));
 
-  void addRoom(RoomModel roomEntity) async {
-    state.houseEntity.addRoom(roomEntity);
-    emit(HouseState(houseEntity: state.houseEntity));
+  void addRoom(RoomModel roomModel) async {
+    state.houseModel.addRoom(roomModel);
+    emit(HouseState(houseModel: state.houseModel));
   }
 }

@@ -102,7 +102,7 @@ class AddRoomPage extends StatelessWidget {
                       context: context,
                       onPressed: isAddButtonEnabled
                           ? () {
-                              final RoomModel roomEntity = RoomModel(
+                              final RoomModel roomModel = RoomModel(
                                 id: _idService.generateRandomId(),
                                 name: _nameController.text,
                                 description:
@@ -111,7 +111,7 @@ class AddRoomPage extends StatelessWidget {
                                         : null,
                                 locationModel: addRoomPageArguments.roomLocationModel,
                               );
-                              addRoomPageArguments.onAddRoomPressed(roomEntity);
+                              addRoomPageArguments.onAddRoomPressed(roomModel);
                               Navigator.pop(context);
                             }
                           : null,

@@ -98,7 +98,7 @@ class AddHousePage extends StatelessWidget {
                       context: context,
                       onPressed: isAddButtonEnabled
                           ? () {
-                              final HouseModel houseEntity = HouseModel(
+                              final HouseModel houseModel = HouseModel(
                                 id: _idService.generateRandomId(),
                                 name: _nameController.text,
                                 description:
@@ -107,7 +107,7 @@ class AddHousePage extends StatelessWidget {
                                         : null,
                               );
                               addHousePageArguments.homeCubit
-                                  .addHouse(houseEntity);
+                                  .addHouse(houseModel);
                               Navigator.pop(context);
                             }
                           : null,

@@ -3,19 +3,19 @@ part of 'house_cubit.dart';
 @immutable
 class HouseState {
   const HouseState({
-    required this.houseEntity,
+    required this.houseModel,
     this.isLoading = false,
   });
 
-  final HouseModel houseEntity;
+  final HouseModel houseModel;
   final bool isLoading;
 
   HouseState copyWith({
-    HouseModel? houseEntity,
+    HouseModel? houseModel,
     bool? isLoading,
   }) {
     return HouseState(
-      houseEntity: houseEntity ?? this.houseEntity,
+      houseModel: houseModel ?? this.houseModel,
       isLoading: isLoading ?? this.isLoading,
     );
   }

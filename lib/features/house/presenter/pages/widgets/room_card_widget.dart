@@ -6,10 +6,10 @@ import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
 class RoomCardWidget extends StatelessWidget {
   const RoomCardWidget({
     Key? key,
-    required this.roomEntity,
+    required this.roomModel,
   }) : super(key: key);
 
-  final RoomModel roomEntity;
+  final RoomModel roomModel;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class RoomCardWidget extends StatelessWidget {
           context,
           RoomPage.routeName,
           arguments:
-              RoomPageArguments(roomEntity: roomEntity),
+              RoomPageArguments(roomModel: roomModel),
         );
       },
       child: Container(
@@ -36,7 +36,7 @@ class RoomCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              roomEntity.name,
+              roomModel.name,
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!

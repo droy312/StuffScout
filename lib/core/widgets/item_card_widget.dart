@@ -9,12 +9,12 @@ class ItemCardWidget extends StatelessWidget {
   const ItemCardWidget({
     Key? key,
     this.size = 40,
-    required this.itemEntity,
+    required this.itemModel,
     this.imageUrl,
   }) : super(key: key);
 
   final double size;
-  final ItemModel itemEntity;
+  final ItemModel itemModel;
   final String? imageUrl;
 
   @override
@@ -24,7 +24,7 @@ class ItemCardWidget extends StatelessWidget {
         Navigator.pushNamed(context, ItemPage.routeName);
       },
       child: ContainerItemCardWidget(
-        label: itemEntity.name,
+        label: itemModel.name,
         imageUrl: imageUrl,
       ),
     );
