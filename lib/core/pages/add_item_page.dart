@@ -6,7 +6,7 @@ import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
-import 'package:stuff_scout/features/item/domain/entities/item_entity.dart';
+import 'package:stuff_scout/features/item/data/models/item_model.dart';
 
 import '../../service_locator.dart';
 import '../widgets/back_icon_button.dart';
@@ -17,7 +17,7 @@ class AddItemPageArguments {
     required this.itemLocationModel,
   });
 
-  final Function(ItemEntity) onAddItemPressed;
+  final Function(ItemModel) onAddItemPressed;
   final LocationModel itemLocationModel;
 }
 
@@ -151,7 +151,7 @@ class AddItemPage extends StatelessWidget {
                           ? () {
                               final int? quantity = int.tryParse(_quantityController.text);
                               final double? pricePerItem = double.tryParse(_pricePerItemController.text);
-                              final ItemEntity itemEntity = ItemEntity(
+                              final ItemModel itemEntity = ItemModel(
                                 id: _idService.generateRandomId(),
                                 name: _nameController.text,
                                 description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,

@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
 import '../../../container/domain/entities/container_entity.dart';
-import '../../../item/domain/entities/item_entity.dart';
+import '../../../item/data/models/item_model.dart';
 
 part 'room_state.dart';
 
@@ -16,7 +16,7 @@ class RoomCubit extends Cubit<RoomState> {
     emit(RoomState(roomEntity: state.roomEntity));
   }
 
-  void addItem(ItemEntity itemEntity) {
+  void addItem(ItemModel itemEntity) {
     state.roomEntity.addItem(itemEntity);
     emit(RoomState(roomEntity: state.roomEntity));
   }

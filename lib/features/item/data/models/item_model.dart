@@ -1,7 +1,7 @@
 import 'package:stuff_scout/core/models/location_model.dart';
 
-class ItemEntity {
-  const ItemEntity({
+class ItemModel {
+  const ItemModel({
     required this.id,
     required this.name,
     this.description,

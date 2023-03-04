@@ -1,5 +1,5 @@
 import 'package:stuff_scout/core/models/location_model.dart';
-import 'package:stuff_scout/features/item/domain/entities/item_entity.dart';
+import 'package:stuff_scout/features/item/data/models/item_model.dart';
 
 import '../../../container/domain/entities/container_entity.dart';
 
@@ -20,7 +20,7 @@ class RoomEntity {
   final LocationModel locationModel;
   final String? imageUrl;
   List<ContainerEntity> containerList;
-  List<ItemEntity> itemList;
+  List<ItemModel> itemList;
 
   void addContainer(ContainerEntity containerEntity) {
     List<ContainerEntity> newContainerList = containerList.toList();
@@ -28,8 +28,8 @@ class RoomEntity {
     containerList = newContainerList;
   }
 
-  void addItem(ItemEntity itemEntity) {
-    List<ItemEntity> newItemList = itemList.toList();
+  void addItem(ItemModel itemEntity) {
+    List<ItemModel> newItemList = itemList.toList();
     newItemList.add(itemEntity);
     itemList = newItemList;
   }
