@@ -11,13 +11,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'add_house_page.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   static const String routeName = '/home';
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   static const double _userImageSize = 80;
 
   final HomeCubit _homeCubit = HomeCubit();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _homeCubit.init(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,29 +95,32 @@ class HomePage extends StatelessWidget {
                           color: Theme.of(context).colorScheme.onBackground),
                     ));
                   }
-                  return ListView(
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: Nums.horizontalPaddingWidth + 12),
-                        child: Text(
-                          'Houses',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      ...state.houseList.map((houseEntity) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                                  horizontal: Nums.horizontalPaddingWidth)
-                              .copyWith(bottom: 16),
-                          child: HouseCardWidget(houseEntity: houseEntity),
-                        );
-                      })
-                    ],
-                  );
+                  return !state.isLoading
+                      ? ListView(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: Nums.horizontalPaddingWidth + 12),
+                              child: Text(
+                                'Houses',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            ...state.houseList.map((houseEntity) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                        horizontal: Nums.horizontalPaddingWidth)
+                                    .copyWith(bottom: 16),
+                                child:
+                                    HouseCardWidget(houseEntity: houseEntity),
+                              );
+                            })
+                          ],
+                        )
+                      : const Center(child: CircularProgressIndicator());
                 },
               ),
             ),

@@ -8,7 +8,7 @@ import 'package:stuff_scout/core/widgets/input_text_field.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/add_room_cubit.dart';
 import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
-import '../../../../core/service_locator.dart';
+import '../../../../service_locator.dart';
 import '../../../../core/widgets/back_icon_button.dart';
 
 class AddRoomPageArguments {

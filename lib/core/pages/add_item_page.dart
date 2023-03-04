@@ -8,7 +8,7 @@ import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
 import 'package:stuff_scout/features/item/domain/entities/item_entity.dart';
 
-import '../service_locator.dart';
+import '../../service_locator.dart';
 import '../widgets/back_icon_button.dart';
 
 class AddItemPageArguments {

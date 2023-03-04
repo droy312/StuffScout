@@ -7,7 +7,7 @@ import 'package:stuff_scout/core/widgets/input_text_field.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/add_house_cubit.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 
-import '../../../../core/service_locator.dart';
+import '../../../../service_locator.dart';
 import '../../../../core/widgets/back_icon_button.dart';
 import '../../../house/domain/entities/house_entity.dart';
 

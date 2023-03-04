@@ -14,7 +14,7 @@ class RouteGenerator {
   static Route generateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case HomePage.routeName:
-        return MaterialPageRoute(builder: (_) => HomePage());
+        return MaterialPageRoute(builder: (_) => const HomePage());
       case HousePage.routeName:
         return MaterialPageRoute(
             builder: (_) => HousePage(

@@ -2,7 +2,7 @@ import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/features/container/domain/entities/container_entity.dart';
 import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
-import '../service_locator.dart';
+import '../../service_locator.dart';
 
 class LocationModel {
   const LocationModel({

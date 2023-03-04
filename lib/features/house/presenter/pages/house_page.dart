@@ -8,7 +8,7 @@ import 'package:stuff_scout/features/house/domain/entities/house_entity.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/room_card_widget.dart';
 
-import '../../../../core/service_locator.dart';
+import '../../../../service_locator.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../room/domain/entities/room_entity.dart';
 import 'add_room_page.dart';

@@ -10,7 +10,7 @@ class HouseCubit extends Cubit<HouseState> {
   HouseCubit({required HouseEntity houseEntity})
       : super(HouseState(houseEntity: houseEntity));
 
-  void addRoom(RoomEntity roomEntity) {
+  void addRoom(RoomEntity roomEntity) async {
     state.houseEntity.addRoom(roomEntity);
     emit(HouseState(houseEntity: state.houseEntity));
   }

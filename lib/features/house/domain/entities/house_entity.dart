@@ -1,3 +1,4 @@
+import 'package:stuff_scout/features/house/data/models/house_model.dart';
 import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
 class HouseEntity {
@@ -21,5 +22,15 @@ class HouseEntity {
     List<RoomEntity> newRoomList = roomList.toList();
     newRoomList.add(roomEntity);
     roomList = newRoomList;
+  }
+
+  HouseModel toHouseModel() {
+    return HouseModel(
+      id: id,
+      name: name,
+      description: description,
+      imageUrl: imageUrl,
+      mapLocationLink: mapLocationLink,
+    );
   }
 }
