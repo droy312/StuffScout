@@ -23,13 +23,15 @@ class HouseModel {
     roomList = newRoomList;
   }
 
+  List<String> get _getRoomIdList => roomList.map((roomModel) => roomModel.id).toList();
+
   Map<String, dynamic> toMapForLocalStorage() {
     return {
       'id': id,
       'name': name,
       'description': description,
       'imageUrl': imageUrl,
-      'roomIdList': [],
+      'roomIdList': _getRoomIdList,
       'mapLocationLink': mapLocationLink,
     };
   }
