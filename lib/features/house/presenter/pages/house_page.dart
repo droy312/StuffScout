@@ -10,7 +10,7 @@ import 'package:stuff_scout/features/house/presenter/pages/widgets/room_card_wid
 
 import '../../../../service_locator.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
-import '../../../room/domain/entities/room_entity.dart';
+import '../../../room/data/models/room_model.dart';
 import 'add_room_page.dart';
 
 class HousePage extends StatelessWidget {
@@ -99,7 +99,7 @@ class HousePage extends StatelessWidget {
                         return const SizedBox(height: 16);
                       }
                       index--;
-                      final RoomEntity roomEntity = state.houseEntity.roomList[index];
+                      final RoomModel roomEntity = state.houseEntity.roomList[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                                 horizontal: Nums.horizontalPaddingWidth)

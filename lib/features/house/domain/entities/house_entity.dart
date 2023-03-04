@@ -1,5 +1,5 @@
 import 'package:stuff_scout/features/house/data/models/house_model.dart';
-import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
+import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
 class HouseEntity {
   HouseEntity({
@@ -15,11 +15,11 @@ class HouseEntity {
   final String name;
   final String? description;
   final String? imageUrl;
-  List<RoomEntity> roomList;
+  List<RoomModel> roomList;
   final String? mapLocationLink;
 
-  void addRoom(RoomEntity roomEntity) {
-    List<RoomEntity> newRoomList = roomList.toList();
+  void addRoom(RoomModel roomEntity) {
+    List<RoomModel> newRoomList = roomList.toList();
     newRoomList.add(roomEntity);
     roomList = newRoomList;
   }

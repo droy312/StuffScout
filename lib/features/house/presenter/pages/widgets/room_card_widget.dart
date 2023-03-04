@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
-import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
+import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
 
 class RoomCardWidget extends StatelessWidget {
@@ -9,7 +9,7 @@ class RoomCardWidget extends StatelessWidget {
     required this.roomEntity,
   }) : super(key: key);
 
-  final RoomEntity roomEntity;
+  final RoomModel roomEntity;
 
   @override
   Widget build(BuildContext context) {

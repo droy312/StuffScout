@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/strs.dart';
 import 'package:stuff_scout/features/home/domain/usercases/home_usecase.dart';
-import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
+import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
 import '../../../../service_locator.dart';
 import '../../../house/domain/entities/house_entity.dart';
@@ -20,7 +20,7 @@ class HomeCubit extends Cubit<HomeState> {
             name: 'Dummy House',
             description: 'Some description of the house',
             roomList: [
-              RoomEntity(
+              RoomModel(
                 id: '123',
                 name: 'Dummy Room',
                 locationModel: const LocationModel(

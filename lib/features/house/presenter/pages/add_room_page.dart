@@ -6,7 +6,7 @@ import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/add_room_cubit.dart';
-import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
+import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
 import '../../../../service_locator.dart';
 import '../../../../core/widgets/back_icon_button.dart';
@@ -17,7 +17,7 @@ class AddRoomPageArguments {
     required this.roomLocationModel,
   });
 
-  final Function(RoomEntity) onAddRoomPressed;
+  final Function(RoomModel) onAddRoomPressed;
   final LocationModel roomLocationModel;
 }
 
@@ -102,7 +102,7 @@ class AddRoomPage extends StatelessWidget {
                       context: context,
                       onPressed: isAddButtonEnabled
                           ? () {
-                              final RoomEntity roomEntity = RoomEntity(
+                              final RoomModel roomEntity = RoomModel(
                                 id: _idService.generateRandomId(),
                                 name: _nameController.text,
                                 description:

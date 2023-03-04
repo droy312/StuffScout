@@ -4,5 +4,5 @@ part of 'room_cubit.dart';
 class RoomState {
   const RoomState({required this.roomEntity});
 
-  final RoomEntity roomEntity;
+  final RoomModel roomEntity;
 }

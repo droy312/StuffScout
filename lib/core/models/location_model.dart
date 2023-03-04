@@ -1,6 +1,6 @@
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/features/container/data/models/container_model.dart';
-import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
+import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
 import '../../service_locator.dart';
 
@@ -37,7 +37,7 @@ class LocationModel {
     return location;
   }
 
-  LocationModel addRoom(RoomEntity roomEntity) {
+  LocationModel addRoom(RoomModel roomEntity) {
     final IdService idService = sl<IdService>();
 
     return LocationModel(

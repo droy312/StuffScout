@@ -3,8 +3,8 @@ import 'package:stuff_scout/features/item/data/models/item_model.dart';
 
 import '../../../container/data/models/container_model.dart';
 
-class RoomEntity {
-  RoomEntity({
+class RoomModel {
+  RoomModel({
     required this.id,
     required this.name,
     this.description,

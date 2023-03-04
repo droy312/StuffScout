@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
+import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/presenter/cubits/room_cubit.dart';
 
 import '../../../../core/nums.dart';
@@ -15,7 +15,7 @@ import '../../../../core/widgets/item_card_widget.dart';
 class RoomPageArguments {
   const RoomPageArguments({required this.roomEntity});
 
-  final RoomEntity roomEntity;
+  final RoomModel roomEntity;
 }
 
 class RoomPage extends StatefulWidget {
