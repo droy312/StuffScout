@@ -6,7 +6,7 @@ import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
-import 'package:stuff_scout/features/container/domain/entities/container_entity.dart';
+import 'package:stuff_scout/features/container/data/models/container_model.dart';
 
 import '../../service_locator.dart';
 import '../widgets/back_icon_button.dart';
@@ -17,7 +17,7 @@ class AddContainerPageArguments {
     required this.containerLocationModel,
   });
 
-  final Function(ContainerEntity) onAddContainerPressed;
+  final Function(ContainerModel) onAddContainerPressed;
   final LocationModel containerLocationModel;
 }
 
@@ -102,7 +102,7 @@ class AddContainerPage extends StatelessWidget {
                       context: context,
                       onPressed: isAddButtonEnabled
                           ? () {
-                        final ContainerEntity containerEntity = ContainerEntity(
+                        final ContainerModel containerEntity = ContainerModel(
                           id: _idService.generateRandomId(),
                           name: _nameController.text,
                           description:

@@ -10,12 +10,12 @@ import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../../core/widgets/back_search_edit_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
-import '../../domain/entities/container_entity.dart';
+import '../../data/models/container_model.dart';
 
 class ContainerPageArguments {
   const ContainerPageArguments({required this.containerEntity});
 
-  final ContainerEntity containerEntity;
+  final ContainerModel containerEntity;
 }
 
 class ContainerPage extends StatefulWidget {

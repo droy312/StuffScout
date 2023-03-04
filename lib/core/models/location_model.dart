@@ -1,5 +1,5 @@
 import 'package:stuff_scout/core/services/id_service.dart';
-import 'package:stuff_scout/features/container/domain/entities/container_entity.dart';
+import 'package:stuff_scout/features/container/data/models/container_model.dart';
 import 'package:stuff_scout/features/room/domain/entities/room_entity.dart';
 
 import '../../service_locator.dart';
@@ -47,7 +47,7 @@ class LocationModel {
     );
   }
 
-  LocationModel addContainer(ContainerEntity containerEntity) {
+  LocationModel addContainer(ContainerModel containerEntity) {
     final IdService idService = sl<IdService>();
     final List<String> newContainerListInOrder =
         containerListInOrder != null ? containerListInOrder!.toList() : [];

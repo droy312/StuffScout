@@ -4,5 +4,5 @@ part of 'container_cubit.dart';
 class ContainerState {
   const ContainerState({required this.containerEntity});
 
-  final ContainerEntity containerEntity;
+  final ContainerModel containerEntity;
 }

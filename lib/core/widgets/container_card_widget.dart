@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/widgets/container_item_card_widget.dart';
-import 'package:stuff_scout/features/container/domain/entities/container_entity.dart';
+import 'package:stuff_scout/features/container/data/models/container_model.dart';
 import 'package:stuff_scout/features/container/presenter/pages/container_page.dart';
 
 import 'unsplash_ink_well.dart';
@@ -14,7 +14,7 @@ class ContainerCardWidget extends StatelessWidget {
   }) : super(key: key);
 
   final double size;
-  final ContainerEntity containerEntity;
+  final ContainerModel containerEntity;
   final String? imageUrl;
 
   @override
