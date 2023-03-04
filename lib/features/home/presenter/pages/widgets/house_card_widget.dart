@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
-import 'package:stuff_scout/features/house/domain/entities/house_entity.dart';
 import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
+
+import '../../../../house/data/models/house_model.dart';
 
 class HouseCardWidget extends StatelessWidget {
   const HouseCardWidget({
@@ -19,7 +20,7 @@ class HouseCardWidget extends StatelessWidget {
       Nums.textFieldElevatedButtonBorderRadius * .75;
   static const double _cardPadding = 12;
 
-  final HouseEntity houseEntity;
+  final HouseModel houseEntity;
 
   @override
   Widget build(BuildContext context) {

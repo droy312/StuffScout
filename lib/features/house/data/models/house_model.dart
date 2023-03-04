@@ -1,20 +1,27 @@
-import 'package:stuff_scout/features/house/domain/entities/house_entity.dart';
+import '../../../room/data/models/room_model.dart';
 
-class HouseModel extends HouseEntity {
+class HouseModel {
   HouseModel({
-    required String id,
-    required String name,
-    final String? description,
-    final String? imageUrl,
-    final String? mapLocationLink,
-  }) : super(
-          id: id,
-          name: name,
-          description: description,
-          imageUrl: imageUrl,
-          roomList: [],
-          mapLocationLink: mapLocationLink,
-        );
+    required this.id,
+    required this.name,
+    this.description,
+    this.imageUrl,
+    this.roomList = const [],
+    this.mapLocationLink,
+  });
+
+  final String id;
+  final String name;
+  final String? description;
+  final String? imageUrl;
+  List<RoomModel> roomList;
+  final String? mapLocationLink;
+
+  void addRoom(RoomModel roomEntity) {
+    List<RoomModel> newRoomList = roomList.toList();
+    newRoomList.add(roomEntity);
+    roomList = newRoomList;
+  }
 
   Map<String, dynamic> toMapForLocalStorage() {
     return {

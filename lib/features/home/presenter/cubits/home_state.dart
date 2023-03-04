@@ -7,11 +7,11 @@ class HomeState {
     this.isLoading = false,
   });
 
-  final List<HouseEntity> houseList;
+  final List<HouseModel> houseList;
   final bool isLoading;
 
   HomeState copyWith({
-    List<HouseEntity>? houseList,
+    List<HouseModel>? houseList,
     bool? isLoading,
   }) {
     return HomeState(

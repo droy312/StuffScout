@@ -4,13 +4,13 @@ import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/back_search_edit_app_bar.dart';
-import 'package:stuff_scout/features/house/domain/entities/house_entity.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/room_card_widget.dart';
 
 import '../../../../service_locator.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../room/data/models/room_model.dart';
+import '../../data/models/house_model.dart';
 import 'add_room_page.dart';
 
 class HousePage extends StatelessWidget {
@@ -141,5 +141,5 @@ class HousePage extends StatelessWidget {
 class HousePageArguments {
   const HousePageArguments({required this.houseEntity});
 
-  final HouseEntity houseEntity;
+  final HouseModel houseEntity;
 }

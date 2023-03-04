@@ -1,13 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:stuff_scout/features/house/domain/entities/house_entity.dart';
 
 import '../../../room/data/models/room_model.dart';
+import '../../data/models/house_model.dart';
 
 part 'house_state.dart';
 
 class HouseCubit extends Cubit<HouseState> {
-  HouseCubit({required HouseEntity houseEntity})
+  HouseCubit({required HouseModel houseEntity})
       : super(HouseState(houseEntity: houseEntity));
 
   void addRoom(RoomModel roomEntity) async {

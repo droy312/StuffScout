@@ -9,7 +9,7 @@ import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 
 import '../../../../service_locator.dart';
 import '../../../../core/widgets/back_icon_button.dart';
-import '../../../house/domain/entities/house_entity.dart';
+import '../../../house/data/models/house_model.dart';
 
 class AddHousePageArguments {
   const AddHousePageArguments({required this.homeCubit});
@@ -98,7 +98,7 @@ class AddHousePage extends StatelessWidget {
                       context: context,
                       onPressed: isAddButtonEnabled
                           ? () {
-                              final HouseEntity houseEntity = HouseEntity(
+                              final HouseModel houseEntity = HouseModel(
                                 id: _idService.generateRandomId(),
                                 name: _nameController.text,
                                 description:

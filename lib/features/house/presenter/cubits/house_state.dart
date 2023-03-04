@@ -7,11 +7,11 @@ class HouseState {
     this.isLoading = false,
   });
 
-  final HouseEntity houseEntity;
+  final HouseModel houseEntity;
   final bool isLoading;
 
   HouseState copyWith({
-    HouseEntity? houseEntity,
+    HouseModel? houseEntity,
     bool? isLoading,
   }) {
     return HouseState(
