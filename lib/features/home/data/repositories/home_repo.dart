@@ -13,7 +13,8 @@ class HomeRepo {
   }
 
   Future<HouseModel> getHouseModel(String houseId) async {
-    final Map<dynamic, dynamic>? map = await _localStorageService.getHouseInfo(houseId);
+    final Map<dynamic, dynamic>? map =
+        await _localStorageService.getHouseInfo(houseId);
 
     if (map == null) {
       throw const CustomException(message: Strs.thereWasSomeProblem);
@@ -26,7 +27,8 @@ class HomeRepo {
     try {
       return _localStorageService.addHouseIdToHouseIdList(houseId);
     } catch (e) {
-      throw const CustomException(message: 'Couldn\'t add House. Please try again');
+      throw const CustomException(
+          message: 'Couldn\'t add House. Please try again');
     }
   }
 
@@ -35,7 +37,8 @@ class HomeRepo {
       final Map<String, dynamic> map = houseModel.toMapForLocalStorage();
       await _localStorageService.putHouseInfo(houseModel.id, map);
     } catch (e) {
-      throw const CustomException(message: 'Couldn\'t add House. Please try again');
+      throw const CustomException(
+          message: 'Couldn\'t add House. Please try again');
     }
   }
 }

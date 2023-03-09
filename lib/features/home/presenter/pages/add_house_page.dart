@@ -6,16 +6,15 @@ import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/add_house_cubit.dart';
-import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 
 import '../../../../service_locator.dart';
 import '../../../../core/widgets/back_icon_button.dart';
 import '../../../house/data/models/house_model.dart';
 
 class AddHousePageArguments {
-  const AddHousePageArguments({required this.homeCubit});
+  const AddHousePageArguments({required this.onAddHousePressed});
 
-  final HomeCubit homeCubit;
+  final Function(HouseModel) onAddHousePressed;
 }
 
 class AddHousePage extends StatelessWidget {
@@ -113,11 +112,8 @@ class AddHousePage extends StatelessWidget {
                                           ? _descriptionController.text
                                           : null,
                                 );
-                                final Future addHouse = addHousePageArguments
-                                    .homeCubit
-                                    .addHouse(houseModel);
                                 await _addHouseCubit.addHouse(
-                                    context, addHouse);
+                                    context, addHousePageArguments.onAddHousePressed(houseModel));
                               }
                             : null,
                         child: Center(

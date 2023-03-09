@@ -133,7 +133,8 @@ class _HomePageState extends State<HomePage> {
             Navigator.pushNamed(
               context,
               AddHousePage.routeName,
-              arguments: AddHousePageArguments(homeCubit: _homeCubit),
+              arguments:
+                  AddHousePageArguments(onAddHousePressed: _homeCubit.addHouse),
             );
           },
         ),

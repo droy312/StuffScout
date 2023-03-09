@@ -7,6 +7,7 @@ class HouseModel {
     this.description,
     this.imageUrl,
     this.roomList = const [],
+    this.roomIdList = const [],
     this.mapLocationLink,
   });
 
@@ -15,15 +16,25 @@ class HouseModel {
   final String? description;
   final String? imageUrl;
   List<RoomModel> roomList;
+  List<String> roomIdList;
   final String? mapLocationLink;
 
   void addRoom(RoomModel roomModel) {
     List<RoomModel> newRoomList = roomList.toList();
     newRoomList.add(roomModel);
     roomList = newRoomList;
+
+    List<String> newRoomIdList = roomIdList.toList();
+    newRoomIdList.add(roomModel.id);
+    roomIdList = newRoomIdList;
   }
 
-  List<String> get _getRoomIdList => roomList.map((roomModel) => roomModel.id).toList();
+  void addRoomList(List<RoomModel> roomList) {
+    roomIdList = roomIdList;
+
+    List<String> newRoomIdList = roomList.map((roomModel) => roomModel.id).toList();
+    roomIdList = newRoomIdList;
+  }
 
   Map<String, dynamic> toMapForLocalStorage() {
     return {
@@ -31,7 +42,7 @@ class HouseModel {
       'name': name,
       'description': description,
       'imageUrl': imageUrl,
-      'roomIdList': _getRoomIdList,
+      'roomIdList': roomIdList,
       'mapLocationLink': mapLocationLink,
     };
   }
@@ -46,6 +57,9 @@ class HouseModel {
       name: map['name'],
       description: map['description'],
       imageUrl: map['imageUrl'],
+      roomIdList: (map['roomIdList'] as List<dynamic>)
+          .map((roomId) => roomId.toString())
+          .toList(),
       mapLocationLink: map['mapLocationLink'],
     );
   }

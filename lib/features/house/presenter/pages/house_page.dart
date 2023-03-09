@@ -4,6 +4,7 @@ import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/back_search_edit_app_bar.dart';
+import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/room_card_widget.dart';
 
@@ -13,23 +14,43 @@ import '../../../room/data/models/room_model.dart';
 import '../../data/models/house_model.dart';
 import 'add_room_page.dart';
 
-class HousePage extends StatelessWidget {
-  HousePage({
+class HousePageArguments {
+  const HousePageArguments({required this.houseModel});
+
+  final HouseModel houseModel;
+}
+
+class HousePage extends StatefulWidget {
+  const HousePage({
     Key? key,
     required this.housePageArguments,
-  }) : super(key: key) {
-    _houseCubit = HouseCubit(houseModel: housePageArguments.houseModel);
-  }
+  }) : super(key: key);
 
   static const String routeName = '/house';
 
+  final HousePageArguments housePageArguments;
+
+  @override
+  State<HousePage> createState() => _HousePageState();
+}
+
+class _HousePageState extends State<HousePage> {
   static const double _titleContainerTopAndBottomPadding = 16;
 
   late final HouseCubit _houseCubit;
 
   final IdService _idService = sl<IdService>();
 
-  final HousePageArguments housePageArguments;
+  @override
+  void initState() {
+    super.initState();
+
+    _houseCubit = HouseCubit(
+      context: context,
+      houseModel: widget.housePageArguments.houseModel,
+    );
+    _houseCubit.init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +70,7 @@ class HousePage extends StatelessWidget {
                 children: [
                   const SizedBox(height: _titleContainerTopAndBottomPadding),
                   Text(
-                    housePageArguments.houseModel.name,
+                    widget.housePageArguments.houseModel.name,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
@@ -57,9 +78,9 @@ class HousePage extends StatelessWidget {
                   const SizedBox(height: 4),
 
                   // Description
-                  if (housePageArguments.houseModel.description != null)
+                  if (widget.housePageArguments.houseModel.description != null)
                     Text(
-                      housePageArguments.houseModel.description!,
+                      widget.housePageArguments.houseModel.description!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -90,7 +111,7 @@ class HousePage extends StatelessWidget {
             Expanded(
               child: BlocBuilder<HouseCubit, HouseState>(
                 builder: (context, state) {
-                  return ListView.builder(
+                  return !state.isLoading ? ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     itemCount: state.houseModel.roomList.length + 1,
                     // 1 extra for the top SizedBox
@@ -99,7 +120,8 @@ class HousePage extends StatelessWidget {
                         return const SizedBox(height: 16);
                       }
                       index--;
-                      final RoomModel roomModel = state.houseModel.roomList[index];
+                      final RoomModel roomModel =
+                          state.houseModel.roomList[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                                 horizontal: Nums.horizontalPaddingWidth)
@@ -107,7 +129,7 @@ class HousePage extends StatelessWidget {
                         child: RoomCardWidget(roomModel: roomModel),
                       );
                     },
-                  );
+                  ) : const Center(child: LoadingWidget(size: 24));
                 },
               ),
             ),
@@ -118,7 +140,7 @@ class HousePage extends StatelessWidget {
           onPressed: () {
             final LocationModel roomLocationModel = LocationModel(
               id: _idService.generateRandomId(),
-              house: housePageArguments.houseModel.name,
+              house: widget.housePageArguments.houseModel.name,
             );
 
             Navigator.pushNamed(
@@ -136,10 +158,4 @@ class HousePage extends StatelessWidget {
       ),
     );
   }
-}
-
-class HousePageArguments {
-  const HousePageArguments({required this.houseModel});
-
-  final HouseModel houseModel;
 }

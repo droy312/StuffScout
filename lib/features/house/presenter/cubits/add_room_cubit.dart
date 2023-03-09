@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
 part 'add_room_state.dart';
@@ -11,6 +12,19 @@ class AddRoomCubit extends Cubit<AddRoomState> {
       emit(const AddRoomState());
     } else {
       emit(AddRoomState(name: name));
+    }
+  }
+
+  void addRoom(BuildContext context, Future addRoom) async {
+    emit(state.copyWith(isLoading: true));
+
+    await addRoom;
+    await Future.delayed(const Duration(seconds: 5));
+
+    emit(state.copyWith(isLoading: false));
+
+    if (context.mounted) {
+      Navigator.pop(context);
     }
   }
 }

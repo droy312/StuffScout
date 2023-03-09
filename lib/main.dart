@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stuff_scout/color_scheme.dart';
-import 'package:stuff_scout/core/services/local_storage_service.dart';
 import 'package:stuff_scout/service_locator.dart';
 import 'package:stuff_scout/features/home/presenter/pages/home_page.dart';
 import 'package:stuff_scout/route_generator.dart';
 
 void main() async {
-  setUpServices();
-  final LocalStorageService localStorageService = sl();
-  await localStorageService.init();
+  await setUpServices();
   runApp(const MyApp());
 }
 

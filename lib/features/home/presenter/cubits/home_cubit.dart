@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/widgets/snackbar_widget.dart';
 import 'package:stuff_scout/features/home/domain/usercases/home_usecase.dart';
-import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
 import '../../../../service_locator.dart';
 import '../../../house/data/models/house_model.dart';
@@ -11,24 +9,7 @@ import '../../../house/data/models/house_model.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit({required this.context})
-      : super(HomeState(houseList: [
-          HouseModel(
-            id: '123',
-            name: 'Dummy House',
-            description: 'Some description of the house',
-            roomList: [
-              RoomModel(
-                id: '123',
-                name: 'Dummy Room',
-                locationModel: const LocationModel(
-                  id: '123',
-                  house: 'Dummy House',
-                ),
-              ),
-            ],
-          )
-        ]));
+  HomeCubit({required this.context}) : super(const HomeState());
 
   final HomeUsecase _homeUsecase = sl<HomeUsecase>();
 
@@ -57,8 +38,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> addHouse(HouseModel houseModel) async {
     final List<HouseModel> houseList = state.houseList.toList();
-    houseList.add(houseModel);
-    emit(state.copyWith(houseList: houseList));
+
     final result = await _homeUsecase.putHouseModel(houseModel);
     result.fold((l) {
       if (l.message != null) {
@@ -69,6 +49,9 @@ class HomeCubit extends Cubit<HomeState> {
         ));
       }
     }, (r) {
+      houseList.add(houseModel);
+      emit(state.copyWith(houseList: houseList));
+
       if (r.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
           context: context,
