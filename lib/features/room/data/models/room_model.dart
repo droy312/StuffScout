@@ -33,4 +33,31 @@ class RoomModel {
     newItemList.add(itemModel);
     itemList = newItemList;
   }
+
+  List<String> get _getContainerIdList =>
+      containerList.map((containerModel) => containerModel.id).toList();
+  List<String> get _getItemIdList =>
+      containerList.map((containerModel) => containerModel.id).toList();
+
+  Map<String, dynamic> toMapForLocalStorage() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'locationModel': locationModel.toMap(),
+      'imageUrl': imageUrl,
+      'containerList': _getContainerIdList,
+      'itemList': _getItemIdList,
+    };
+  }
+
+  factory RoomModel.fromMapOfLocalStorage(Map<dynamic, dynamic> map) {
+    return RoomModel(
+      id: map['id'],
+      name: map['name'],
+      description: map['description'],
+      locationModel: LocationModel.fromMapOfLocalStorage(map['locationModel']),
+      imageUrl: map['imageUrl'],
+    );
+  }
 }

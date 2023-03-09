@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:stuff_scout/core/errors/custom_exception.dart';
+import 'package:stuff_scout/core/errors/success.dart';
 import 'package:stuff_scout/features/home/data/repositories/home_repo.dart';
 
 import '../../../../core/errors/failure.dart';
@@ -28,7 +29,13 @@ class HomeUsecase {
     return Right(houseList);
   }
 
-  Future<void> putHouseModel(HouseModel houseModel) async {
-    await _homeRepo.putHouseModel(houseModel);
+  Future<Either<Failure, Success>> putHouseModel(HouseModel houseModel) async {
+    try {
+      await _homeRepo.putHouseModel(houseModel);
+      await _homeRepo.addHouseIdToHouseIdList(houseModel.id);
+      return const Right(Success(message: 'Added House successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
   }
 }

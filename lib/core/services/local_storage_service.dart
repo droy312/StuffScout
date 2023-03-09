@@ -29,20 +29,81 @@ class LocalStorageService {
     _itemBox = await _hive.openBox(_itemBoxName);
   }
 
-  Future<void> putHouseInfo(
-      String houseId, Map<String, dynamic> houseMap) async {
-    await _houseBox.put(houseId, houseMap);
-    final List<String> houseIdList = _userInfoBox.get(_houseIdListKey,
+  Future<void> _addIdToList(Box box, String key, String id) async {
+    final List<String> list = box.get(key,
         defaultValue: [].map((e) => e.toString()).toList()) as List<String>;
-    houseIdList.add(houseId);
-    await _userInfoBox.put(_houseIdListKey, houseIdList);
+    list.add(id);
+    await box.put(key, list);
+  }
+
+  // Home
+
+  Future<void> addHouseIdToHouseIdList(String houseId) {
+    return _addIdToList(_userInfoBox, _houseIdListKey, houseId);
   }
 
   Future<List<String>?> getHouseIdList() async {
     return _userInfoBox.get(_houseIdListKey) as List<String>?;
   }
 
+  // House
+
+  Future<void> putHouseInfo(
+      String houseId, Map<String, dynamic> houseMap) async {
+    await _houseBox.put(houseId, houseMap);
+  }
+
+  Future<void> addRoomIdToHouseInfo(String houseId, String roomId) {
+    return _addIdToList(_houseBox, houseId, roomId);
+  }
+
   Future<Map<dynamic, dynamic>?> getHouseInfo(String houseId) async {
     return _houseBox.get(houseId);
+  }
+
+  // Room
+
+  Future<void> putRoomInfo(String roomId, Map<String, dynamic> roomMap) async {
+    await _roomBox.put(roomId, roomMap);
+  }
+
+  Future<void> addContainerIdToRoomInfo(String roomId, String containerId) {
+    return _addIdToList(_roomBox, roomId, containerId);
+  }
+
+  Future<void> addItemIdToRoomInfo(String roomId, String itemId) {
+    return _addIdToList(_roomBox, roomId, itemId);
+  }
+
+  Future<Map<dynamic, dynamic>?> getRoomInfo(String roomId) async {
+    return _roomBox.get(roomId);
+  }
+
+  // Container
+
+  Future<void> putContainerInfo(String containerId, Map<String, dynamic> containerMap) async {
+    await _containerBox.put(containerId, containerMap);
+  }
+
+  Future<void> addContainerIdToContainerInfo(String containerId, String nestedContainerId) {
+    return _addIdToList(_containerBox, containerId, nestedContainerId);
+  }
+
+  Future<void> addItemIdToContainerInfo(String containerId, String itemId) {
+    return _addIdToList(_containerBox, containerId, itemId);
+  }
+
+  Future<Map<dynamic, dynamic>?> getContainerInfo(String containerId) async {
+    return _containerBox.get(containerId);
+  }
+
+  // Item
+
+  Future<void> putItemInfo(String itemId, Map<String, dynamic> itemMap) async {
+    await _itemBox.put(itemId, itemMap);
+  }
+
+  Future<Map<dynamic, dynamic>?> getItemInfo(String itemId) async {
+    return _itemBox.get(itemId);
   }
 }

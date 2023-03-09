@@ -49,7 +49,7 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => AddItemPage(
                 addItemPageArguments:
-                settings.arguments as AddItemPageArguments));
+                    settings.arguments as AddItemPageArguments));
       default:
         return MaterialPageRoute(
             builder: (_) => _NoRoutePage(settings: settings));

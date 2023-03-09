@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/widgets/add_floating_action_button.dart';
+import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/core/widgets/menu_icon_button.dart';
 import 'package:stuff_scout/core/widgets/notification_icon_button.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
@@ -23,13 +24,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static const double _userImageSize = 80;
 
-  final HomeCubit _homeCubit = HomeCubit();
+  late final HomeCubit _homeCubit;
 
   @override
   void initState() {
     super.initState();
 
-    _homeCubit.init(context);
+    _homeCubit = HomeCubit(context: context);
+    _homeCubit.init();
   }
 
   @override
@@ -114,13 +116,12 @@ class _HomePageState extends State<HomePage> {
                                 padding: const EdgeInsets.symmetric(
                                         horizontal: Nums.horizontalPaddingWidth)
                                     .copyWith(bottom: 16),
-                                child:
-                                    HouseCardWidget(houseModel: houseModel),
+                                child: HouseCardWidget(houseModel: houseModel),
                               );
                             })
                           ],
                         )
-                      : const Center(child: CircularProgressIndicator());
+                      : const Center(child: LoadingWidget(size: 24));
                 },
               ),
             ),

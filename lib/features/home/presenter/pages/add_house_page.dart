@@ -4,6 +4,7 @@ import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
+import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/add_house_cubit.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 
@@ -38,97 +39,113 @@ class AddHousePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AddHouseCubit>.value(
       value: _addHouseCubit,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: BackIconButton(
-            context: context,
-            iconColor: Theme.of(context).colorScheme.primary,
-          ),
-          title: Text(
-            'Add House',
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(color: Theme.of(context).colorScheme.primary),
-          ),
-        ),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: Nums.horizontalPaddingWidth),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 16),
-                // Name text field
-                InputTextField(
-                  controller: _nameController,
-                  context: context,
-                  onChanged: (name) {
-                    _addHouseCubit.addHouseName(name);
-                  },
-                  hintText: 'Enter house name',
-                ),
-                const SizedBox(height: 4),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    '* required',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                  ),
-                ),
-                const SizedBox(height: 16),
+      child: BlocBuilder<AddHouseCubit, AddHouseState>(
+        builder: (context, state) {
+          final bool isAddButtonEnabled = state.name != null;
 
-                // Description text field
-                InputTextField(
-                  controller: _descriptionController,
+          return WillPopScope(
+            onWillPop: () async {
+              return !state.isLoading;
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                leading: BackIconButton(
                   context: context,
-                  hintText: 'Enter house description',
+                  iconColor: Theme.of(context).colorScheme.primary,
+                  enabled: !state.isLoading,
                 ),
-                const SizedBox(height: 32),
-                BlocBuilder<AddHouseCubit, AddHouseState>(
-                  builder: (context, state) {
-                    final bool isAddButtonEnabled = state.name != null;
-
-                    // Add house elevated button
-                    return CustomElevatedButton(
-                      context: context,
-                      onPressed: isAddButtonEnabled
-                          ? () {
-                              final HouseModel houseModel = HouseModel(
-                                id: _idService.generateRandomId(),
-                                name: _nameController.text,
-                                description:
-                                    _descriptionController.text.isNotEmpty
-                                        ? _descriptionController.text
-                                        : null,
-                              );
-                              addHousePageArguments.homeCubit
-                                  .addHouse(houseModel);
-                              Navigator.pop(context);
-                            }
-                          : null,
-                      child: Center(
+                title: Text(
+                  'Add House',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+              body: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: Nums.horizontalPaddingWidth),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      // Name text field
+                      InputTextField(
+                        controller: _nameController,
+                        context: context,
+                        onChanged: (name) {
+                          _addHouseCubit.addHouseName(name);
+                        },
+                        hintText: 'Enter house name',
+                      ),
+                      const SizedBox(height: 4),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
-                          'Add House',
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                          '* required',
+                          style:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
                         ),
                       ),
-                    );
-                  },
+                      const SizedBox(height: 16),
+
+                      // Description text field
+                      InputTextField(
+                        controller: _descriptionController,
+                        context: context,
+                        hintText: 'Enter house description',
+                      ),
+                      const SizedBox(height: 32),
+                      // Add house elevated button
+                      CustomElevatedButton(
+                        context: context,
+                        onPressed: isAddButtonEnabled
+                            ? () async {
+                                final HouseModel houseModel = HouseModel(
+                                  id: _idService.generateRandomId(),
+                                  name: _nameController.text,
+                                  description:
+                                      _descriptionController.text.isNotEmpty
+                                          ? _descriptionController.text
+                                          : null,
+                                );
+                                final Future addHouse = addHousePageArguments
+                                    .homeCubit
+                                    .addHouse(houseModel);
+                                await _addHouseCubit.addHouse(
+                                    context, addHouse);
+                              }
+                            : null,
+                        child: Center(
+                          child: !state.isLoading
+                              ? Text(
+                                  'Add House',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
+                                )
+                              : LoadingWidget(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  size: 14,
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

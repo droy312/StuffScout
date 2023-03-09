@@ -22,8 +22,20 @@ class HomeRepo {
     return HouseModel.fromMapOfLocalStorage(map);
   }
 
+  Future<void> addHouseIdToHouseIdList(String houseId) async {
+    try {
+      return _localStorageService.addHouseIdToHouseIdList(houseId);
+    } catch (e) {
+      throw const CustomException(message: 'Couldn\'t add House. Please try again');
+    }
+  }
+
   Future<void> putHouseModel(HouseModel houseModel) async {
-    final Map<String, dynamic> map = houseModel.toMapForLocalStorage();
-    await _localStorageService.putHouseInfo(houseModel.id, map);
+    try {
+      final Map<String, dynamic> map = houseModel.toMapForLocalStorage();
+      await _localStorageService.putHouseInfo(houseModel.id, map);
+    } catch (e) {
+      throw const CustomException(message: 'Couldn\'t add House. Please try again');
+    }
   }
 }
