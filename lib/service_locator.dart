@@ -5,6 +5,8 @@ import 'package:stuff_scout/core/services/local_storage_service.dart';
 import 'package:stuff_scout/features/home/data/repositories/home_repo.dart';
 import 'package:stuff_scout/features/home/domain/usercases/home_usecase.dart';
 import 'package:stuff_scout/features/house/data/repositories/house_repo.dart';
+import 'package:stuff_scout/features/room/data/repositories/room_repo.dart';
+import 'package:stuff_scout/features/room/domain/usecases/room_usecase.dart';
 import 'package:uuid/uuid.dart';
 
 import 'features/house/domain/usecases/house_usecase.dart';
@@ -25,8 +27,10 @@ Future<void> setUpServices() async {
   // Repositories
   sl.registerSingleton<HomeRepo>(HomeRepo());
   sl.registerSingleton<HouseRepo>(HouseRepo());
+  sl.registerSingleton<RoomRepo>(RoomRepo());
 
   // Usecases
   sl.registerSingleton<HomeUsecase>(HomeUsecase());
   sl.registerSingleton<HouseUsecase>(HouseUsecase());
+  sl.registerSingleton<RoomUsecase>(RoomUsecase());
 }

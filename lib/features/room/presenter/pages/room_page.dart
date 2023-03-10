@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/presenter/cubits/room_cubit.dart';
 
@@ -56,7 +57,11 @@ class _RoomPageState extends State<RoomPage>
   void initState() {
     super.initState();
 
-    _roomCubit = RoomCubit(roomModel: widget.roomPageArguments.roomModel);
+    _roomCubit = RoomCubit(
+      context: context,
+      roomModel: widget.roomPageArguments.roomModel,
+    );
+    _roomCubit.init();
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -96,11 +101,11 @@ class _RoomPageState extends State<RoomPage>
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(.6),
-                        ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimary
+                                  .withOpacity(.6),
+                            ),
                       ),
                     const SizedBox(height: 16),
 
@@ -141,7 +146,7 @@ class _RoomPageState extends State<RoomPage>
                   builder: (context, state) {
                     return TabBarView(
                       controller: _tabController,
-                      children: [
+                      children: !state.isLoading ? [
                         _listOfWidgetsInGridView(
                             state.roomModel.containerList.map((containerModel) {
                           return ContainerCardWidget(
@@ -151,6 +156,9 @@ class _RoomPageState extends State<RoomPage>
                             state.roomModel.itemList.map((itemModel) {
                           return ItemCardWidget(itemModel: itemModel);
                         }).toList()),
+                      ] : [
+                        const Center(child: LoadingWidget(size: 24)),
+                        const Center(child: LoadingWidget(size: 24)),
                       ],
                     );
                   },
@@ -172,9 +180,7 @@ class _RoomPageState extends State<RoomPage>
                         context,
                         AddContainerPage.routeName,
                         arguments: AddContainerPageArguments(
-                          onAddContainerPressed: (containerModel) {
-                            _roomCubit.addContainer(containerModel);
-                          },
+                          onAddContainerPressed: _roomCubit.addContainer,
                           containerLocationModel: widget
                               .roomPageArguments.roomModel.locationModel
                               .addRoom(widget.roomPageArguments.roomModel),
@@ -188,9 +194,7 @@ class _RoomPageState extends State<RoomPage>
                         context,
                         AddItemPage.routeName,
                         arguments: AddItemPageArguments(
-                          onAddItemPressed: (itemModel) {
-                            _roomCubit.addItem(itemModel);
-                          },
+                          onAddItemPressed: _roomCubit.addItem,
                           itemLocationModel: widget
                               .roomPageArguments.roomModel.locationModel
                               .addRoom(widget.roomPageArguments.roomModel),

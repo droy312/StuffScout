@@ -56,6 +56,7 @@ class AddRoomPage extends StatelessWidget {
                 leading: BackIconButton(
                   context: context,
                   iconColor: Theme.of(context).colorScheme.primary,
+                  enabled: !state.isLoading,
                 ),
                 title: Text(
                   'Add Room',

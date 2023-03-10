@@ -11,7 +11,9 @@ class RoomModel {
     required this.locationModel,
     this.imageUrl,
     this.containerList = const [],
+    this.containerIdList = const [],
     this.itemList = const [],
+    this.itemIdList = const [],
   });
 
   final String id;
@@ -20,12 +22,30 @@ class RoomModel {
   final LocationModel locationModel;
   final String? imageUrl;
   List<ContainerModel> containerList;
+  List<String> containerIdList;
   List<ItemModel> itemList;
+  List<String> itemIdList;
+
+  void addContainerList(List<ContainerModel> containerList) {
+    this.containerList = containerList;
+
+    final List<String> newContainerIdList =
+        containerList.map((containerModel) => containerModel.id).toList();
+    containerIdList = newContainerIdList;
+  }
 
   void addContainer(ContainerModel containerModel) {
     List<ContainerModel> newContainerList = containerList.toList();
     newContainerList.add(containerModel);
     containerList = newContainerList;
+  }
+
+  void addItemList(List<ItemModel> itemList) {
+    this.itemList = itemList;
+
+    final List<String> newItemIdList =
+        itemList.map((itemModel) => itemModel.id).toList();
+    itemIdList = newItemIdList;
   }
 
   void addItem(ItemModel itemModel) {
@@ -34,11 +54,6 @@ class RoomModel {
     itemList = newItemList;
   }
 
-  List<String> get _getContainerIdList =>
-      containerList.map((containerModel) => containerModel.id).toList();
-  List<String> get _getItemIdList =>
-      containerList.map((containerModel) => containerModel.id).toList();
-
   Map<String, dynamic> toMapForLocalStorage() {
     return {
       'id': id,
@@ -46,8 +61,8 @@ class RoomModel {
       'description': description,
       'locationModel': locationModel.toMap(),
       'imageUrl': imageUrl,
-      'containerList': _getContainerIdList,
-      'itemList': _getItemIdList,
+      'containerIdList': containerIdList,
+      'itemIdList': itemIdList,
     };
   }
 
@@ -58,6 +73,12 @@ class RoomModel {
       description: map['description'],
       locationModel: LocationModel.fromMapOfLocalStorage(map['locationModel']),
       imageUrl: map['imageUrl'],
+      containerIdList: ((map['containerIdList'] ?? []) as List<dynamic>)
+          .map((e) => e.toString())
+          .toList(),
+      itemIdList: ((map['itemIdList'] ?? []) as List<dynamic>)
+          .map((e) => e.toString())
+          .toList(),
     );
   }
 }

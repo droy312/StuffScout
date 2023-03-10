@@ -40,7 +40,7 @@ class LocalStorageService {
   Future<void> _addIdToList(
       Box box, String key, String mapKey, String id) async {
     Map<dynamic, dynamic> map = box.get(key);
-    List<dynamic> list = map[mapKey].toList();
+    List<dynamic> list = (map[mapKey] ?? []).toList();
     list.add(id);
     map[mapKey] = list;
     await box.put(key, map);
