@@ -6,12 +6,12 @@ import '../../../../service_locator.dart';
 import '../../../container/data/models/container_model.dart';
 import '../../../item/data/models/item_model.dart';
 
-class RoomRepo {
-  final LocalStorageService _localStorageService = sl<LocalStorageService>();
+class ContainerRepo {
+  final LocalStorageService _localStorageService = sl();
 
   Future<ContainerModel> getContainerModel(String containerId) async {
     final Map<dynamic, dynamic>? map =
-        await _localStorageService.getContainerInfo(containerId);
+    await _localStorageService.getContainerInfo(containerId);
 
     if (map == null) {
       throw const CustomException(message: Strs.thereWasSomeProblem);
@@ -20,13 +20,11 @@ class RoomRepo {
     return ContainerModel.fromMapOfLocalStorage(map);
   }
 
-  Future<void> addContainerIdToRoomInfo(
-      String roomId, String containerId) async {
+  Future<void> addContainerIdToContainerInfo(String containerId, String nestedContainerId) async {
     try {
-      await _localStorageService.addContainerIdToRoomInfo(roomId, containerId);
+      await _localStorageService.addContainerIdToContainerInfo(containerId, nestedContainerId);
     } catch (e) {
-      throw const CustomException(
-          message: 'Couldn\'t add Container. Please try again.');
+      throw const CustomException(message: 'Couldn\'t add Container. Please try again.');
     }
   }
 
@@ -42,7 +40,7 @@ class RoomRepo {
 
   Future<ItemModel> getItemModel(String itemId) async {
     final Map<dynamic, dynamic>? map =
-        await _localStorageService.getItemInfo(itemId);
+    await _localStorageService.getItemInfo(itemId);
 
     if (map == null) {
       throw const CustomException(message: Strs.thereWasSomeProblem);
@@ -51,12 +49,11 @@ class RoomRepo {
     return ItemModel.fromMapOfLocalStorage(map);
   }
 
-  Future<void> addItemIdToRoomInfo(String roomId, String itemId) async {
+  Future<void> addItemIdToContainerInfo(String containerId, String itemId) async {
     try {
-      await _localStorageService.addItemIdToRoomInfo(roomId, itemId);
+      await _localStorageService.addItemIdToContainerInfo(containerId, itemId);
     } catch (e) {
-      throw const CustomException(
-          message: 'Couldn\'t add Item. Please try again.');
+      throw const CustomException(message: 'Couldn\'t add Item. Please try again.');
     }
   }
 

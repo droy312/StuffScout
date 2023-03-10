@@ -18,7 +18,7 @@ class RoomCubit extends Cubit<RoomState> {
     required RoomModel roomModel,
   }) : super(RoomState(roomModel: roomModel));
 
-  final RoomUsecase _roomUsecase = sl();
+  final RoomUsecase _roomUsecase = sl<RoomUsecase>();
 
   final BuildContext context;
 

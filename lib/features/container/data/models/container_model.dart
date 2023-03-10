@@ -26,10 +26,26 @@ class ContainerModel {
   List<ItemModel> itemList;
   List<String> itemIdList;
 
+  void addContainerList(List<ContainerModel> containerList) {
+    this.containerList = containerList;
+
+    final List<String> newContainerIdList =
+    containerList.map((containerModel) => containerModel.id).toList();
+    containerIdList = newContainerIdList;
+  }
+
   void addContainer(ContainerModel containerModel) {
     List<ContainerModel> newContainerList = containerList.toList();
     newContainerList.add(containerModel);
     containerList = newContainerList;
+  }
+
+  void addItemList(List<ItemModel> itemList) {
+    this.itemList = itemList;
+
+    final List<String> newItemIdList =
+    itemList.map((itemModel) => itemModel.id).toList();
+    itemIdList = newItemIdList;
   }
 
   void addItem(ItemModel itemModel) {

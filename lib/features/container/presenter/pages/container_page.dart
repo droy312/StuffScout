@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/pages/add_item_page.dart';
+import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/container/presenter/cubits/container_cubit.dart';
 
 import '../../../../core/nums.dart';
@@ -57,7 +58,10 @@ class _ContainerPageState extends State<ContainerPage>
     super.initState();
 
     _containerCubit = ContainerCubit(
-        containerModel: widget.containerPageArguments.containerModel);
+      context: context,
+      containerModel: widget.containerPageArguments.containerModel,
+    );
+    _containerCubit.init();
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -91,17 +95,20 @@ class _ContainerPageState extends State<ContainerPage>
                     const SizedBox(height: 4),
 
                     // Description
-                    if (widget.containerPageArguments.containerModel.description != null)
+                    if (widget.containerPageArguments.containerModel
+                            .description !=
+                        null)
                       Text(
-                        widget.containerPageArguments.containerModel.description!,
+                        widget
+                            .containerPageArguments.containerModel.description!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(.6),
-                        ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimary
+                                  .withOpacity(.6),
+                            ),
                       ),
                     const SizedBox(height: 16),
 
@@ -113,8 +120,7 @@ class _ContainerPageState extends State<ContainerPage>
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      widget
-                          .containerPageArguments.containerModel.locationModel
+                      widget.containerPageArguments.containerModel.locationModel
                           .toLocationString(),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Theme.of(context)
@@ -143,7 +149,7 @@ class _ContainerPageState extends State<ContainerPage>
                   builder: (context, state) {
                     return TabBarView(
                       controller: _tabController,
-                      children: [
+                      children: !state.isLoading ? [
                         _listOfWidgetsInGridView(state
                             .containerModel.containerList
                             .map((containerModel) {
@@ -154,6 +160,9 @@ class _ContainerPageState extends State<ContainerPage>
                             state.containerModel.itemList.map((itemModel) {
                           return ItemCardWidget(itemModel: itemModel);
                         }).toList()),
+                      ] : [
+                        const Center(child: LoadingWidget(size: 24)),
+                        const Center(child: LoadingWidget(size: 24)),
                       ],
                     );
                   },
@@ -175,13 +184,11 @@ class _ContainerPageState extends State<ContainerPage>
                         context,
                         AddContainerPage.routeName,
                         arguments: AddContainerPageArguments(
-                          onAddContainerPressed: (containerModel) {
-                            _containerCubit.addContainer(containerModel);
-                          },
+                          onAddContainerPressed: _containerCubit.addContainer,
                           containerLocationModel: widget.containerPageArguments
                               .containerModel.locationModel
-                              .addContainer(widget
-                                  .containerPageArguments.containerModel),
+                              .addContainer(
+                                  widget.containerPageArguments.containerModel),
                         ),
                       );
                       _tabController.animateTo(0);
@@ -192,13 +199,11 @@ class _ContainerPageState extends State<ContainerPage>
                         context,
                         AddItemPage.routeName,
                         arguments: AddItemPageArguments(
-                          onAddItemPressed: (itemModel) {
-                            _containerCubit.addItem(itemModel);
-                          },
+                          onAddItemPressed: _containerCubit.addItem,
                           itemLocationModel: widget.containerPageArguments
                               .containerModel.locationModel
-                              .addContainer(widget
-                              .containerPageArguments.containerModel),
+                              .addContainer(
+                                  widget.containerPageArguments.containerModel),
                         ),
                       );
                       _tabController.animateTo(1);
