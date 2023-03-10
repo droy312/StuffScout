@@ -26,6 +26,8 @@ class HouseCubit extends Cubit<HouseState> {
 
     final result =
         await _houseUsecase.getRoomModelList(state.houseModel.roomIdList);
+    HouseModel houseModel = state.houseModel;
+    
     result.fold((l) {
       if (l.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
@@ -36,13 +38,13 @@ class HouseCubit extends Cubit<HouseState> {
       }
     }, (roomList) {
       state.houseModel.addRoomList(roomList);
-      emit(state);
+      houseModel = state.houseModel;
     });
 
-    emit(state.copyWith(isLoading: false));
+    emit(HouseState(houseModel: houseModel));
   }
 
-  void addRoom(RoomModel roomModel) async {
+  Future<void> addRoom(RoomModel roomModel) async {
     final result =
         await _houseUsecase.putRoomModel(state.houseModel.id, roomModel);
     result.fold((l) {
@@ -55,7 +57,7 @@ class HouseCubit extends Cubit<HouseState> {
       }
     }, (r) {
       state.houseModel.addRoom(roomModel);
-      emit(state);
+      emit(HouseState(houseModel: state.houseModel));
 
       if (r.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(

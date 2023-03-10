@@ -30,7 +30,7 @@ class HouseModel {
   }
 
   void addRoomList(List<RoomModel> roomList) {
-    roomIdList = roomIdList;
+    this.roomList = roomList;
 
     List<String> newRoomIdList = roomList.map((roomModel) => roomModel.id).toList();
     roomIdList = newRoomIdList;

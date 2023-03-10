@@ -19,7 +19,6 @@ class AddRoomCubit extends Cubit<AddRoomState> {
     emit(state.copyWith(isLoading: true));
 
     await addRoom;
-    await Future.delayed(const Duration(seconds: 5));
 
     emit(state.copyWith(isLoading: false));
 

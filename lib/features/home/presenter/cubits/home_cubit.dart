@@ -20,7 +20,6 @@ class HomeCubit extends Cubit<HomeState> {
 
     List<HouseModel> houseList = [];
     final result = await _homeUsecase.getHouseModelList();
-    await Future.delayed(const Duration(seconds: 2));
     result.fold((l) {
       if (l.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
