@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
 
-class EditIconButton extends IconButton {
-  EditIconButton({
+class MoreIconButton extends IconButton {
+  MoreIconButton({
     Key? key,
     Function()? onPressed,
     required BuildContext context,

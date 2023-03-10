@@ -22,7 +22,7 @@ class BackSearchEditAppBar extends AppBar {
               context: context,
               iconColor: Theme.of(context).colorScheme.onPrimary,
             ),
-            EditIconButton(
+            MoreIconButton(
               context: context,
               iconColor: Theme.of(context).colorScheme.onPrimary,
             ),

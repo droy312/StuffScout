@@ -59,12 +59,15 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(width: Nums.horizontalPaddingWidth),
                 SizedBox(
                   height: _userImageSize + 16,
-                  child: FittedBox(
-                    fit: BoxFit.fitHeight,
-                    child: Text(
-                      'Welcome\nDhritiman',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * .5,
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                        'Welcome',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary),
+                      ),
                     ),
                   ),
                 ),

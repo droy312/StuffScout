@@ -29,7 +29,9 @@ class RouteGenerator {
                 containerPageArguments:
                     settings.arguments as ContainerPageArguments));
       case ItemPage.routeName:
-        return MaterialPageRoute(builder: (_) => const ItemPage());
+        return MaterialPageRoute(
+            builder: (_) => ItemPage(
+                itemPageArguments: settings.arguments as ItemPageArguments));
       case AddHousePage.routeName:
         return MaterialPageRoute(
             builder: (_) => AddHousePage(
