@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/models/location_model.dart';
@@ -9,6 +11,8 @@ import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/add_room_cubit.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
+import '../../../../core/widgets/get_image_from_camera_outlined_button.dart';
+import '../../../../core/widgets/get_image_from_gallery_outlined_button.dart';
 import '../../../../service_locator.dart';
 import '../../../../core/widgets/back_icon_button.dart';
 
@@ -41,6 +45,9 @@ class AddRoomPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double imageContainerHeight =
+        MediaQuery.of(context).size.width - (2 * Nums.horizontalPaddingWidth);
+
     return BlocProvider<AddRoomCubit>.value(
       value: _addRoomCubit,
       child: BlocBuilder<AddRoomCubit, AddRoomState>(
@@ -103,6 +110,96 @@ class AddRoomPage extends StatelessWidget {
                         context: context,
                         hintText: 'Enter room description',
                       ),
+                      const SizedBox(height: 16),
+
+                      // Image display
+                      BlocBuilder<AddRoomCubit, AddRoomState>(
+                        builder: (context, state) {
+                          if (state.imageUrl != null) {
+                            return Column(
+                              children: [
+                                Stack(
+                                  children: [
+                                    Container(
+                                      height: imageContainerHeight,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(16)),
+                                        border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: ClipRRect(
+                                          borderRadius:
+                                          const BorderRadius.all(
+                                              Radius.circular(16)),
+                                          child:
+                                          Center(child: Image.file(File(state.imageUrl!)))),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          _addRoomCubit.removeImageFile();
+                                        },
+                                        icon: Container(
+                                          width: 24,
+                                          height: 24,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.clear,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onError,
+                                            size: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                              ],
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
+
+                      // Image adding button
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GetImageFromCameraOutlinedButton(
+                              context: context,
+                              onPressed: () {
+                                _addRoomCubit.addImageUrlFromCamera(context);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: GetImageFromGalleryOutlinedButton(
+                              context: context,
+                              onPressed: () {
+                                _addRoomCubit.addImageUrlFromGallery(context);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+
                       const SizedBox(height: 32),
 
                       // Add house elevated button
