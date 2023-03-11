@@ -68,7 +68,8 @@ class _HousePageState extends State<HousePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: _titleContainerTopAndBottomPadding),
+                  const SizedBox(
+                      height: _titleContainerTopAndBottomPadding),
                   Text(
                     widget.housePageArguments.houseModel.name,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -78,17 +79,19 @@ class _HousePageState extends State<HousePage> {
                   const SizedBox(height: 4),
 
                   // Description
-                  if (widget.housePageArguments.houseModel.description != null)
+                  if (widget.housePageArguments.houseModel.description !=
+                      null)
                     Text(
                       widget.housePageArguments.houseModel.description!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimary
-                                .withOpacity(.6),
-                          ),
+                      style:
+                          Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary
+                                    .withOpacity(.6),
+                              ),
                     ),
                   const SizedBox(height: 16),
                   Text(
@@ -104,32 +107,43 @@ class _HousePageState extends State<HousePage> {
                         .bodyMedium!
                         .copyWith(color: Colors.blue[400]),
                   ),
-                  const SizedBox(height: _titleContainerTopAndBottomPadding),
+                  const SizedBox(
+                      height: _titleContainerTopAndBottomPadding),
                 ],
               ),
             ),
             Expanded(
               child: BlocBuilder<HouseCubit, HouseState>(
                 builder: (context, state) {
-                  return !state.isLoading ? ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: state.houseModel.roomList.length + 1,
-                    // 1 extra for the top SizedBox
-                    itemBuilder: (_, index) {
-                      if (index == 0) {
-                        return const SizedBox(height: 16);
-                      }
-                      index--;
-                      final RoomModel roomModel =
-                          state.houseModel.roomList[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                                horizontal: Nums.horizontalPaddingWidth)
-                            .copyWith(bottom: 16),
-                        child: RoomCardWidget(roomModel: roomModel),
-                      );
-                    },
-                  ) : const Center(child: LoadingWidget(size: 24));
+                  if (state.houseModel.roomList.isEmpty) {
+                    return Center(
+                        child: Text(
+                          'No Rooms present',
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Theme.of(context).colorScheme.onBackground),
+                        ));
+                  }
+                  return !state.isLoading
+                      ? ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: state.houseModel.roomList.length + 1,
+                          // 1 extra for the top SizedBox
+                          itemBuilder: (_, index) {
+                            if (index == 0) {
+                              return const SizedBox(height: 16);
+                            }
+                            index--;
+                            final RoomModel roomModel =
+                                state.houseModel.roomList[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                      horizontal: Nums.horizontalPaddingWidth)
+                                  .copyWith(bottom: 16),
+                              child: RoomCardWidget(roomModel: roomModel),
+                            );
+                          },
+                        )
+                      : const Center(child: LoadingWidget(size: 24));
                 },
               ),
             ),

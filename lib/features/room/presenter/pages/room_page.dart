@@ -146,20 +146,48 @@ class _RoomPageState extends State<RoomPage>
                   builder: (context, state) {
                     return TabBarView(
                       controller: _tabController,
-                      children: !state.isLoading ? [
-                        _listOfWidgetsInGridView(
-                            state.roomModel.containerList.map((containerModel) {
-                          return ContainerCardWidget(
-                              containerModel: containerModel);
-                        }).toList()),
-                        _listOfWidgetsInGridView(
-                            state.roomModel.itemList.map((itemModel) {
-                          return ItemCardWidget(itemModel: itemModel);
-                        }).toList()),
-                      ] : [
-                        const Center(child: LoadingWidget(size: 24)),
-                        const Center(child: LoadingWidget(size: 24)),
-                      ],
+                      children: !state.isLoading
+                          ? [
+                              state.roomModel.containerList.isNotEmpty
+                                  ? _listOfWidgetsInGridView(state
+                                      .roomModel.containerList
+                                      .map((containerModel) {
+                                      return ContainerCardWidget(
+                                          containerModel: containerModel);
+                                    }).toList())
+                                  : Center(
+                                      child: Text(
+                                      'No Containers present',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground),
+                                    )),
+                              state.roomModel.itemList.isNotEmpty
+                                  ? _listOfWidgetsInGridView(
+                                      state.roomModel.itemList.map((itemModel) {
+                                      return ItemCardWidget(
+                                          itemModel: itemModel);
+                                    }).toList())
+                                  : Center(
+                                      child: Text(
+                                      'No Items present',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground),
+                                    )),
+                            ]
+                          : [
+                              const Center(child: LoadingWidget(size: 24)),
+                              const Center(child: LoadingWidget(size: 24)),
+                            ],
                     );
                   },
                 ),

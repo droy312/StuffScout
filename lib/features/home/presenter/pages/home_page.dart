@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                   if (state.houseList.isEmpty) {
                     return Center(
                         child: Text(
-                      'No houses present',
+                      'No Houses present',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: Theme.of(context).colorScheme.onBackground),
                     ));
