@@ -38,6 +38,7 @@ class ContainerItemCardWidget extends StatelessWidget {
                   const BorderRadius.all(Radius.circular(_borderRadius * .95)),
               child: Container(
                 width: double.infinity,
+                height: double.infinity,
                 color: Colors.red,
                 child: Image.file(
                   File(imageUrl!),
