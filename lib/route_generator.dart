@@ -11,6 +11,10 @@ import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
 import 'features/house/presenter/pages/add_room_page.dart';
 
 class RouteGenerator {
+  static List<Route> generateInitialRoutes(String route) {
+    return [MaterialPageRoute(builder: (_) => const HomePage())];
+  }
+
   static Route generateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case HomePage.routeName:
