@@ -10,12 +10,10 @@ class ContainerCardWidget extends StatelessWidget {
     Key? key,
     this.size = 40,
     required this.containerModel,
-    this.imageUrl,
   }) : super(key: key);
 
   final double size;
   final ContainerModel containerModel;
-  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,7 @@ class ContainerCardWidget extends StatelessWidget {
       },
       child: ContainerItemCardWidget(
         label: containerModel.name,
-        imageUrl: imageUrl,
+        imageUrl: containerModel.imageUrl,
       ),
     );
   }

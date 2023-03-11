@@ -216,6 +216,7 @@ class AddRoomPage extends StatelessWidget {
                                           : null,
                                   locationModel:
                                       addRoomPageArguments.roomLocationModel,
+                                  imageUrl: state.imageUrl,
                                 );
                                 _addRoomCubit.addRoom(
                                     context,

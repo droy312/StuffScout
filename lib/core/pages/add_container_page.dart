@@ -216,6 +216,7 @@ class AddContainerPage extends StatelessWidget {
                                           : null,
                                   locationModel: addContainerPageArguments
                                       .containerLocationModel,
+                                   imageUrl: state.imageUrl,
                                 );
                                 _addContainerCubit.addContainer(
                                     context,

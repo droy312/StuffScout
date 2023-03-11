@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class ContainerItemCardWidget extends StatelessWidget {
@@ -12,31 +14,62 @@ class ContainerItemCardWidget extends StatelessWidget {
   final String label;
   final String? imageUrl;
 
+  static const double _borderRadius = 16;
+
   @override
   Widget build(BuildContext context) {
     final Color borderColor =
         Theme.of(context).colorScheme.onBackground.withOpacity(.2);
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 12,
-      ),
       height: size,
       width: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
-        borderRadius: const BorderRadius.all(Radius.circular(16)),
+        borderRadius: const BorderRadius.all(Radius.circular(_borderRadius)),
         border: Border.all(color: borderColor),
       ),
-      child: Text(
-        label,
-        textAlign: TextAlign.center,
-        style: Theme.of(context)
-            .textTheme
-            .titleMedium!
-            .copyWith(color: Theme.of(context).colorScheme.onBackground),
+      child: Stack(
+        children: [
+          if (imageUrl != null) ...[
+            ClipRRect(
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(_borderRadius * .95)),
+              child: Container(
+                width: double.infinity,
+                color: Colors.red,
+                child: Image.file(
+                  File(imageUrl!),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
+              ),
+            ),
+          ],
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: imageUrl != null
+                      ? Colors.white
+                      : Theme.of(context).colorScheme.onBackground),
+            ),
+          ),
+        ],
       ),
     );
   }

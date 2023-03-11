@@ -278,6 +278,7 @@ class AddItemPage extends StatelessWidget {
                                   pricePerItem: pricePerItem,
                                   locationModel:
                                       addItemPageArguments.itemLocationModel,
+                                  imageUrl: state.imageUrl,
                                 );
                                 _addItemCubit.addItem(
                                     context,
