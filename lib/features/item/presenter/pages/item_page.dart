@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/widgets/back_icon_button.dart';
 import 'package:stuff_scout/core/widgets/edit_icon_button.dart';
@@ -66,8 +68,8 @@ class ItemPage extends StatelessWidget {
                     borderRadius: BorderRadius.all(
                         Radius.circular(imageContainerBorderRadius)),
                     child: Center(
-                      child: Image.asset(
-                        itemPageArguments.itemModel.imageUrl!,
+                      child: Image.file(
+                        File(itemPageArguments.itemModel.imageUrl!),
                         fit: BoxFit.contain,
                       ),
                     ),
