@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
+import 'package:stuff_scout/core/services/image_picker_service.dart';
 import 'package:stuff_scout/core/services/local_storage_service.dart';
 import 'package:stuff_scout/features/container/data/repositories/container_repo.dart';
 import 'package:stuff_scout/features/container/domain/container_usecases/container_usecase.dart';
@@ -19,12 +21,14 @@ Future<void> setUpServices() async {
   // External services
   sl.registerSingleton<Uuid>(const Uuid());
   sl.registerSingleton<HiveInterface>(Hive);
+  sl.registerSingleton<ImagePicker>(ImagePicker());
 
   // Internal services
   sl.registerSingleton<IdService>(IdService());
   sl.registerSingleton<LocalStorageService>(LocalStorageService());
   final LocalStorageService localStorageService = sl<LocalStorageService>();
   await localStorageService.init();
+  sl.registerSingleton<ImagePickerService>(ImagePickerService());
 
   // Repositories
   sl.registerSingleton<HomeRepo>(HomeRepo());

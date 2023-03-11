@@ -44,6 +44,7 @@ dependencies:
   dartz: ^0.10.1
   flutter_spinkit: ^5.1.0
   flutter_dotenv: ^5.0.2
+  image_picker: ^0.8.7
 
   # Local storage
   hive: ^2.2.3

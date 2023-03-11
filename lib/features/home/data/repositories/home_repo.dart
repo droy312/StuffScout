@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:stuff_scout/core/errors/custom_exception.dart';
+import 'package:stuff_scout/core/services/image_picker_service.dart';
 import 'package:stuff_scout/core/strs.dart';
 import 'package:stuff_scout/features/house/data/models/house_model.dart';
 
@@ -7,6 +10,7 @@ import '../../../../service_locator.dart';
 
 class HomeRepo {
   final LocalStorageService _localStorageService = sl<LocalStorageService>();
+  final ImagePickerService _imagePickerService = sl<ImagePickerService>();
 
   Future<List<String>> getHouseIdList() async {
     return await _localStorageService.getHouseIdList() ?? [];
@@ -39,6 +43,24 @@ class HomeRepo {
     } catch (e) {
       throw const CustomException(
           message: 'Couldn\'t add House. Please try again');
+    }
+  }
+
+  Future<File?> getImageFileFromCamera() {
+    try {
+      return _imagePickerService.getImageFileFromCamera();
+    } catch (e) {
+      throw const CustomException(
+          message: 'Failed to get image. Please try again.');
+    }
+  }
+
+  Future<File?> getImageFileFromGallery() {
+    try {
+      return _imagePickerService.getImageFileFromGallery();
+    } catch (e) {
+      throw const CustomException(
+          message: 'Failed to get image. Please try again.');
     }
   }
 }

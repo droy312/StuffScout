@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -12,9 +13,6 @@ class HouseCardWidget extends StatelessWidget {
     Key? key,
     required this.houseModel,
   }) : super(key: key);
-
-  static const String _testImageUrl =
-      'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
   static const double _imageContainerBorderRadius =
       Nums.textFieldElevatedButtonBorderRadius * .75;
@@ -59,17 +57,31 @@ class HouseCardWidget extends StatelessWidget {
               Container(
                 height: imageContainerSize,
                 width: imageContainerSize,
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(_imageContainerBorderRadius))),
-                child: ClipRRect(
+                decoration: BoxDecoration(
+                  color: houseModel.imageUrl == null ? Theme.of(context).colorScheme.secondaryContainer : null,
                   borderRadius: const BorderRadius.all(
                       Radius.circular(_imageContainerBorderRadius)),
-                  child: Image.network(
-                    _testImageUrl,
-                    fit: BoxFit.cover,
-                  ),
                 ),
+                child: houseModel.imageUrl != null
+                    ? ClipRRect(
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(_imageContainerBorderRadius)),
+                        child: Image.file(
+                          File(houseModel.imageUrl!),
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : Center(
+                      child: Text(
+                          houseModel.name[0].toUpperCase(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium!
+                              .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondaryContainer),
+                        ),
+                    ),
               ),
               const SizedBox(width: 16),
               Expanded(

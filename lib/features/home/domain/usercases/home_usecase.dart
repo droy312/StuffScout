@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:stuff_scout/core/errors/custom_exception.dart';
 import 'package:stuff_scout/core/errors/success.dart';
@@ -34,6 +36,22 @@ class HomeUsecase {
       await _homeRepo.putHouseModel(houseModel);
       await _homeRepo.addHouseIdToHouseIdList(houseModel.id);
       return const Right(Success(message: 'Added House successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
+  Future<Either<Failure, File?>> getImageFileFromCamera() async {
+    try {
+      return Right(await _homeRepo.getImageFileFromCamera());
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
+  Future<Either<Failure, File?>> getImageFileFromGallery() async {
+    try {
+      return Right(await _homeRepo.getImageFileFromGallery());
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }

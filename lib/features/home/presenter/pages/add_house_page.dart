@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/custom_elevated_button.dart';
+import 'package:stuff_scout/core/widgets/get_image_from_camera_outlined_button.dart';
+import 'package:stuff_scout/core/widgets/get_image_from_gallery_outlined_button.dart';
 import 'package:stuff_scout/core/widgets/input_text_field.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/add_house_cubit.dart';
@@ -36,6 +40,9 @@ class AddHousePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double imageContainerHeight =
+        MediaQuery.of(context).size.width - (2 * Nums.horizontalPaddingWidth);
+
     return BlocProvider<AddHouseCubit>.value(
       value: _addHouseCubit,
       child: BlocBuilder<AddHouseCubit, AddHouseState>(
@@ -98,7 +105,97 @@ class AddHousePage extends StatelessWidget {
                         context: context,
                         hintText: 'Enter house description',
                       ),
+                      const SizedBox(height: 16),
+
+                      // Image display
+                      BlocBuilder<AddHouseCubit, AddHouseState>(
+                        builder: (context, state) {
+                          if (state.imageUrl != null) {
+                            return Column(
+                              children: [
+                                Stack(
+                                  children: [
+                                    Container(
+                                      height: imageContainerHeight,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(16)),
+                                        border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              const BorderRadius.all(
+                                                  Radius.circular(16)),
+                                          child:
+                                              Center(child: Image.file(File(state.imageUrl!)))),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          _addHouseCubit.removeImageFile();
+                                        },
+                                        icon: Container(
+                                          width: 24,
+                                          height: 24,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.clear,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onError,
+                                            size: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                              ],
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
+
+                      // Image adding button
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GetImageFromCameraOutlinedButton(
+                              context: context,
+                              onPressed: () {
+                                _addHouseCubit.addImageUrlFromCamera(context);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: GetImageFromGalleryOutlinedButton(
+                              context: context,
+                              onPressed: () {
+                                _addHouseCubit.addImageUrlFromGallery(context);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 32),
+
                       // Add house elevated button
                       CustomElevatedButton(
                         context: context,
@@ -111,9 +208,12 @@ class AddHousePage extends StatelessWidget {
                                       _descriptionController.text.isNotEmpty
                                           ? _descriptionController.text
                                           : null,
+                                  imageUrl: state.imageUrl,
                                 );
                                 await _addHouseCubit.addHouse(
-                                    context, addHousePageArguments.onAddHousePressed(houseModel));
+                                    context,
+                                    addHousePageArguments
+                                        .onAddHousePressed(houseModel));
                               }
                             : null,
                         child: Center(

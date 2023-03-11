@@ -65,9 +65,11 @@ class ItemPage extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(
                         Radius.circular(imageContainerBorderRadius)),
-                    child: Image.asset(
-                      itemPageArguments.itemModel.imageUrl!,
-                      fit: BoxFit.contain,
+                    child: Center(
+                      child: Image.asset(
+                        itemPageArguments.itemModel.imageUrl!,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
