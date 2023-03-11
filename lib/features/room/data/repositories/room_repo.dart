@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:stuff_scout/core/services/local_storage_service.dart';
 
 import '../../../../core/errors/custom_exception.dart';
+import '../../../../core/services/image_picker_service.dart';
 import '../../../../core/strs.dart';
 import '../../../../service_locator.dart';
 import '../../../container/data/models/container_model.dart';
@@ -8,6 +11,7 @@ import '../../../item/data/models/item_model.dart';
 
 class RoomRepo {
   final LocalStorageService _localStorageService = sl<LocalStorageService>();
+  final ImagePickerService _imagePickerService = sl<ImagePickerService>();
 
   Future<ContainerModel> getContainerModel(String containerId) async {
     final Map<dynamic, dynamic>? map =
@@ -67,6 +71,24 @@ class RoomRepo {
     } catch (e) {
       throw const CustomException(
           message: 'Couldn\'t add Item. Please try again.');
+    }
+  }
+
+  Future<File?> getImageFileFromCamera() {
+    try {
+      return _imagePickerService.getImageFileFromCamera();
+    } catch (e) {
+      throw const CustomException(
+          message: 'Failed to get image. Please try again.');
+    }
+  }
+
+  Future<File?> getImageFileFromGallery() {
+    try {
+      return _imagePickerService.getImageFileFromGallery();
+    } catch (e) {
+      throw const CustomException(
+          message: 'Failed to get image. Please try again.');
     }
   }
 }
