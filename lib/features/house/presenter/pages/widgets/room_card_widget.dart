@@ -1,54 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
-import 'package:stuff_scout/features/room/data/models/room_model.dart';
-import 'package:stuff_scout/features/room/presenter/pages/room_page.dart';
+import 'package:stuff_scout/core/widgets/room_container_item_card_widget.dart';
+
+import '../../../../room/data/models/room_model.dart';
+import '../../../../room/presenter/pages/room_page.dart';
+import '../../../../../core/widgets/unsplash_ink_well.dart';
 
 class RoomCardWidget extends StatelessWidget {
   const RoomCardWidget({
     Key? key,
+    this.size = 40,
     required this.roomModel,
   }) : super(key: key);
 
+  final double size;
   final RoomModel roomModel;
 
   @override
   Widget build(BuildContext context) {
-    final Color borderColor =
-        Theme.of(context).colorScheme.onBackground.withOpacity(.2);
-
     return UnsplashInkWell(
       onTap: () {
         Navigator.pushNamed(
           context,
           RoomPage.routeName,
-          arguments:
-              RoomPageArguments(roomModel: roomModel),
+          arguments: RoomPageArguments(roomModel: roomModel),
         );
       },
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
-          border: Border.all(color: borderColor),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              roomModel.name,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(color: Theme.of(context).colorScheme.onBackground),
-            ),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 20,
-              color: Theme.of(context).colorScheme.onBackground,
-            ),
-          ],
-        ),
+      child: RoomContainerItemCardWidget(
+        label: roomModel.name,
+        imageUrl: roomModel.imageUrl,
       ),
     );
   }

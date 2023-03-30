@@ -7,10 +7,10 @@ import 'package:stuff_scout/core/widgets/back_search_edit_app_bar.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/add_room_item_dialog.dart';
-import 'package:stuff_scout/features/house/presenter/pages/widgets/room_card_widget.dart';
 
 import '../../../../core/pages/add_item_page.dart';
 import '../../../../core/widgets/item_card_widget.dart';
+import 'widgets/room_card_widget.dart';
 import '../../../../service_locator.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../data/models/house_model.dart';
@@ -138,7 +138,7 @@ class _HousePageState extends State<HousePage>
                   vertical: 12,
                 ),
                 tabs: const [
-                  Text('Containers'),
+                  Text('Rooms'),
                   Text('Items'),
                 ],
               ),
