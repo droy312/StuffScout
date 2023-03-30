@@ -6,6 +6,7 @@ import 'package:stuff_scout/core/widgets/snackbar_widget.dart';
 import 'package:stuff_scout/features/house/domain/usecases/house_usecase.dart';
 
 import '../../../../service_locator.dart';
+import '../../../item/data/models/item_model.dart';
 import '../../../room/data/models/room_model.dart';
 import '../../data/models/house_model.dart';
 
@@ -24,11 +25,11 @@ class HouseCubit extends Cubit<HouseState> {
   void init() async {
     emit(state.copyWith(isLoading: true));
 
-    final result =
+    final result1 =
         await _houseUsecase.getRoomModelList(state.houseModel.roomIdList);
     HouseModel houseModel = state.houseModel;
     
-    result.fold((l) {
+    result1.fold((l) {
       if (l.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
           context: context,
@@ -39,6 +40,20 @@ class HouseCubit extends Cubit<HouseState> {
     }, (roomList) {
       state.houseModel.addRoomList(roomList);
       houseModel = state.houseModel;
+    });
+
+    final result2 =
+    await _houseUsecase.getItemModelList(state.houseModel.itemIdList);
+    result2.fold((l) {
+      if (l.message != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+          context: context,
+          text: l.message!,
+          isError: true,
+        ));
+      }
+    }, (itemList) {
+      state.houseModel.addItemList(itemList);
     });
 
     emit(HouseState(houseModel: houseModel));
@@ -57,6 +72,30 @@ class HouseCubit extends Cubit<HouseState> {
       }
     }, (r) {
       state.houseModel.addRoom(roomModel);
+      emit(HouseState(houseModel: state.houseModel));
+
+      if (r.message != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+          context: context,
+          text: r.message!,
+        ));
+      }
+    });
+  }
+
+  Future<void> addItem(ItemModel itemModel) async {
+    final result = await _houseUsecase.putItemModel(
+        state.houseModel.id, itemModel);
+    result.fold((l) {
+      if (l.message != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+          context: context,
+          text: l.message!,
+          isError: true,
+        ));
+      }
+    }, (r) {
+      state.houseModel.addItem(itemModel);
       emit(HouseState(houseModel: state.houseModel));
 
       if (r.message != null) {

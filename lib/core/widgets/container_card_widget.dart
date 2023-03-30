@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stuff_scout/core/widgets/container_item_card_widget.dart';
+import 'package:stuff_scout/core/widgets/room_container_item_card_widget.dart';
 import 'package:stuff_scout/features/container/data/models/container_model.dart';
 import 'package:stuff_scout/features/container/presenter/pages/container_page.dart';
 
@@ -25,7 +25,7 @@ class ContainerCardWidget extends StatelessWidget {
           arguments: ContainerPageArguments(containerModel: containerModel),
         );
       },
-      child: ContainerItemCardWidget(
+      child: RoomContainerItemCardWidget(
         label: containerModel.name,
         imageUrl: containerModel.imageUrl,
       ),

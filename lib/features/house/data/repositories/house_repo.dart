@@ -6,6 +6,7 @@ import 'package:stuff_scout/core/strs.dart';
 
 import '../../../../core/services/image_picker_service.dart';
 import '../../../../service_locator.dart';
+import '../../../item/data/models/item_model.dart';
 import '../../../room/data/models/room_model.dart';
 
 class HouseRepo {
@@ -40,6 +41,36 @@ class HouseRepo {
     } catch (e) {
       throw const CustomException(
           message: 'Couldn\'t add Room. Please try again.');
+    }
+  }
+
+  Future<ItemModel> getItemModel(String itemId) async {
+    final Map<dynamic, dynamic>? map =
+    await _localStorageService.getItemInfo(itemId);
+
+    if (map == null) {
+      throw const CustomException(message: Strs.thereWasSomeProblem);
+    }
+
+    return ItemModel.fromMapOfLocalStorage(map);
+  }
+
+  Future<void> addItemIdToHouseInfo(String houseId, String itemId) async {
+    try {
+      await _localStorageService.addItemIdToHouseInfo(houseId, itemId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t add Item. Please try again.');
+    }
+  }
+
+  Future<void> putItemModel(ItemModel itemModel) async {
+    try {
+      final Map<String, dynamic> map = itemModel.toMapForLocalStorage();
+      await _localStorageService.putItemInfo(itemModel.id, map);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t add Item. Please try again.');
     }
   }
 

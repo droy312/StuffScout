@@ -8,6 +8,7 @@ import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../service_locator.dart';
+import '../../../item/data/models/item_model.dart';
 
 class HouseUsecase {
   final HouseRepo _houseRepo = sl<HouseRepo>();
@@ -33,6 +34,33 @@ class HouseUsecase {
       await _houseRepo.addRoomIdToHouseInfo(houseId, roomModel.id);
 
       return const Right(Success(message: 'Added Room successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
+  Future<Either<Failure, List<ItemModel>>> getItemModelList(
+      List<String> itemIdList) async {
+    final List<ItemModel> itemList = [];
+
+    for (final itemId in itemIdList) {
+      try {
+        final ItemModel itemModel = await _houseRepo.getItemModel(itemId);
+        itemList.add(itemModel);
+      } on CustomException catch (e) {
+        return Left(Failure(message: e.message, code: e.code));
+      }
+    }
+
+    return Right(itemList);
+  }
+
+  Future<Either<Failure, Success>> putItemModel(
+      String houseId, ItemModel itemModel) async {
+    try {
+      await _houseRepo.addItemIdToHouseInfo(houseId, itemModel.id);
+      await _houseRepo.putItemModel(itemModel);
+      return const Right(Success(message: 'Added Item successfully'));
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }

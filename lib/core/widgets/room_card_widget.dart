@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/widgets/room_container_item_card_widget.dart';
-import 'package:stuff_scout/features/item/data/models/item_model.dart';
-import 'package:stuff_scout/features/item/presenter/pages/item_page.dart';
 
+import '../../features/room/data/models/room_model.dart';
+import '../../features/room/presenter/pages/room_page.dart';
 import 'unsplash_ink_well.dart';
 
-class ItemCardWidget extends StatelessWidget {
-  const ItemCardWidget({
+class RoomCardWidget extends StatelessWidget {
+  const RoomCardWidget({
     Key? key,
     this.size = 40,
-    required this.itemModel,
+    required this.roomModel,
   }) : super(key: key);
 
   final double size;
-  final ItemModel itemModel;
+  final RoomModel roomModel;
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +21,13 @@ class ItemCardWidget extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(
           context,
-          ItemPage.routeName,
-          arguments: ItemPageArguments(itemModel: itemModel),
+          RoomPage.routeName,
+          arguments: RoomPageArguments(roomModel: roomModel),
         );
       },
       child: RoomContainerItemCardWidget(
-        label: itemModel.name,
-        imageUrl: itemModel.imageUrl,
+        label: roomModel.name,
+        imageUrl: roomModel.imageUrl,
       ),
     );
   }

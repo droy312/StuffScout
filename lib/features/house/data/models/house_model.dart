@@ -1,3 +1,4 @@
+import '../../../item/data/models/item_model.dart';
 import '../../../room/data/models/room_model.dart';
 
 class HouseModel {
@@ -8,6 +9,8 @@ class HouseModel {
     this.imageUrl,
     this.roomList = const [],
     this.roomIdList = const [],
+    this.itemList = const [],
+    this.itemIdList = const [],
     this.mapLocationLink,
   });
 
@@ -17,6 +20,8 @@ class HouseModel {
   final String? imageUrl;
   List<RoomModel> roomList;
   List<String> roomIdList;
+  List<ItemModel> itemList;
+  List<String> itemIdList;
   final String? mapLocationLink;
 
   void addRoom(RoomModel roomModel) {
@@ -36,6 +41,23 @@ class HouseModel {
     roomIdList = newRoomIdList;
   }
 
+  void addItem(ItemModel itemModel) {
+    List<ItemModel> newItemList = itemList.toList();
+    newItemList.add(itemModel);
+    itemList = newItemList;
+
+    List<String> newItemIdList = itemIdList.toList();
+    newItemIdList.add(itemModel.id);
+    itemIdList = newItemIdList;
+  }
+
+  void addItemList(List<ItemModel> itemList) {
+    this.itemList = itemList;
+
+    List<String> newItemIdList = itemList.map((itemModel) => itemModel.id).toList();
+    itemIdList = newItemIdList;
+  }
+
   Map<String, dynamic> toMapForLocalStorage() {
     return {
       'id': id,
@@ -43,6 +65,7 @@ class HouseModel {
       'description': description,
       'imageUrl': imageUrl,
       'roomIdList': roomIdList,
+      'itemIdList': itemIdList,
       'mapLocationLink': mapLocationLink,
     };
   }
@@ -57,8 +80,11 @@ class HouseModel {
       name: map['name'],
       description: map['description'],
       imageUrl: map['imageUrl'],
-      roomIdList: (map['roomIdList'] as List<dynamic>)
+      roomIdList: ((map['roomIdList'] ?? []) as List<dynamic>)
           .map((roomId) => roomId.toString())
+          .toList(),
+      itemIdList: ((map['itemIdList'] ?? [] )as List<dynamic>)
+          .map((itemId) => itemId.toString())
           .toList(),
       mapLocationLink: map['mapLocationLink'],
     );

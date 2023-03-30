@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class ContainerItemCardWidget extends StatelessWidget {
-  const ContainerItemCardWidget({
+class RoomContainerItemCardWidget extends StatelessWidget {
+  const RoomContainerItemCardWidget({
     Key? key,
     this.size = 40,
     required this.label,

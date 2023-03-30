@@ -72,6 +72,10 @@ class LocalStorageService {
     return _addIdToList(_houseBox, houseId, 'roomIdList', roomId);
   }
 
+  Future<void> addItemIdToHouseInfo(String houseId, String itemId) {
+    return _addIdToList(_houseBox, houseId, 'itemIdList', itemId);
+  }
+
   Future<Map<dynamic, dynamic>?> getHouseInfo(String houseId) async {
     return _houseBox.get(houseId);
   }
