@@ -22,7 +22,7 @@ class HomeCubit extends Cubit<HomeState> {
     final result = await _homeUsecase.getHouseModelList();
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -41,7 +41,7 @@ class HomeCubit extends Cubit<HomeState> {
     final result = await _homeUsecase.putHouseModel(houseModel);
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -52,7 +52,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(houseList: houseList));
 
       if (r.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: r.message!,
         ));

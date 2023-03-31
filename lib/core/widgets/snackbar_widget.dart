@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SnackBarWidget extends SnackBar {
-  SnackBarWidget({
+class CustomSnackBar extends SnackBar {
+  CustomSnackBar({
     Key? key,
     required BuildContext context,
     required String text,

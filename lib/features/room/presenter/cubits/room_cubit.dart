@@ -29,7 +29,7 @@ class RoomCubit extends Cubit<RoomState> {
         .getContainerModelList(state.roomModel.containerIdList);
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -43,7 +43,7 @@ class RoomCubit extends Cubit<RoomState> {
         await _roomUsecase.getItemModelList(state.roomModel.itemIdList);
     result2.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -61,7 +61,7 @@ class RoomCubit extends Cubit<RoomState> {
         state.roomModel.id, containerModel);
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -72,7 +72,7 @@ class RoomCubit extends Cubit<RoomState> {
       emit(RoomState(roomModel: state.roomModel));
 
       if (r.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: r.message!,
         ));
@@ -85,7 +85,7 @@ class RoomCubit extends Cubit<RoomState> {
         state.roomModel.id, itemModel);
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -96,7 +96,7 @@ class RoomCubit extends Cubit<RoomState> {
       emit(RoomState(roomModel: state.roomModel));
 
       if (r.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: r.message!,
         ));

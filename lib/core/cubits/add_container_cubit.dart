@@ -38,7 +38,7 @@ class AddContainerCubit extends Cubit<AddContainerState> {
     final result = await _roomUsecase.getImageFileFromCamera();
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -46,7 +46,7 @@ class AddContainerCubit extends Cubit<AddContainerState> {
       }
     }, (imageFile) {
       if (imageFile == null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: 'No Image selected',
         ));
@@ -60,7 +60,7 @@ class AddContainerCubit extends Cubit<AddContainerState> {
     final result = await _roomUsecase.getImageFileFromGallery();
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -68,7 +68,7 @@ class AddContainerCubit extends Cubit<AddContainerState> {
       }
     }, (imageFile) {
       if (imageFile == null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: 'No Image selected',
         ));

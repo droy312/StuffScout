@@ -27,7 +27,7 @@ class AddHouseCubit extends Cubit<AddHouseState> {
     final result = await _homeUsecase.getImageFileFromCamera();
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -35,7 +35,7 @@ class AddHouseCubit extends Cubit<AddHouseState> {
       }
     }, (imageFile) {
       if (imageFile == null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: 'No Image selected',
         ));
@@ -49,7 +49,7 @@ class AddHouseCubit extends Cubit<AddHouseState> {
     final result = await _homeUsecase.getImageFileFromGallery();
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -57,7 +57,7 @@ class AddHouseCubit extends Cubit<AddHouseState> {
       }
     }, (imageFile) {
       if (imageFile == null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: 'No Image selected',
         ));

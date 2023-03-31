@@ -4,12 +4,14 @@ import 'package:stuff_scout/core/widgets/add_floating_action_button.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/core/widgets/menu_icon_button.dart';
 import 'package:stuff_scout/core/widgets/notification_icon_button.dart';
+import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 import 'package:stuff_scout/features/home/presenter/pages/widgets/house_card_widget.dart';
 import 'package:stuff_scout/features/home/presenter/pages/widgets/search_bar_widget.dart';
 import 'package:stuff_scout/features/home/presenter/pages/widgets/user_image_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../search/presenter/pages/search_page.dart';
 import 'add_house_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,8 +25,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const double _userImageSize = 80;
+  static const String _searchBarHintText =
+      'Search houses, rooms, containers, items...';
 
   late final HomeCubit _homeCubit;
+
+  final String _heroTag = 'searchBarTextField${HomePage.routeName}';
 
   @override
   void initState() {
@@ -80,9 +86,32 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(
                   horizontal: Nums.horizontalPaddingWidth),
-              child: SearchBarWidget(
-                context: context,
-                hintText: 'Search Rooms, Containers, Items...',
+              child: BlocBuilder<HomeCubit, HomeState>(
+                builder: (context, state) {
+                  return Hero(
+                    tag: _heroTag,
+                    child: Material(
+                      child: UnsplashInkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            SearchPage.routeName,
+                            arguments: SearchPageArguments(
+                              hintText: _searchBarHintText,
+                              heroTag: _heroTag,
+                              houseList: state.houseList,
+                            ),
+                          );
+                        },
+                        child: SearchBarTextField(
+                          context: context,
+                          hintText: _searchBarHintText,
+                          enabled: false,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 12),
@@ -124,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                             })
                           ],
                         )
-                      : const Center(child: LoadingWidget(size: 24));
+                      : const Center(child: LoadingWidget());
                 },
               ),
             ),

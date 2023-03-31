@@ -185,8 +185,8 @@ class _RoomPageState extends State<RoomPage>
                                     )),
                             ]
                           : [
-                              const Center(child: LoadingWidget(size: 24)),
-                              const Center(child: LoadingWidget(size: 24)),
+                              const Center(child: LoadingWidget()),
+                              const Center(child: LoadingWidget()),
                             ],
                     );
                   },

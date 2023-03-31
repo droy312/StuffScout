@@ -189,8 +189,8 @@ class _ContainerPageState extends State<ContainerPage>
                                     )),
                             ]
                           : [
-                              const Center(child: LoadingWidget(size: 24)),
-                              const Center(child: LoadingWidget(size: 24)),
+                              const Center(child: LoadingWidget()),
+                              const Center(child: LoadingWidget()),
                             ],
                     );
                   },

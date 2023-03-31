@@ -28,7 +28,7 @@ class ContainerCubit extends Cubit<ContainerState> {
         .getContainerModelList(state.containerModel.containerIdList);
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -42,7 +42,7 @@ class ContainerCubit extends Cubit<ContainerState> {
         await _containerUsecase.getItemModelList(state.containerModel.itemIdList);
     result2.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -60,7 +60,7 @@ class ContainerCubit extends Cubit<ContainerState> {
         state.containerModel.id, containerModel);
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -71,7 +71,7 @@ class ContainerCubit extends Cubit<ContainerState> {
       emit(ContainerState(containerModel: state.containerModel));
 
       if (r.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: r.message!,
         ));
@@ -84,7 +84,7 @@ class ContainerCubit extends Cubit<ContainerState> {
         state.containerModel.id, itemModel);
     result.fold((l) {
       if (l.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: l.message!,
           isError: true,
@@ -95,7 +95,7 @@ class ContainerCubit extends Cubit<ContainerState> {
       emit(ContainerState(containerModel: state.containerModel));
 
       if (r.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBarWidget(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: r.message!,
         ));

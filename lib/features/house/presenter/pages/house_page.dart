@@ -187,8 +187,8 @@ class _HousePageState extends State<HousePage>
                                     )),
                             ]
                           : [
-                              const Center(child: LoadingWidget(size: 24)),
-                              const Center(child: LoadingWidget(size: 24)),
+                              const Center(child: LoadingWidget()),
+                              const Center(child: LoadingWidget()),
                             ],
                     );
                   },
