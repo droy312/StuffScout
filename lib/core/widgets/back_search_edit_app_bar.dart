@@ -7,6 +7,8 @@ class BackSearchEditAppBar extends AppBar {
   BackSearchEditAppBar({
     Key? key,
     required BuildContext context,
+    Function()? onSearchPressed,
+    Function()? onMorePressed,
   }) : super(
           key: key,
           elevation: 0,
@@ -21,10 +23,12 @@ class BackSearchEditAppBar extends AppBar {
             SearchIconButton(
               context: context,
               iconColor: Theme.of(context).colorScheme.onPrimary,
+              onPressed: onSearchPressed,
             ),
             MoreIconButton(
               context: context,
               iconColor: Theme.of(context).colorScheme.onPrimary,
+              onPressed: onMorePressed,
             ),
           ],
         );

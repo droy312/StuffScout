@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/presenter/cubits/room_cubit.dart';
+import 'package:stuff_scout/features/search/presenter/pages/search_page.dart';
 
 import '../../../../core/nums.dart';
 import '../../../../core/pages/add_container_page.dart';
@@ -72,7 +73,19 @@ class _RoomPageState extends State<RoomPage>
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: BackSearchEditAppBar(context: context),
+          appBar: BackSearchEditAppBar(
+            context: context,
+            onSearchPressed: () {
+              Navigator.pushNamed(
+                context,
+                SearchPage.routeName,
+                arguments: SearchPageArguments(
+                  hintText: 'Search containers, items...',
+                  roomModel: widget.roomPageArguments.roomModel,
+                ),
+              );
+            },
+          ),
           body: Column(
             children: [
               Container(

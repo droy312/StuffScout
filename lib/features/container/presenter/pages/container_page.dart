@@ -11,6 +11,7 @@ import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../../core/widgets/back_search_edit_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
+import '../../../search/presenter/pages/search_page.dart';
 import '../../data/models/container_model.dart';
 
 class ContainerPageArguments {
@@ -72,7 +73,19 @@ class _ContainerPageState extends State<ContainerPage>
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: BackSearchEditAppBar(context: context),
+          appBar: BackSearchEditAppBar(
+            context: context,
+            onSearchPressed: () {
+              Navigator.pushNamed(
+                context,
+                SearchPage.routeName,
+                arguments: SearchPageArguments(
+                  hintText: 'Search containers, items...',
+                  containerModel: widget.containerPageArguments.containerModel,
+                ),
+              );
+            },
+          ),
           body: Column(
             children: [
               Container(

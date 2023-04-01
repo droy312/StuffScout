@@ -10,6 +10,7 @@ import 'package:stuff_scout/features/house/presenter/pages/widgets/add_room_item
 
 import '../../../../core/pages/add_item_page.dart';
 import '../../../../core/widgets/item_card_widget.dart';
+import '../../../search/presenter/pages/search_page.dart';
 import 'widgets/room_card_widget.dart';
 import '../../../../service_locator.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
@@ -79,7 +80,19 @@ class _HousePageState extends State<HousePage>
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: BackSearchEditAppBar(context: context),
+          appBar: BackSearchEditAppBar(
+            context: context,
+            onSearchPressed: () {
+              Navigator.pushNamed(
+                context,
+                SearchPage.routeName,
+                arguments: SearchPageArguments(
+                  hintText: 'Search rooms, containers, items...',
+                  houseModel: widget.housePageArguments.houseModel,
+                ),
+              );
+            },
+          ),
           body: Column(
             children: [
               Container(

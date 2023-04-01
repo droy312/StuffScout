@@ -9,18 +9,26 @@ import 'package:stuff_scout/features/search/presenter/pages/widgets/search_page_
 import 'package:stuff_scout/features/search/presenter/pages/widgets/search_page_item_card_widget.dart';
 import 'package:stuff_scout/features/search/presenter/pages/widgets/search_page_room_card_widget.dart';
 
+import '../../../container/data/models/container_model.dart';
 import '../../../house/data/models/house_model.dart';
+import '../../../room/data/models/room_model.dart';
 
 class SearchPageArguments {
   const SearchPageArguments({
     required this.hintText,
-    required this.heroTag,
-    this.houseList = const [],
+    this.heroTag,
+    this.houseList,
+    this.houseModel,
+    this.roomModel,
+    this.containerModel,
   });
 
   final String hintText;
-  final String heroTag;
-  final List<HouseModel> houseList;
+  final String? heroTag;
+  final List<HouseModel>? houseList;
+  final HouseModel? houseModel;
+  final RoomModel? roomModel;
+  final ContainerModel? containerModel;
 }
 
 class SearchPage extends StatefulWidget {
@@ -45,6 +53,9 @@ class _SearchPageState extends State<SearchPage> {
     context.read<SearchCubit>().initSearchList(
           context: context,
           houseList: widget.searchPageArguments.houseList,
+          houseModel: widget.searchPageArguments.houseModel,
+          roomModel: widget.searchPageArguments.roomModel,
+          containerModel: widget.searchPageArguments.containerModel,
         );
   }
 
@@ -56,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
           appBar: AppBar(
             leading: const SizedBox(),
             title: Hero(
-              tag: widget.searchPageArguments.heroTag,
+              tag: widget.searchPageArguments.heroTag ?? '',
               child: Material(
                 child: SearchBarTextField(
                   context: context,
