@@ -97,6 +97,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             SearchPage.routeName,
                             arguments: SearchPageArguments(
+                              title: 'Search',
                               hintText: _searchBarHintText,
                               heroTag: _heroTag,
                               houseList: state.houseList,

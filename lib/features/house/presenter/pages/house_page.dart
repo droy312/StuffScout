@@ -87,6 +87,7 @@ class _HousePageState extends State<HousePage>
                 context,
                 SearchPage.routeName,
                 arguments: SearchPageArguments(
+                  title: 'Search in ${widget.housePageArguments.houseModel.name}',
                   hintText: 'Search rooms, containers, items...',
                   houseModel: widget.housePageArguments.houseModel,
                 ),

@@ -80,6 +80,7 @@ class _ContainerPageState extends State<ContainerPage>
                 context,
                 SearchPage.routeName,
                 arguments: SearchPageArguments(
+                  title: 'Search in ${widget.containerPageArguments.containerModel.name}',
                   hintText: 'Search containers, items...',
                   containerModel: widget.containerPageArguments.containerModel,
                 ),

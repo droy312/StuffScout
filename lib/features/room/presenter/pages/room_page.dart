@@ -80,6 +80,7 @@ class _RoomPageState extends State<RoomPage>
                 context,
                 SearchPage.routeName,
                 arguments: SearchPageArguments(
+                  title: 'Search in ${widget.roomPageArguments.roomModel.name}',
                   hintText: 'Search containers, items...',
                   roomModel: widget.roomPageArguments.roomModel,
                 ),
