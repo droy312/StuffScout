@@ -28,149 +28,144 @@ class _HomePageState extends State<HomePage> {
   static const String _searchBarHintText =
       'Search houses, rooms, containers, items...';
 
-  late final HomeCubit _homeCubit;
-
   final String _heroTag = 'searchBarTextField${HomePage.routeName}';
 
   @override
   void initState() {
     super.initState();
 
-    _homeCubit = HomeCubit(context: context);
-    _homeCubit.init();
+    context.read<HomeCubit>().init(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeCubit>.value(
-      value: _homeCubit,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: MenuIconButton(
+    return Scaffold(
+      appBar: AppBar(
+        leading: MenuIconButton(
+          context: context,
+          onPressed: () {},
+        ),
+        actions: [
+          NotificationIconButton(
             context: context,
             onPressed: () {},
           ),
-          actions: [
-            NotificationIconButton(
-              context: context,
-              onPressed: () {},
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            // Header
-            Row(
-              children: [
-                const SizedBox(width: Nums.horizontalPaddingWidth),
-                SizedBox(
-                  height: _userImageSize + 16,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * .5,
-                    child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Text(
-                        'Welcome',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
-                      ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Header
+          Row(
+            children: [
+              const SizedBox(width: Nums.horizontalPaddingWidth),
+              SizedBox(
+                height: _userImageSize + 16,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * .5,
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      'Welcome',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                 ),
-                const Spacer(),
-                const UserImageWidget(size: _userImageSize),
-                const SizedBox(width: Nums.horizontalPaddingWidth),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Nums.horizontalPaddingWidth),
-              child: BlocBuilder<HomeCubit, HomeState>(
-                builder: (context, state) {
-                  return Hero(
-                    tag: _heroTag,
-                    child: Material(
-                      child: UnsplashInkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            SearchPage.routeName,
-                            arguments: SearchPageArguments(
-                              title: 'Search',
-                              hintText: _searchBarHintText,
-                              heroTag: _heroTag,
-                              houseList: state.houseList,
-                            ),
-                          );
-                        },
-                        child: SearchBarTextField(
-                          context: context,
-                          hintText: _searchBarHintText,
-                          enabled: false,
-                        ),
+              ),
+              const Spacer(),
+              const UserImageWidget(size: _userImageSize),
+              const SizedBox(width: Nums.horizontalPaddingWidth),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: Nums.horizontalPaddingWidth),
+            child: BlocBuilder<HomeCubit, HomeState>(
+              builder: (context, state) {
+                return Hero(
+                  tag: _heroTag,
+                  child: Material(
+                    child: UnsplashInkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          SearchPage.routeName,
+                          arguments: SearchPageArguments(
+                            title: 'Search',
+                            hintText: _searchBarHintText,
+                            heroTag: _heroTag,
+                            houseList: state.houseList,
+                          ),
+                        );
+                      },
+                      child: SearchBarTextField(
+                        context: context,
+                        hintText: _searchBarHintText,
+                        enabled: false,
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-            const SizedBox(height: 12),
+          ),
+          const SizedBox(height: 12),
 
-            // House list
-            Expanded(
-              child: BlocBuilder<HomeCubit, HomeState>(
-                bloc: _homeCubit,
-                builder: (context, state) {
-                  if (state.houseList.isEmpty) {
-                    return Center(
-                        child: Text(
-                      'No Houses present',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground),
-                    ));
-                  }
-                  return !state.isLoading
-                      ? ListView(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: Nums.horizontalPaddingWidth + 12),
-                              child: Text(
-                                'Houses',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
+          // House list
+          Expanded(
+            child: BlocBuilder<HomeCubit, HomeState>(
+              bloc: context.read<HomeCubit>(),
+              builder: (context, state) {
+                if (state.houseList.isEmpty) {
+                  return Center(
+                      child: Text(
+                    'No Houses present',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground),
+                  ));
+                }
+                return !state.isLoading
+                    ? ListView(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Nums.horizontalPaddingWidth + 12),
+                            child: Text(
+                              'Houses',
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            const SizedBox(height: 12),
-                            ...state.houseList.map((houseModel) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                        horizontal: Nums.horizontalPaddingWidth)
-                                    .copyWith(bottom: 16),
-                                child: HouseCardWidget(houseModel: houseModel),
-                              );
-                            })
-                          ],
-                        )
-                      : const Center(child: LoadingWidget());
-                },
-              ),
+                          ),
+                          const SizedBox(height: 12),
+                          ...state.houseList.map((houseModel) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                      horizontal: Nums.horizontalPaddingWidth)
+                                  .copyWith(bottom: 16),
+                              child: HouseCardWidget(houseModel: houseModel),
+                            );
+                          })
+                        ],
+                      )
+                    : const Center(child: LoadingWidget());
+              },
             ),
-          ],
-        ),
-        floatingActionButton: AddFloatingActionButton(
-          context: context,
-          onPressed: () {
-            Navigator.pushNamed(
-              context,
-              AddHousePage.routeName,
-              arguments:
-                  AddHousePageArguments(onAddHousePressed: _homeCubit.addHouse),
-            );
-          },
-        ),
+          ),
+        ],
+      ),
+      floatingActionButton: AddFloatingActionButton(
+        context: context,
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            AddHousePage.routeName,
+            arguments: AddHousePageArguments(
+                onAddHousePressed: (houseModel) =>
+                    context.read<HomeCubit>().addHouse(context, houseModel)),
+          );
+        },
       ),
     );
   }

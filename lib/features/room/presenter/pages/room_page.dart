@@ -86,6 +86,9 @@ class _RoomPageState extends State<RoomPage>
                 ),
               );
             },
+            onMovePressed: () {},
+            onEditPressed: () {},
+            onDeletePressed: () {},
           ),
           body: Column(
             children: [

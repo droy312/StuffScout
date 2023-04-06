@@ -9,13 +9,11 @@ import '../../../house/data/models/house_model.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit({required this.context}) : super(const HomeState());
+  HomeCubit() : super(const HomeState());
 
   final HomeUsecase _homeUsecase = sl<HomeUsecase>();
 
-  final BuildContext context;
-
-  void init() async {
+  void init(BuildContext context) async {
     emit(state.copyWith(isLoading: true));
 
     List<HouseModel> houseList = [];
@@ -35,7 +33,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeState(houseList: houseList));
   }
 
-  Future<void> addHouse(HouseModel houseModel) async {
+  Future<void> addHouse(BuildContext context, HouseModel houseModel) async {
     final List<HouseModel> houseList = state.houseList.toList();
 
     final result = await _homeUsecase.putHouseModel(houseModel);
@@ -58,5 +56,13 @@ class HomeCubit extends Cubit<HomeState> {
         ));
       }
     });
+  }
+
+  void deleteHouse(HouseModel houseModel) async {
+    final List<HouseModel> houseList = state.houseList.toList();
+    houseList.remove(houseModel);
+
+    emit(HomeState(houseList: houseList));
+
   }
 }

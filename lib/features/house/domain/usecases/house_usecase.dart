@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:stuff_scout/core/errors/custom_exception.dart';
 import 'package:stuff_scout/core/errors/success.dart';
+import 'package:stuff_scout/features/house/data/models/house_model.dart';
 import 'package:stuff_scout/features/house/data/repositories/house_repo.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
@@ -61,6 +62,16 @@ class HouseUsecase {
       await _houseRepo.addItemIdToHouseInfo(houseId, itemModel.id);
       await _houseRepo.putItemModel(itemModel);
       return const Right(Success(message: 'Added Item successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
+  Future<Either<Failure, Success>> deleteHouseModel(HouseModel houseModel) async {
+    try {
+      await _houseRepo.deleteHouseIdFromHouseList(houseModel.id);
+      await _houseRepo.deleteHouseInfo(houseModel.id);
+      return const Right(Success(message: 'Deleted House successfully'));
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }

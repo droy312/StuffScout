@@ -46,6 +46,14 @@ class LocalStorageService {
     await box.put(key, map);
   }
 
+  Future<void> _removeIdFromList(Box box, String key, String mapKey, String id) async {
+    Map<dynamic, dynamic> map = box.get(key);
+    List<dynamic> list = (map[mapKey] ?? []).toList();
+    list.remove(id);
+    map[mapKey] = list;
+    await box.put(key, map);
+  }
+
   // Home
 
   Future<void> addHouseIdToHouseIdList(String houseId) async {
@@ -59,6 +67,16 @@ class LocalStorageService {
 
   Future<List<String>?> getHouseIdList() async {
     return _userInfoBox.get(_houseIdListKey) as List<String>?;
+  }
+
+  Future<void> deleteHouseIdFromHouseIdList(String houseId) async {
+    final List<String>? list = await getHouseIdList();
+    if (list == null) {
+      throw Exception();
+    }
+
+    list.remove(houseId);
+    await _userInfoBox.put(_houseIdListKey, list);
   }
 
   // House
@@ -80,6 +98,18 @@ class LocalStorageService {
     return _houseBox.get(houseId);
   }
 
+  Future<void> deleteHouseInfo(String houseId) async {
+    return _houseBox.delete(houseId);
+  }
+
+  Future<void> deleteRoomIdFromHouseInfo(String houseId, String roomId) async {
+    return _removeIdFromList(_houseBox, houseId, 'roomIdList', roomId);
+  }
+
+  Future<void> deleteItemIdFromHouseInfo(String houseId, String itemId) async {
+    return _removeIdFromList(_houseBox, houseId, 'itemIdList', itemId);
+  }
+
   // Room
 
   Future<void> putRoomInfo(String roomId, Map<String, dynamic> roomMap) async {
@@ -96,6 +126,18 @@ class LocalStorageService {
 
   Future<Map<dynamic, dynamic>?> getRoomInfo(String roomId) async {
     return _roomBox.get(roomId);
+  }
+
+  Future<void> deleteRoomInfo(String roomId) async {
+    return _roomBox.delete(roomId);
+  }
+
+  Future<void> deleteContainerIdFromRoomInfo(String roomId, String containerId) async {
+    return _removeIdFromList(_roomBox, roomId, 'containerIdList', containerId);
+  }
+
+  Future<void> deleteItemIdFromRoomInfo(String roomId, String itemId) async {
+    return _removeIdFromList(_roomBox, roomId, 'itemIdList', itemId);
   }
 
   // Container
@@ -119,6 +161,18 @@ class LocalStorageService {
     return _containerBox.get(containerId);
   }
 
+  Future<void> deleteContainerInfo(String containerId) async {
+    return _containerBox.delete(containerId);
+  }
+
+  Future<void> deleteContainerIdFromContainerInfo(String containerId, String nestedContainerId) async {
+    return _removeIdFromList(_containerBox, containerId, 'containerIdList', nestedContainerId);
+  }
+
+  Future<void> deleteItemIdFromContainerInfo(String containerId, String itemId) async {
+    return _removeIdFromList(_containerBox, containerId, 'itemIdList', itemId);
+  }
+
   // Item
 
   Future<void> putItemInfo(String itemId, Map<String, dynamic> itemMap) async {
@@ -127,5 +181,9 @@ class LocalStorageService {
 
   Future<Map<dynamic, dynamic>?> getItemInfo(String itemId) async {
     return _itemBox.get(itemId);
+  }
+
+  Future<void> deleteItemInfo(String itemId) async {
+    return _itemBox.delete(itemId);
   }
 }

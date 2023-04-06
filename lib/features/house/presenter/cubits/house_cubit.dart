@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:stuff_scout/core/widgets/snackbar_widget.dart';
+import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 import 'package:stuff_scout/features/house/domain/usecases/house_usecase.dart';
 
 import '../../../../service_locator.dart';
@@ -28,7 +30,7 @@ class HouseCubit extends Cubit<HouseState> {
     final result1 =
         await _houseUsecase.getRoomModelList(state.houseModel.roomIdList);
     HouseModel houseModel = state.houseModel;
-    
+
     result1.fold((l) {
       if (l.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
@@ -43,7 +45,7 @@ class HouseCubit extends Cubit<HouseState> {
     });
 
     final result2 =
-    await _houseUsecase.getItemModelList(state.houseModel.itemIdList);
+        await _houseUsecase.getItemModelList(state.houseModel.itemIdList);
     result2.fold((l) {
       if (l.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
@@ -84,8 +86,8 @@ class HouseCubit extends Cubit<HouseState> {
   }
 
   Future<void> addItem(ItemModel itemModel) async {
-    final result = await _houseUsecase.putItemModel(
-        state.houseModel.id, itemModel);
+    final result =
+        await _houseUsecase.putItemModel(state.houseModel.id, itemModel);
     result.fold((l) {
       if (l.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
@@ -105,5 +107,32 @@ class HouseCubit extends Cubit<HouseState> {
         ));
       }
     });
+  }
+
+  Future<void> deleteHouse() async {
+    final result = await _houseUsecase.deleteHouseModel(state.houseModel);
+    result.fold(
+      (l) {
+        if (l.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: l.message!,
+            isError: true,
+          ));
+        }
+      },
+      (r) {
+        if (r.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: r.message!,
+          ));
+        }
+        context.read<HomeCubit>().deleteHouse(state.houseModel);
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
+      },
+    );
   }
 }

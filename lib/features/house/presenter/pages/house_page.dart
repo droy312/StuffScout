@@ -18,7 +18,9 @@ import '../../data/models/house_model.dart';
 import 'add_room_page.dart';
 
 class HousePageArguments {
-  const HousePageArguments({required this.houseModel});
+  const HousePageArguments({
+    required this.houseModel,
+  });
 
   final HouseModel houseModel;
 }
@@ -87,11 +89,16 @@ class _HousePageState extends State<HousePage>
                 context,
                 SearchPage.routeName,
                 arguments: SearchPageArguments(
-                  title: 'Search in ${widget.housePageArguments.houseModel.name}',
+                  title:
+                      'Search in ${widget.housePageArguments.houseModel.name}',
                   hintText: 'Search rooms, containers, items...',
                   houseModel: widget.housePageArguments.houseModel,
                 ),
               );
+            },
+            onEditPressed: () {},
+            onDeletePressed: () async {
+              await _houseCubit.deleteHouse();
             },
           ),
           body: Column(

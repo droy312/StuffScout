@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/widgets/back_icon_button.dart';
-import 'package:stuff_scout/core/widgets/edit_icon_button.dart';
+import 'package:stuff_scout/core/widgets/more_popup_menu_button.dart';
 import 'package:stuff_scout/features/item/data/models/item_model.dart';
 
 import '../../../../core/nums.dart';
@@ -23,16 +23,24 @@ class ItemPage extends StatelessWidget {
 
   final ItemPageArguments itemPageArguments;
 
+  static const double _imageContainerBorderRadius = 16;
+
   @override
   Widget build(BuildContext context) {
     final double imageContainerHeight =
         MediaQuery.of(context).size.width - (2 * Nums.horizontalPaddingWidth);
-    final double imageContainerBorderRadius = 16;
 
     return Scaffold(
       appBar: AppBar(
         leading: BackIconButton(context: context),
-        actions: [MoreIconButton(context: context)],
+        actions: [
+          MorePopupMenuButton(
+            context: context,
+            onMovePressed: () {},
+            onEditPressed: () {},
+            onDeletePressed: () {},
+          )
+        ],
         title: Text(
           itemPageArguments.itemModel.name,
           overflow: TextOverflow.ellipsis,
@@ -57,16 +65,16 @@ class ItemPage extends StatelessWidget {
                 Container(
                   height: imageContainerHeight,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(imageContainerBorderRadius)),
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(_imageContainerBorderRadius)),
                     border: Border.all(
                       color: Theme.of(context).colorScheme.primary,
                       width: 1,
                     ),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(imageContainerBorderRadius)),
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(_imageContainerBorderRadius)),
                     child: Center(
                       child: Image.file(
                         File(itemPageArguments.itemModel.imageUrl!),

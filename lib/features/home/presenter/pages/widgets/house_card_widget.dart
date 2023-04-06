@@ -58,7 +58,9 @@ class HouseCardWidget extends StatelessWidget {
                 height: imageContainerSize,
                 width: imageContainerSize,
                 decoration: BoxDecoration(
-                  color: houseModel.imageUrl == null ? Theme.of(context).colorScheme.secondaryContainer : null,
+                  color: houseModel.imageUrl == null
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : null,
                   borderRadius: const BorderRadius.all(
                       Radius.circular(_imageContainerBorderRadius)),
                 ),
@@ -72,16 +74,17 @@ class HouseCardWidget extends StatelessWidget {
                         ),
                       )
                     : Center(
-                      child: Text(
+                        child: Text(
                           houseModel.name[0].toUpperCase(),
                           style: Theme.of(context)
                               .textTheme
                               .displayMedium!
                               .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onSecondaryContainer),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer),
                         ),
-                    ),
+                      ),
               ),
               const SizedBox(width: 16),
               Expanded(

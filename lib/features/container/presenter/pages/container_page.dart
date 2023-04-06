@@ -86,6 +86,9 @@ class _ContainerPageState extends State<ContainerPage>
                 ),
               );
             },
+            onMovePressed: () {},
+            onEditPressed: () {},
+            onDeletePressed: () {},
           ),
           body: Column(
             children: [
