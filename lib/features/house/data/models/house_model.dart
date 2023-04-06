@@ -39,6 +39,11 @@ class HouseModel {
     roomIdList.removeWhere((roomId) => roomId == roomModel.id);
   }
 
+  void deleteItem(ItemModel itemModel) {
+    itemList.remove(itemModel);
+    itemIdList.removeWhere((itemId) => itemId == itemModel.id);
+  }
+
   void addRoomList(List<RoomModel> roomList) {
     this.roomList = roomList;
 

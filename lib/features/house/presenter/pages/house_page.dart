@@ -240,7 +240,6 @@ class _HousePageState extends State<HousePage>
                       house: widget.housePageArguments.houseModel.name,
                     );
 
-                    Navigator.pop(context);
                     await Navigator.pushNamed(
                       context,
                       AddItemPage.routeName,
@@ -251,6 +250,9 @@ class _HousePageState extends State<HousePage>
                         itemLocationModel: itemLocationModel,
                       ),
                     );
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
                     _tabController.animateTo(1);
                   },
                 );

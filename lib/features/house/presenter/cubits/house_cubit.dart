@@ -134,4 +134,10 @@ class HouseCubit extends Cubit<HouseState> {
 
     emit(HouseState(houseModel: state.houseModel));
   }
+
+  void deleteItem(ItemModel itemModel) {
+    state.houseModel.deleteItem(itemModel);
+
+    emit(HouseState(houseModel: state.houseModel));
+  }
 }
