@@ -8,6 +8,7 @@ import 'package:stuff_scout/features/item/data/models/item_model.dart';
 import 'package:stuff_scout/features/item/presenter/cubits/item_cubit.dart';
 
 import '../../../../core/nums.dart';
+import '../../../house/presenter/cubits/house_cubit.dart';
 
 class ItemPageArguments {
   const ItemPageArguments({required this.itemModel});
@@ -62,7 +63,8 @@ class _ItemPageState extends State<ItemPage> {
                   onMovePressed: () {},
                   onEditPressed: () {},
                   onDeletePressed: () {
-                    context.read<ItemCubit>().deleteRoom();
+                    context.read<ItemCubit>().deleteRoom(() =>
+                        context.read<HouseCubit>().deleteItem(state.itemModel));
                   },
                 )
               ],

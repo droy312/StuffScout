@@ -23,7 +23,7 @@ class ItemCubit extends Cubit<ItemState> {
 
   final BuildContext context;
 
-  Future<void> deleteRoom() async {
+  Future<void> deleteRoom(Function() deleteFunction) async {
     final HouseModel houseModel = context.read<HouseCubit>().state.houseModel;
     final result = await _itemUsecase.deleteItemModel(houseModel, state.itemModel);
     result.fold(
@@ -43,7 +43,7 @@ class ItemCubit extends Cubit<ItemState> {
             text: r.message!,
           ));
         }
-        context.read<HouseCubit>().deleteItem(state.itemModel);
+        deleteFunction();
         if (context.mounted) {
           Navigator.pop(context);
         }
