@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stuff_scout/color_scheme.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
+import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/search/presenter/cubits/search_cubit.dart';
 import 'package:stuff_scout/service_locator.dart';
 import 'package:stuff_scout/route_generator.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => SearchCubit()),
         BlocProvider(create: (_) => HomeCubit()),
+        BlocProvider(create: (_) => HouseCubit()),
       ],
       child: MaterialApp(
         title: 'StuffScout',

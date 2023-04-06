@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:stuff_scout/core/widgets/snackbar_widget.dart';
+import 'package:stuff_scout/features/house/data/models/house_model.dart';
+import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/domain/usecases/room_usecase.dart';
 
@@ -102,5 +105,33 @@ class RoomCubit extends Cubit<RoomState> {
         ));
       }
     });
+  }
+
+  Future<void> deleteRoom() async {
+    final HouseModel houseModel = context.read<HouseCubit>().state.houseModel;
+    final result = await _roomUsecase.deleteRoomModel(houseModel, state.roomModel);
+    result.fold(
+          (l) {
+        if (l.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: l.message!,
+            isError: true,
+          ));
+        }
+      },
+          (r) {
+        if (r.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: r.message!,
+          ));
+        }
+        context.read<HouseCubit>().deleteRoom(state.roomModel);
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
+      },
+    );
   }
 }

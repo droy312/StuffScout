@@ -34,6 +34,11 @@ class HouseModel {
     roomIdList = newRoomIdList;
   }
 
+  void deleteRoom(RoomModel roomModel) {
+    roomList.remove(roomModel);
+    roomIdList.removeWhere((roomId) => roomId == roomModel.id);
+  }
+
   void addRoomList(List<RoomModel> roomList) {
     this.roomList = roomList;
 
@@ -88,5 +93,9 @@ class HouseModel {
           .toList(),
       mapLocationLink: map['mapLocationLink'],
     );
+  }
+
+  factory HouseModel.empty() {
+    return HouseModel(id: 'id', name: 'name');
   }
 }

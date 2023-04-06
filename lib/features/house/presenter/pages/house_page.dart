@@ -43,8 +43,6 @@ class _HousePageState extends State<HousePage>
     with SingleTickerProviderStateMixin {
   static const double _titleContainerTopAndBottomPadding = 16;
 
-  late final HouseCubit _houseCubit;
-
   final IdService _idService = sl<IdService>();
 
   late final TabController _tabController;
@@ -67,203 +65,198 @@ class _HousePageState extends State<HousePage>
   void initState() {
     super.initState();
 
-    _houseCubit = HouseCubit(
-      context: context,
-      houseModel: widget.housePageArguments.houseModel,
-    );
-    _houseCubit.init();
+    context
+        .read<HouseCubit>()
+        .init(context, widget.housePageArguments.houseModel);
     _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HouseCubit>.value(
-      value: _houseCubit,
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: BackSearchEditAppBar(
-            context: context,
-            onSearchPressed: () {
-              Navigator.pushNamed(
-                context,
-                SearchPage.routeName,
-                arguments: SearchPageArguments(
-                  title:
-                      'Search in ${widget.housePageArguments.houseModel.name}',
-                  hintText: 'Search rooms, containers, items...',
-                  houseModel: widget.housePageArguments.houseModel,
-                ),
-              );
-            },
-            onEditPressed: () {},
-            onDeletePressed: () async {
-              await _houseCubit.deleteHouse();
-            },
-          ),
-          body: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                color: Theme.of(context).colorScheme.primary,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Nums.horizontalPaddingWidth),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: _titleContainerTopAndBottomPadding),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: BackSearchEditAppBar(
+          context: context,
+          onSearchPressed: () {
+            Navigator.pushNamed(
+              context,
+              SearchPage.routeName,
+              arguments: SearchPageArguments(
+                title: 'Search in ${widget.housePageArguments.houseModel.name}',
+                hintText: 'Search rooms, containers, items...',
+                houseModel: widget.housePageArguments.houseModel,
+              ),
+            );
+          },
+          onEditPressed: () {},
+          onDeletePressed: () async {
+            await context.read<HouseCubit>().deleteHouse(context);
+          },
+        ),
+        body: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              color: Theme.of(context).colorScheme.primary,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Nums.horizontalPaddingWidth),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: _titleContainerTopAndBottomPadding),
+                  Text(
+                    widget.housePageArguments.houseModel.name,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+
+                  // Description
+                  if (widget.housePageArguments.houseModel.description != null)
                     Text(
-                      widget.housePageArguments.houseModel.name,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
+                      widget.housePageArguments.houseModel.description!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimary
+                                .withOpacity(.6),
                           ),
                     ),
-                    const SizedBox(height: 4),
-
-                    // Description
-                    if (widget.housePageArguments.houseModel.description !=
-                        null)
-                      Text(
-                        widget.housePageArguments.houseModel.description!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimary
-                                  .withOpacity(.6),
-                            ),
-                      ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Location',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'https://goo.gl/maps/HdRczVX9i6sPaJsR8',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.blue[400]),
-                    ),
-                    const SizedBox(height: _titleContainerTopAndBottomPadding),
-                  ],
-                ),
-              ),
-              TabBar(
-                controller: _tabController,
-                labelPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
-                ),
-                tabs: const [
-                  Text('Rooms'),
-                  Text('Items'),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Location',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'https://goo.gl/maps/HdRczVX9i6sPaJsR8',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: Colors.blue[400]),
+                  ),
+                  const SizedBox(height: _titleContainerTopAndBottomPadding),
                 ],
               ),
-              Expanded(
-                child: BlocBuilder<HouseCubit, HouseState>(
-                  builder: (context, state) {
-                    return TabBarView(
-                      controller: _tabController,
-                      children: !state.isLoading
-                          ? [
-                              state.houseModel.roomList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .houseModel.roomList
-                                      .map((roomModel) {
-                                      return RoomCardWidget(
-                                          roomModel: roomModel);
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Rooms present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                              state.houseModel.itemList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .houseModel.itemList
-                                      .map((itemModel) {
-                                      return ItemCardWidget(
-                                          itemModel: itemModel);
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Items present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                            ]
-                          : [
-                              const Center(child: LoadingWidget()),
-                              const Center(child: LoadingWidget()),
-                            ],
-                    );
-                  },
-                ),
+            ),
+            TabBar(
+              controller: _tabController,
+              labelPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
               ),
-            ],
-          ),
-          floatingActionButton: AddFloatingActionButton(
-            context: context,
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AddRoomItemAlertDialog(
-                    context: context,
-                    onRoomPressed: () async {
-                      final LocationModel roomLocationModel = LocationModel(
-                        id: _idService.generateRandomId(),
-                        house: widget.housePageArguments.houseModel.name,
-                      );
-
-                      Navigator.pop(context);
-                      await Navigator.pushNamed(
-                        context,
-                        AddRoomPage.routeName,
-                        arguments: AddRoomPageArguments(
-                          onAddRoomPressed: _houseCubit.addRoom,
-                          roomLocationModel: roomLocationModel,
-                        ),
-                      );
-                      _tabController.animateTo(0);
-                    },
-                    onItemPressed: () async {
-                      final LocationModel itemLocationModel = LocationModel(
-                        id: _idService.generateRandomId(),
-                        house: widget.housePageArguments.houseModel.name,
-                      );
-
-                      Navigator.pop(context);
-                      await Navigator.pushNamed(
-                        context,
-                        AddItemPage.routeName,
-                        arguments: AddItemPageArguments(
-                          onAddItemPressed: _houseCubit.addItem,
-                          itemLocationModel: itemLocationModel,
-                        ),
-                      );
-                      _tabController.animateTo(1);
-                    },
+              tabs: const [
+                Text('Rooms'),
+                Text('Items'),
+              ],
+            ),
+            Expanded(
+              child: BlocBuilder<HouseCubit, HouseState>(
+                builder: (context, state) {
+                  return TabBarView(
+                    controller: _tabController,
+                    children: !state.isLoading
+                        ? [
+                            state.houseModel.roomList.isNotEmpty
+                                ? _listOfWidgetsInGridView(
+                                    state.houseModel.roomList.map((roomModel) {
+                                    return RoomCardWidget(roomModel: roomModel);
+                                  }).toList())
+                                : Center(
+                                    child: Text(
+                                    'No Rooms present',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  )),
+                            state.houseModel.itemList.isNotEmpty
+                                ? _listOfWidgetsInGridView(
+                                    state.houseModel.itemList.map((itemModel) {
+                                    return ItemCardWidget(itemModel: itemModel);
+                                  }).toList())
+                                : Center(
+                                    child: Text(
+                                    'No Items present',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  )),
+                          ]
+                        : [
+                            const Center(child: LoadingWidget()),
+                            const Center(child: LoadingWidget()),
+                          ],
                   );
                 },
-              );
-            },
-          ),
+              ),
+            ),
+          ],
+        ),
+        floatingActionButton: AddFloatingActionButton(
+          context: context,
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AddRoomItemAlertDialog(
+                  context: context,
+                  onRoomPressed: () async {
+                    final LocationModel roomLocationModel = LocationModel(
+                      id: _idService.generateRandomId(),
+                      house: widget.housePageArguments.houseModel.name,
+                    );
+
+                    await Navigator.pushNamed(
+                      context,
+                      AddRoomPage.routeName,
+                      arguments: AddRoomPageArguments(
+                        onAddRoomPressed: (roomModel) => context
+                            .read<HouseCubit>()
+                            .addRoom(context, roomModel),
+                        roomLocationModel: roomLocationModel,
+                      ),
+                    );
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+                    _tabController.animateTo(0);
+                  },
+                  onItemPressed: () async {
+                    final LocationModel itemLocationModel = LocationModel(
+                      id: _idService.generateRandomId(),
+                      house: widget.housePageArguments.houseModel.name,
+                    );
+
+                    Navigator.pop(context);
+                    await Navigator.pushNamed(
+                      context,
+                      AddItemPage.routeName,
+                      arguments: AddItemPageArguments(
+                        onAddItemPressed: (itemModel) => context
+                            .read<HouseCubit>()
+                            .addItem(context, itemModel),
+                        itemLocationModel: itemLocationModel,
+                      ),
+                    );
+                    _tabController.animateTo(1);
+                  },
+                );
+              },
+            );
+          },
         ),
       ),
     );

@@ -15,21 +15,15 @@ import '../../data/models/house_model.dart';
 part 'house_state.dart';
 
 class HouseCubit extends Cubit<HouseState> {
-  HouseCubit({
-    required this.context,
-    required HouseModel houseModel,
-  }) : super(HouseState(houseModel: houseModel));
+  HouseCubit() : super(HouseState(houseModel: HouseModel.empty()));
 
   final HouseUsecase _houseUsecase = sl<HouseUsecase>();
 
-  final BuildContext context;
-
-  void init() async {
-    emit(state.copyWith(isLoading: true));
+  void init(BuildContext context, HouseModel houseModel) async {
+    emit(HouseState(houseModel: houseModel, isLoading: true));
 
     final result1 =
         await _houseUsecase.getRoomModelList(state.houseModel.roomIdList);
-    HouseModel houseModel = state.houseModel;
 
     result1.fold((l) {
       if (l.message != null) {
@@ -41,7 +35,6 @@ class HouseCubit extends Cubit<HouseState> {
       }
     }, (roomList) {
       state.houseModel.addRoomList(roomList);
-      houseModel = state.houseModel;
     });
 
     final result2 =
@@ -58,10 +51,10 @@ class HouseCubit extends Cubit<HouseState> {
       state.houseModel.addItemList(itemList);
     });
 
-    emit(HouseState(houseModel: houseModel));
+    emit(HouseState(houseModel: state.houseModel));
   }
 
-  Future<void> addRoom(RoomModel roomModel) async {
+  Future<void> addRoom(BuildContext context, RoomModel roomModel) async {
     final result =
         await _houseUsecase.putRoomModel(state.houseModel.id, roomModel);
     result.fold((l) {
@@ -85,7 +78,7 @@ class HouseCubit extends Cubit<HouseState> {
     });
   }
 
-  Future<void> addItem(ItemModel itemModel) async {
+  Future<void> addItem(BuildContext context, ItemModel itemModel) async {
     final result =
         await _houseUsecase.putItemModel(state.houseModel.id, itemModel);
     result.fold((l) {
@@ -109,7 +102,7 @@ class HouseCubit extends Cubit<HouseState> {
     });
   }
 
-  Future<void> deleteHouse() async {
+  Future<void> deleteHouse(BuildContext context) async {
     final result = await _houseUsecase.deleteHouseModel(state.houseModel);
     result.fold(
       (l) {
@@ -134,5 +127,11 @@ class HouseCubit extends Cubit<HouseState> {
         }
       },
     );
+  }
+
+  void deleteRoom(RoomModel roomModel) {
+    state.houseModel.deleteRoom(roomModel);
+
+    emit(HouseState(houseModel: state.houseModel));
   }
 }

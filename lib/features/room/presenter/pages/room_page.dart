@@ -88,7 +88,9 @@ class _RoomPageState extends State<RoomPage>
             },
             onMovePressed: () {},
             onEditPressed: () {},
-            onDeletePressed: () {},
+            onDeletePressed: () {
+              _roomCubit.deleteRoom();
+            },
           ),
           body: Column(
             children: [

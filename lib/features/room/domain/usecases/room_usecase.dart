@@ -5,10 +5,12 @@ import 'package:stuff_scout/core/errors/custom_exception.dart';
 import 'package:stuff_scout/core/errors/failure.dart';
 import 'package:stuff_scout/core/errors/success.dart';
 import 'package:stuff_scout/features/container/data/models/container_model.dart';
+import 'package:stuff_scout/features/house/data/models/house_model.dart';
 import 'package:stuff_scout/features/room/data/repositories/room_repo.dart';
 
 import '../../../../service_locator.dart';
 import '../../../item/data/models/item_model.dart';
+import '../../data/models/room_model.dart';
 
 class RoomUsecase {
   final RoomRepo _roomRepo = sl<RoomRepo>();
@@ -63,6 +65,16 @@ class RoomUsecase {
       await _roomRepo.addItemIdToRoomInfo(roomId, itemModel.id);
       await _roomRepo.putItemModel(itemModel);
       return const Right(Success(message: 'Added Item successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
+  Future<Either<Failure, Success>> deleteRoomModel(HouseModel houseModel, RoomModel roomModel) async {
+    try {
+      await _roomRepo.deleteRoomIdFromHouseInfo(houseModel.id, roomModel.id);
+      await _roomRepo.deleteRoomInfo(roomModel.id);
+      return const Right(Success(message: 'Deleted Room successfully'));
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }
