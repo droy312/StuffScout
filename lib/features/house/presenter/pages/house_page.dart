@@ -20,9 +20,11 @@ import 'add_room_page.dart';
 class HousePageArguments {
   const HousePageArguments({
     required this.houseModel,
+    this.deleteFunction,
   });
 
   final HouseModel houseModel;
+  final Function()? deleteFunction;
 }
 
 class HousePage extends StatefulWidget {
@@ -91,7 +93,9 @@ class _HousePageState extends State<HousePage>
           },
           onEditPressed: () {},
           onDeletePressed: () async {
-            await context.read<HouseCubit>().deleteHouse(context);
+            await context
+                .read<HouseCubit>()
+                .deleteHouse(context, widget.housePageArguments.deleteFunction);
           },
         ),
         body: Column(

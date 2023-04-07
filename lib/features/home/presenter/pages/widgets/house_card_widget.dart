@@ -2,8 +2,10 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
+import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
 
 import '../../../../house/data/models/house_model.dart';
@@ -32,7 +34,10 @@ class HouseCardWidget extends StatelessWidget {
         Navigator.pushNamed(
           context,
           HousePage.routeName,
-          arguments: HousePageArguments(houseModel: houseModel),
+          arguments: HousePageArguments(
+              houseModel: houseModel,
+              deleteFunction: () =>
+                  context.read<HomeCubit>().deleteHouse(houseModel)),
         );
       },
       child: Container(

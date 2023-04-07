@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:stuff_scout/core/widgets/snackbar_widget.dart';
-import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 import 'package:stuff_scout/features/house/domain/usecases/house_usecase.dart';
 
 import '../../../../service_locator.dart';
@@ -102,7 +101,7 @@ class HouseCubit extends Cubit<HouseState> {
     });
   }
 
-  Future<void> deleteHouse(BuildContext context) async {
+  Future<void> deleteHouse(BuildContext context, Function()? deleteFunction) async {
     final result = await _houseUsecase.deleteHouseModel(state.houseModel);
     result.fold(
       (l) {
@@ -121,7 +120,9 @@ class HouseCubit extends Cubit<HouseState> {
             text: r.message!,
           ));
         }
-        context.read<HomeCubit>().deleteHouse(state.houseModel);
+        if (deleteFunction != null) {
+          deleteFunction();
+        }
         if (context.mounted) {
           Navigator.pop(context);
         }
