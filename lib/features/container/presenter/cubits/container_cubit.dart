@@ -19,17 +19,12 @@ import '../../../item/data/models/item_model.dart';
 part 'container_state.dart';
 
 class ContainerCubit extends Cubit<ContainerState> {
-  ContainerCubit({
-    required this.context,
-    required ContainerModel containerModel,
-  }) : super(ContainerState(containerModel: containerModel));
+  ContainerCubit() : super(ContainerState(containerModel: ContainerModel.empty()));
   
   final ContainerUsecase _containerUsecase = sl<ContainerUsecase>();
 
-  final BuildContext context;
-
-  void init() async {
-    emit(state.copyWith(isLoading: true));
+  void init(BuildContext context, ContainerModel containerModel) async {
+    emit(ContainerState(containerModel: containerModel, isLoading: true));
 
     final result = await _containerUsecase
         .getContainerModelList(state.containerModel.containerIdList);
@@ -62,7 +57,7 @@ class ContainerCubit extends Cubit<ContainerState> {
     emit(ContainerState(containerModel: state.containerModel));
   }
 
-  Future<void> addContainer(ContainerModel containerModel) async {
+  Future<void> addContainer(BuildContext context, ContainerModel containerModel) async {
     final result = await _containerUsecase.putContainerModel(
         state.containerModel.id, containerModel);
     result.fold((l) {
@@ -86,7 +81,7 @@ class ContainerCubit extends Cubit<ContainerState> {
     });
   }
 
-  Future<void> addItem(ItemModel itemModel) async {
+  Future<void> addItem(BuildContext context, ItemModel itemModel) async {
     final result = await _containerUsecase.putItemModel(
         state.containerModel.id, itemModel);
     result.fold((l) {
@@ -110,7 +105,7 @@ class ContainerCubit extends Cubit<ContainerState> {
     });
   }
 
-  Future<void> deleteContainer(ContainerStorage containerStorage) async {
+  Future<void> deleteContainer(BuildContext context, ContainerStorage containerStorage) async {
     Future<Either<Failure, Success>>? result;
 
     if (containerStorage == ContainerStorage.room) {

@@ -39,8 +39,6 @@ class _ContainerPageState extends State<ContainerPage>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
-  late final ContainerCubit _containerCubit;
-
   Widget _listOfWidgetsInGridView(List<Widget> list) {
     return GridView.count(
       crossAxisSpacing: 16,
@@ -59,215 +57,215 @@ class _ContainerPageState extends State<ContainerPage>
   void initState() {
     super.initState();
 
-    _containerCubit = ContainerCubit(
-      context: context,
-      containerModel: widget.containerPageArguments.containerModel,
-    );
-    _containerCubit.init();
+    context
+        .read<ContainerCubit>()
+        .init(context, widget.containerPageArguments.containerModel);
     _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ContainerCubit>.value(
-      value: _containerCubit,
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: BackSearchEditAppBar(
-            context: context,
-            onSearchPressed: () {
-              Navigator.pushNamed(
-                context,
-                SearchPage.routeName,
-                arguments: SearchPageArguments(
-                  title:
-                      'Search in ${widget.containerPageArguments.containerModel.name}',
-                  hintText: 'Search containers, items...',
-                  containerModel: widget.containerPageArguments.containerModel,
-                ),
-              );
-            },
-            onMovePressed: () {},
-            onEditPressed: () {},
-            onDeletePressed: () {
-              _containerCubit.deleteContainer(ContainerStorage.room);
-            },
-          ),
-          body: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                color: Theme.of(context).colorScheme.primary,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Nums.horizontalPaddingWidth),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: BackSearchEditAppBar(
+          context: context,
+          onSearchPressed: () {
+            Navigator.pushNamed(
+              context,
+              SearchPage.routeName,
+              arguments: SearchPageArguments(
+                title:
+                    'Search in ${widget.containerPageArguments.containerModel.name}',
+                hintText: 'Search containers, items...',
+                containerModel: widget.containerPageArguments.containerModel,
+              ),
+            );
+          },
+          onMovePressed: () {},
+          onEditPressed: () {},
+          onDeletePressed: () {
+            context
+                .read<ContainerCubit>()
+                .deleteContainer(context, ContainerStorage.room);
+          },
+        ),
+        body: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              color: Theme.of(context).colorScheme.primary,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Nums.horizontalPaddingWidth),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
 
-                    // Title
+                  // Title
+                  Text(
+                    widget.containerPageArguments.containerModel.name,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+
+                  // Description
+                  if (widget
+                          .containerPageArguments.containerModel.description !=
+                      null)
                     Text(
-                      widget.containerPageArguments.containerModel.name,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
+                      widget.containerPageArguments.containerModel.description!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimary
+                                .withOpacity(.6),
                           ),
                     ),
-                    const SizedBox(height: 4),
+                  const SizedBox(height: 16),
 
-                    // Description
-                    if (widget.containerPageArguments.containerModel
-                            .description !=
-                        null)
-                      Text(
-                        widget
-                            .containerPageArguments.containerModel.description!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimary
-                                  .withOpacity(.6),
-                            ),
-                      ),
-                    const SizedBox(height: 16),
-
-                    // Location
-                    Text(
-                      'Location',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      widget.containerPageArguments.containerModel.locationModel
-                          .toLocationString(),
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(.6)),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-              TabBar(
-                controller: _tabController,
-                labelPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
-                ),
-                tabs: const [
-                  Text('Containers'),
-                  Text('Items'),
+                  // Location
+                  Text(
+                    'Location',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    widget.containerPageArguments.containerModel.locationModel
+                        .toLocationString(),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onPrimary
+                            .withOpacity(.6)),
+                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
-              Expanded(
-                // Containers and Items
-                child: BlocBuilder<ContainerCubit, ContainerState>(
-                  builder: (context, state) {
-                    return TabBarView(
-                      controller: _tabController,
-                      children: !state.isLoading
-                          ? [
-                              state.containerModel.containerList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .containerModel.containerList
-                                      .map((containerModel) {
-                                      return ContainerCardWidget(
-                                          containerModel: containerModel);
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Containers present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                              state.containerModel.itemList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .containerModel.itemList
-                                      .map((itemModel) {
-                                      return ItemCardWidget(
-                                        itemModel: itemModel,
-                                        itemStorage: ItemStorage.container,
-                                      );
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Items present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                            ]
-                          : [
-                              const Center(child: LoadingWidget()),
-                              const Center(child: LoadingWidget()),
-                            ],
-                    );
-                  },
-                ),
+            ),
+            TabBar(
+              controller: _tabController,
+              labelPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
               ),
-            ],
-          ),
-          floatingActionButton: AddFloatingActionButton(
-            context: context,
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AddContainerItemAlertDialog(
-                    context: context,
-                    onContainerPressed: () async {
-                      await Navigator.pushNamed(
-                        context,
-                        AddContainerPage.routeName,
-                        arguments: AddContainerPageArguments(
-                          onAddContainerPressed: _containerCubit.addContainer,
-                          containerLocationModel: widget.containerPageArguments
-                              .containerModel.locationModel
-                              .addContainer(
-                                  widget.containerPageArguments.containerModel),
-                        ),
-                      );
-                      if (context.mounted) {
-                        Navigator.pop(context);
-                      }
-                      _tabController.animateTo(0);
-                    },
-                    onItemPressed: () async {
-                      await Navigator.pushNamed(
-                        context,
-                        AddItemPage.routeName,
-                        arguments: AddItemPageArguments(
-                          onAddItemPressed: _containerCubit.addItem,
-                          itemLocationModel: widget.containerPageArguments
-                              .containerModel.locationModel
-                              .addContainer(
-                                  widget.containerPageArguments.containerModel),
-                        ),
-                      );
-                      if (context.mounted) {
-                        Navigator.pop(context);
-                      }
-                      _tabController.animateTo(1);
-                    },
+              tabs: const [
+                Text('Containers'),
+                Text('Items'),
+              ],
+            ),
+            Expanded(
+              // Containers and Items
+              child: BlocBuilder<ContainerCubit, ContainerState>(
+                builder: (context, state) {
+                  return TabBarView(
+                    controller: _tabController,
+                    children: !state.isLoading
+                        ? [
+                            state.containerModel.containerList.isNotEmpty
+                                ? _listOfWidgetsInGridView(state
+                                    .containerModel.containerList
+                                    .map((containerModel) {
+                                    return ContainerCardWidget(
+                                        containerModel: containerModel);
+                                  }).toList())
+                                : Center(
+                                    child: Text(
+                                    'No Containers present',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  )),
+                            state.containerModel.itemList.isNotEmpty
+                                ? _listOfWidgetsInGridView(state
+                                    .containerModel.itemList
+                                    .map((itemModel) {
+                                    return ItemCardWidget(
+                                      itemModel: itemModel,
+                                      itemStorage: ItemStorage.container,
+                                    );
+                                  }).toList())
+                                : Center(
+                                    child: Text(
+                                    'No Items present',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  )),
+                          ]
+                        : [
+                            const Center(child: LoadingWidget()),
+                            const Center(child: LoadingWidget()),
+                          ],
                   );
                 },
-              );
-            },
-          ),
+              ),
+            ),
+          ],
+        ),
+        floatingActionButton: AddFloatingActionButton(
+          context: context,
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AddContainerItemAlertDialog(
+                  context: context,
+                  onContainerPressed: () async {
+                    await Navigator.pushNamed(
+                      context,
+                      AddContainerPage.routeName,
+                      arguments: AddContainerPageArguments(
+                        onAddContainerPressed: (containerModel) => context
+                            .read<ContainerCubit>()
+                            .addContainer(context, containerModel),
+                        containerLocationModel: widget
+                            .containerPageArguments.containerModel.locationModel
+                            .addContainer(
+                                widget.containerPageArguments.containerModel),
+                      ),
+                    );
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+                    _tabController.animateTo(0);
+                  },
+                  onItemPressed: () async {
+                    await Navigator.pushNamed(
+                      context,
+                      AddItemPage.routeName,
+                      arguments: AddItemPageArguments(
+                        onAddItemPressed: (itemModel) => context
+                            .read<ContainerCubit>()
+                            .addItem(context, itemModel),
+                        itemLocationModel: widget
+                            .containerPageArguments.containerModel.locationModel
+                            .addContainer(
+                                widget.containerPageArguments.containerModel),
+                      ),
+                    );
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+                    _tabController.animateTo(1);
+                  },
+                );
+              },
+            );
+          },
         ),
       ),
     );

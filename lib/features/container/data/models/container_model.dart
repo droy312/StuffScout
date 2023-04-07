@@ -30,7 +30,7 @@ class ContainerModel {
     this.containerList = containerList;
 
     final List<String> newContainerIdList =
-    containerList.map((containerModel) => containerModel.id).toList();
+        containerList.map((containerModel) => containerModel.id).toList();
     containerIdList = newContainerIdList;
   }
 
@@ -44,7 +44,7 @@ class ContainerModel {
     this.itemList = itemList;
 
     final List<String> newItemIdList =
-    itemList.map((itemModel) => itemModel.id).toList();
+        itemList.map((itemModel) => itemModel.id).toList();
     itemIdList = newItemIdList;
   }
 
@@ -90,6 +90,14 @@ class ContainerModel {
       itemIdList: ((map['itemIdList'] ?? []) as List<dynamic>)
           .map((e) => e.toString())
           .toList(),
+    );
+  }
+
+  factory ContainerModel.empty() {
+    return ContainerModel(
+      id: 'id',
+      name: 'name',
+      locationModel: LocationModel.empty(),
     );
   }
 }
