@@ -90,7 +90,9 @@ class _ContainerPageState extends State<ContainerPage>
             },
             onMovePressed: () {},
             onEditPressed: () {},
-            onDeletePressed: () {},
+            onDeletePressed: () {
+              _containerCubit.deleteContainer(ContainerStorage.room);
+            },
           ),
           body: Column(
             children: [
@@ -228,7 +230,6 @@ class _ContainerPageState extends State<ContainerPage>
                   return AddContainerItemAlertDialog(
                     context: context,
                     onContainerPressed: () async {
-                      Navigator.pop(context);
                       await Navigator.pushNamed(
                         context,
                         AddContainerPage.routeName,
@@ -240,10 +241,12 @@ class _ContainerPageState extends State<ContainerPage>
                                   widget.containerPageArguments.containerModel),
                         ),
                       );
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
                       _tabController.animateTo(0);
                     },
                     onItemPressed: () async {
-                      Navigator.pop(context);
                       await Navigator.pushNamed(
                         context,
                         AddItemPage.routeName,
@@ -255,6 +258,9 @@ class _ContainerPageState extends State<ContainerPage>
                                   widget.containerPageArguments.containerModel),
                         ),
                       );
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
                       _tabController.animateTo(1);
                     },
                   );

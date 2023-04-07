@@ -85,7 +85,7 @@ class _RoomPageState extends State<RoomPage>
               onMovePressed: () {},
               onEditPressed: () {},
               onDeletePressed: () {
-                context.read<RoomCubit>().deleteRoomFromHouse(context);
+                context.read<RoomCubit>().deleteRoom(context);
               },
             ),
             body: Column(

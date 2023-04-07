@@ -1,11 +1,18 @@
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:stuff_scout/features/container/domain/container_usecases/container_usecase.dart';
 
+import '../../../../core/enums/storage_enums.dart';
+import '../../../../core/errors/failure.dart';
+import '../../../../core/errors/success.dart';
 import '../../../../core/widgets/snackbar_widget.dart';
 import '../../../../service_locator.dart';
+import '../../../room/data/models/room_model.dart';
+import '../../../room/presenter/cubits/room_cubit.dart';
 import '../../data/models/container_model.dart';
 import '../../../item/data/models/item_model.dart';
 
@@ -101,6 +108,44 @@ class ContainerCubit extends Cubit<ContainerState> {
         ));
       }
     });
+  }
+
+  Future<void> deleteContainer(ContainerStorage containerStorage) async {
+    Future<Either<Failure, Success>>? result;
+
+    if (containerStorage == ContainerStorage.room) {
+      final RoomModel roomModel = context.read<RoomCubit>().state.roomModel;
+      result =
+          _containerUsecase.deleteContainerModelFromRoomModel(roomModel, state.containerModel);
+    }
+
+    if (result != null) {
+      (await result).fold(
+            (l) {
+          if (l.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+              context: context,
+              text: l.message!,
+              isError: true,
+            ));
+          }
+        },
+            (r) {
+          if (r.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+              context: context,
+              text: r.message!,
+            ));
+          }
+          if (containerStorage == ContainerStorage.room) {
+            context.read<RoomCubit>().deleteContainer(state.containerModel);
+          }
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
+        },
+      );
+    }
   }
 
   void deleteItem(ItemModel itemModel) {

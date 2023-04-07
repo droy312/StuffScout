@@ -66,4 +66,31 @@ class ContainerRepo {
           message: 'Couldn\'t add Item. Please try again.');
     }
   }
+
+  Future<void> deleteContainerIdFromRoomInfo(String roomId, String containerId) async {
+    try {
+      return _localStorageService.deleteContainerIdFromRoomInfo(roomId, containerId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t delete Container. Please try again.');
+    }
+  }
+
+  Future<void> deleteContainerIdFromContainerInfo(String containerId, String nestedContainerId) async {
+    try {
+      return _localStorageService.deleteContainerIdFromContainerInfo(containerId, nestedContainerId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t delete Container. Please try again.');
+    }
+  }
+
+  Future<void> deleteContainerInfo(String containerId) async {
+    try {
+      return _localStorageService.deleteContainerInfo(containerId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t delete Container. Please try again.');
+    }
+  }
 }
