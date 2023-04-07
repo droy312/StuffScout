@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stuff_scout/core/enums/storage_enums.dart';
+import 'package:stuff_scout/core/models/storage_model.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 
 import '../../../../item/data/models/item_model.dart';
@@ -25,7 +25,7 @@ class SearchPageItemCardWidget extends StatelessWidget {
           ItemPage.routeName,
           arguments: ItemPageArguments(
             itemModel: itemModel,
-            itemStorage: ItemStorage.undefined,
+            storageModel: StorageModel.empty(),
           ),
         );
       },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stuff_scout/core/enums/storage_enums.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/presenter/cubits/room_cubit.dart';
@@ -168,7 +167,9 @@ class _RoomPageState extends State<RoomPage>
                                     .roomModel.containerList
                                     .map((containerModel) {
                                     return ContainerCardWidget(
-                                        containerModel: containerModel);
+                                      containerModel: containerModel,
+                                      storageModel: state.roomModel,
+                                    );
                                   }).toList())
                                 : Center(
                                     child: Text(
@@ -186,7 +187,7 @@ class _RoomPageState extends State<RoomPage>
                                     state.roomModel.itemList.map((itemModel) {
                                     return ItemCardWidget(
                                       itemModel: itemModel,
-                                      itemStorage: ItemStorage.room,
+                                      storageModel: state.roomModel,
                                     );
                                   }).toList())
                                 : Center(

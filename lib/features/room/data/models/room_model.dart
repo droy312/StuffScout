@@ -1,9 +1,10 @@
 import 'package:stuff_scout/core/models/location_model.dart';
+import 'package:stuff_scout/core/models/storage_model.dart';
 import 'package:stuff_scout/features/item/data/models/item_model.dart';
 
 import '../../../container/data/models/container_model.dart';
 
-class RoomModel {
+class RoomModel extends StorageModel {
   RoomModel({
     required this.id,
     required this.name,
@@ -14,7 +15,7 @@ class RoomModel {
     this.containerIdList = const [],
     this.itemList = const [],
     this.itemIdList = const [],
-  });
+  }) : super(modelId: id);
 
   final String id;
   final String name;
@@ -61,7 +62,8 @@ class RoomModel {
 
   void deleteContainer(ContainerModel containerModel) {
     containerList.remove(containerModel);
-    containerIdList.removeWhere((containerId) => containerId == containerModel.id);
+    containerIdList
+        .removeWhere((containerId) => containerId == containerModel.id);
   }
 
   Map<String, dynamic> toMapForLocalStorage() {

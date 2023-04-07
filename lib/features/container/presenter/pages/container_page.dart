@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stuff_scout/core/enums/storage_enums.dart';
+import 'package:stuff_scout/core/models/storage_model.dart';
 import 'package:stuff_scout/core/pages/add_item_page.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/container/presenter/cubits/container_cubit.dart';
@@ -16,9 +16,13 @@ import '../../../search/presenter/pages/search_page.dart';
 import '../../data/models/container_model.dart';
 
 class ContainerPageArguments {
-  const ContainerPageArguments({required this.containerModel});
+  const ContainerPageArguments({
+    required this.containerModel,
+    required this.storageModel,
+  });
 
   final ContainerModel containerModel;
+  final StorageModel storageModel;
 }
 
 class ContainerPage extends StatefulWidget {
@@ -85,9 +89,8 @@ class _ContainerPageState extends State<ContainerPage>
           onMovePressed: () {},
           onEditPressed: () {},
           onDeletePressed: () {
-            context
-                .read<ContainerCubit>()
-                .deleteContainer(context, ContainerStorage.room);
+            context.read<ContainerCubit>().deleteContainer(
+                context, widget.containerPageArguments.storageModel);
           },
         ),
         body: Column(
@@ -172,7 +175,9 @@ class _ContainerPageState extends State<ContainerPage>
                                     .containerModel.containerList
                                     .map((containerModel) {
                                     return ContainerCardWidget(
-                                        containerModel: containerModel);
+                                      containerModel: containerModel,
+                                      storageModel: state.containerModel,
+                                    );
                                   }).toList())
                                 : Center(
                                     child: Text(
@@ -191,7 +196,7 @@ class _ContainerPageState extends State<ContainerPage>
                                     .map((itemModel) {
                                     return ItemCardWidget(
                                       itemModel: itemModel,
-                                      itemStorage: ItemStorage.container,
+                                      storageModel: state.containerModel,
                                     );
                                   }).toList())
                                 : Center(

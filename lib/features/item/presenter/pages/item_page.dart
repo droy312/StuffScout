@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stuff_scout/core/enums/storage_enums.dart';
+import 'package:stuff_scout/core/models/storage_model.dart';
 import 'package:stuff_scout/core/widgets/back_icon_button.dart';
 import 'package:stuff_scout/core/widgets/more_popup_menu_button.dart';
 import 'package:stuff_scout/features/item/data/models/item_model.dart';
@@ -13,11 +13,11 @@ import '../../../../core/nums.dart';
 class ItemPageArguments {
   const ItemPageArguments({
     required this.itemModel,
-    required this.itemStorage,
+    required this.storageModel,
   });
 
   final ItemModel itemModel;
-  final ItemStorage itemStorage;
+  final StorageModel storageModel;
 }
 
 class ItemPage extends StatefulWidget {
@@ -67,7 +67,9 @@ class _ItemPageState extends State<ItemPage> {
                   onMovePressed: () {},
                   onEditPressed: () {},
                   onDeletePressed: () {
-                    context.read<ItemCubit>().deleteItem(widget.itemPageArguments.itemStorage);
+                    context
+                        .read<ItemCubit>()
+                        .deleteItem(widget.itemPageArguments.storageModel);
                   },
                 )
               ],

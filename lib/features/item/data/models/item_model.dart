@@ -1,6 +1,7 @@
 import 'package:stuff_scout/core/models/location_model.dart';
+import 'package:stuff_scout/core/models/storage_model.dart';
 
-class ItemModel {
+class ItemModel extends StorageModel {
   const ItemModel({
     required this.id,
     required this.name,
@@ -13,7 +14,7 @@ class ItemModel {
     this.tagList,
     required this.locationModel,
     this.imageUrl,
-  });
+  }) : super(modelId: id);
 
   final String id;
   final String name;

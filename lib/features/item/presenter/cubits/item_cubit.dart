@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:stuff_scout/core/enums/storage_enums.dart';
 import 'package:stuff_scout/core/errors/failure.dart';
 import 'package:stuff_scout/core/errors/success.dart';
+import 'package:stuff_scout/core/models/storage_model.dart';
 
 import '../../../../core/widgets/snackbar_widget.dart';
 import '../../../../service_locator.dart';
@@ -31,22 +31,18 @@ class ItemCubit extends Cubit<ItemState> {
 
   final BuildContext context;
 
-  Future<void> deleteItem(ItemStorage itemStorage) async {
+  Future<void> deleteItem(StorageModel storageModel) async {
     Future<Either<Failure, Success>>? result;
 
-    if (itemStorage == ItemStorage.house) {
-      final HouseModel houseModel = context.read<HouseCubit>().state.houseModel;
+    if (storageModel is HouseModel) {
       result = _itemUsecase.deleteItemModelFromHouseModel(
-          houseModel, state.itemModel);
-    } else if (itemStorage == ItemStorage.room) {
-      final RoomModel roomModel = context.read<RoomCubit>().state.roomModel;
+          storageModel, state.itemModel);
+    } else if (storageModel is RoomModel) {
       result =
-          _itemUsecase.deleteItemModelFromRoomModel(roomModel, state.itemModel);
-    } else if (itemStorage == ItemStorage.container) {
-      final ContainerModel containerModel =
-          context.read<ContainerCubit>().state.containerModel;
+          _itemUsecase.deleteItemModelFromRoomModel(storageModel, state.itemModel);
+    } else if (storageModel is ContainerModel) {
       result = _itemUsecase.deleteItemModelFromContainerModel(
-          containerModel, state.itemModel);
+          storageModel, state.itemModel);
     }
 
     if (result != null) {
@@ -67,11 +63,11 @@ class ItemCubit extends Cubit<ItemState> {
               text: r.message!,
             ));
           }
-          if (itemStorage == ItemStorage.house) {
+          if (storageModel is HouseModel) {
             context.read<HouseCubit>().deleteItem(state.itemModel);
-          } else if (itemStorage == ItemStorage.room) {
+          } else if (storageModel is RoomModel) {
             context.read<RoomCubit>().deleteItem(state.itemModel);
-          } else if (itemStorage == ItemStorage.container) {
+          } else if (storageModel is ContainerModel) {
             context.read<ContainerCubit>().deleteItem(state.itemModel);
           }
           if (context.mounted) {

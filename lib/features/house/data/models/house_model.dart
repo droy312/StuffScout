@@ -1,7 +1,9 @@
+import 'package:stuff_scout/core/models/storage_model.dart';
+
 import '../../../item/data/models/item_model.dart';
 import '../../../room/data/models/room_model.dart';
 
-class HouseModel {
+class HouseModel extends StorageModel {
   HouseModel({
     required this.id,
     required this.name,
@@ -12,7 +14,7 @@ class HouseModel {
     this.itemList = const [],
     this.itemIdList = const [],
     this.mapLocationLink,
-  });
+  }) : super(modelId: id);
 
   final String id;
   final String name;

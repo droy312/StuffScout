@@ -1,9 +1,10 @@
 import 'package:stuff_scout/core/errors/custom_exception.dart';
 import 'package:stuff_scout/core/models/location_model.dart';
+import 'package:stuff_scout/core/models/storage_model.dart';
 
 import '../../../item/data/models/item_model.dart';
 
-class ContainerModel {
+class ContainerModel extends StorageModel {
   ContainerModel({
     required this.id,
     required this.name,
@@ -14,7 +15,7 @@ class ContainerModel {
     this.containerIdList = const [],
     this.itemList = const [],
     this.itemIdList = const [],
-  });
+  }) : super(modelId: id);
 
   final String id;
   final String name;
@@ -38,6 +39,11 @@ class ContainerModel {
     List<ContainerModel> newContainerList = containerList.toList();
     newContainerList.add(containerModel);
     containerList = newContainerList;
+  }
+
+  void deleteContainer(ContainerModel containerModel) {
+    containerList.remove(containerModel);
+    containerIdList.removeWhere((containerId) => containerId == containerModel.id);
   }
 
   void addItemList(List<ItemModel> itemList) {

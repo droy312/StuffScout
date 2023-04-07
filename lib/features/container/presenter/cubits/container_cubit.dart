@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:stuff_scout/core/models/storage_model.dart';
 import 'package:stuff_scout/features/container/domain/container_usecases/container_usecase.dart';
 
-import '../../../../core/enums/storage_enums.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/errors/success.dart';
 import '../../../../core/widgets/snackbar_widget.dart';
@@ -105,13 +105,14 @@ class ContainerCubit extends Cubit<ContainerState> {
     });
   }
 
-  Future<void> deleteContainer(BuildContext context, ContainerStorage containerStorage) async {
+  Future<void> deleteContainer(BuildContext context, StorageModel storageModel) async {
     Future<Either<Failure, Success>>? result;
 
-    if (containerStorage == ContainerStorage.room) {
-      final RoomModel roomModel = context.read<RoomCubit>().state.roomModel;
+    if (storageModel is RoomModel) {
       result =
-          _containerUsecase.deleteContainerModelFromRoomModel(roomModel, state.containerModel);
+          _containerUsecase.deleteContainerModelFromRoomModel(storageModel, state.containerModel);
+    } else if (storageModel is ContainerModel) {
+      result = _containerUsecase.deleteContainerModelFromContainerModel(storageModel, state.containerModel);
     }
 
     if (result != null) {
@@ -132,8 +133,10 @@ class ContainerCubit extends Cubit<ContainerState> {
               text: r.message!,
             ));
           }
-          if (containerStorage == ContainerStorage.room) {
+          if (storageModel is RoomModel) {
             context.read<RoomCubit>().deleteContainer(state.containerModel);
+          } else if (storageModel is ContainerModel) {
+            storageModel.deleteContainer(state.containerModel);
           }
           if (context.mounted) {
             Navigator.pop(context);
