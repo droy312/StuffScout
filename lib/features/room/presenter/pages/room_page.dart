@@ -13,7 +13,6 @@ import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../../core/widgets/back_search_edit_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
-import '../../../house/presenter/cubits/house_cubit.dart';
 
 class RoomPageArguments {
   const RoomPageArguments({required this.roomModel});
@@ -93,8 +92,7 @@ class _RoomPageState extends State<RoomPage>
                 onMovePressed: () {},
                 onEditPressed: () {},
                 onDeletePressed: () {
-                  _roomCubit.deleteRoom(
-                      () => context.read<HouseCubit>().deleteRoom(state.roomModel));
+                  _roomCubit.deleteRoomFromHouse();
                 },
               ),
               body: Column(
@@ -184,47 +182,46 @@ class _RoomPageState extends State<RoomPage>
                       controller: _tabController,
                       children: !state.isLoading
                           ? [
-                        state.roomModel.containerList.isNotEmpty
-                            ? _listOfWidgetsInGridView(state
-                            .roomModel.containerList
-                            .map((containerModel) {
-                          return ContainerCardWidget(
-                              containerModel: containerModel);
-                        }).toList())
-                            : Center(
-                            child: Text(
-                              'No Containers present',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground),
-                            )),
-                        state.roomModel.itemList.isNotEmpty
-                            ? _listOfWidgetsInGridView(state
-                            .roomModel.itemList
-                            .map((itemModel) {
-                          return ItemCardWidget(
-                              itemModel: itemModel);
-                        }).toList())
-                            : Center(
-                            child: Text(
-                              'No Items present',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground),
-                            )),
-                      ]
+                              state.roomModel.containerList.isNotEmpty
+                                  ? _listOfWidgetsInGridView(state
+                                      .roomModel.containerList
+                                      .map((containerModel) {
+                                      return ContainerCardWidget(
+                                          containerModel: containerModel);
+                                    }).toList())
+                                  : Center(
+                                      child: Text(
+                                      'No Containers present',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground),
+                                    )),
+                              state.roomModel.itemList.isNotEmpty
+                                  ? _listOfWidgetsInGridView(
+                                      state.roomModel.itemList.map((itemModel) {
+                                      return ItemCardWidget(
+                                          itemModel: itemModel);
+                                    }).toList())
+                                  : Center(
+                                      child: Text(
+                                      'No Items present',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground),
+                                    )),
+                            ]
                           : [
-                        const Center(child: LoadingWidget()),
-                        const Center(child: LoadingWidget()),
-                      ],
+                              const Center(child: LoadingWidget()),
+                              const Center(child: LoadingWidget()),
+                            ],
                     ),
                   ),
                 ],

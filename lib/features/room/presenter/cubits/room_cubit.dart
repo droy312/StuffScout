@@ -107,9 +107,9 @@ class RoomCubit extends Cubit<RoomState> {
     });
   }
 
-  Future<void> deleteRoom(Function() deleteFunction) async {
+  Future<void> deleteRoomFromHouse() async {
     final HouseModel houseModel = context.read<HouseCubit>().state.houseModel;
-    final result = await _roomUsecase.deleteRoomModel(houseModel, state.roomModel);
+    final result = await _roomUsecase.deleteRoomModelFromHouseModel(houseModel, state.roomModel);
     result.fold(
           (l) {
         if (l.message != null) {
@@ -127,7 +127,7 @@ class RoomCubit extends Cubit<RoomState> {
             text: r.message!,
           ));
         }
-        deleteFunction();
+        context.read<HouseCubit>().deleteRoom(state.roomModel);
         if (context.mounted) {
           Navigator.pop(context);
         }

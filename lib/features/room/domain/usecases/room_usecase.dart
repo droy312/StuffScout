@@ -70,7 +70,7 @@ class RoomUsecase {
     }
   }
 
-  Future<Either<Failure, Success>> deleteRoomModel(HouseModel houseModel, RoomModel roomModel) async {
+  Future<Either<Failure, Success>> deleteRoomModelFromHouseModel(HouseModel houseModel, RoomModel roomModel) async {
     try {
       await _roomRepo.deleteRoomIdFromHouseInfo(houseModel.id, roomModel.id);
       await _roomRepo.deleteRoomInfo(roomModel.id);
