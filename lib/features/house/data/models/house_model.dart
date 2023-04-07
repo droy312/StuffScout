@@ -47,7 +47,8 @@ class HouseModel {
   void addRoomList(List<RoomModel> roomList) {
     this.roomList = roomList;
 
-    List<String> newRoomIdList = roomList.map((roomModel) => roomModel.id).toList();
+    List<String> newRoomIdList =
+        roomList.map((roomModel) => roomModel.id).toList();
     roomIdList = newRoomIdList;
   }
 
@@ -64,7 +65,8 @@ class HouseModel {
   void addItemList(List<ItemModel> itemList) {
     this.itemList = itemList;
 
-    List<String> newItemIdList = itemList.map((itemModel) => itemModel.id).toList();
+    List<String> newItemIdList =
+        itemList.map((itemModel) => itemModel.id).toList();
     itemIdList = newItemIdList;
   }
 
@@ -93,7 +95,7 @@ class HouseModel {
       roomIdList: ((map['roomIdList'] ?? []) as List<dynamic>)
           .map((roomId) => roomId.toString())
           .toList(),
-      itemIdList: ((map['itemIdList'] ?? [] )as List<dynamic>)
+      itemIdList: ((map['itemIdList'] ?? []) as List<dynamic>)
           .map((itemId) => itemId.toString())
           .toList(),
       mapLocationLink: map['mapLocationLink'],
@@ -101,6 +103,9 @@ class HouseModel {
   }
 
   factory HouseModel.empty() {
-    return HouseModel(id: 'id', name: 'name');
+    return HouseModel(
+      id: 'id',
+      name: 'name',
+    );
   }
 }

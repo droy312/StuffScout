@@ -78,4 +78,11 @@ class LocationModel {
       containerListInOrder: map['containerListInOrder'],
     );
   }
+
+  factory LocationModel.empty() {
+    return const LocationModel(
+      id: 'id',
+      house: 'house',
+    );
+  }
 }

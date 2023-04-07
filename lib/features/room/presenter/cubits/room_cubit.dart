@@ -16,17 +16,12 @@ import '../../../item/data/models/item_model.dart';
 part 'room_state.dart';
 
 class RoomCubit extends Cubit<RoomState> {
-  RoomCubit({
-    required this.context,
-    required RoomModel roomModel,
-  }) : super(RoomState(roomModel: roomModel));
+  RoomCubit() : super(RoomState(roomModel: RoomModel.empty()));
 
   final RoomUsecase _roomUsecase = sl<RoomUsecase>();
 
-  final BuildContext context;
-
-  void init() async {
-    emit(state.copyWith(isLoading: true));
+  void init(BuildContext context, RoomModel roomModel) async {
+    emit(RoomState(roomModel: roomModel, isLoading: true));
 
     final result = await _roomUsecase
         .getContainerModelList(state.roomModel.containerIdList);
@@ -59,7 +54,7 @@ class RoomCubit extends Cubit<RoomState> {
     emit(RoomState(roomModel: state.roomModel));
   }
 
-  Future<void> addContainer(ContainerModel containerModel) async {
+  Future<void> addContainer(BuildContext context, ContainerModel containerModel) async {
     final result = await _roomUsecase.putContainerModel(
         state.roomModel.id, containerModel);
     result.fold((l) {
@@ -83,7 +78,7 @@ class RoomCubit extends Cubit<RoomState> {
     });
   }
 
-  Future<void> addItem(ItemModel itemModel) async {
+  Future<void> addItem(BuildContext context, ItemModel itemModel) async {
     final result = await _roomUsecase.putItemModel(
         state.roomModel.id, itemModel);
     result.fold((l) {
@@ -107,7 +102,7 @@ class RoomCubit extends Cubit<RoomState> {
     });
   }
 
-  Future<void> deleteRoomFromHouse() async {
+  Future<void> deleteRoomFromHouse(BuildContext context) async {
     final HouseModel houseModel = context.read<HouseCubit>().state.houseModel;
     final result = await _roomUsecase.deleteRoomModelFromHouseModel(houseModel, state.roomModel);
     result.fold(
@@ -133,5 +128,11 @@ class RoomCubit extends Cubit<RoomState> {
         }
       },
     );
+  }
+
+  void deleteItem(ItemModel itemModel) {
+    state.roomModel.deleteItem(itemModel);
+
+    emit(RoomState(roomModel: state.roomModel));
   }
 }

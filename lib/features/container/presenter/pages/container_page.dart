@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stuff_scout/core/enums/storage_enums.dart';
 import 'package:stuff_scout/core/pages/add_item_page.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/container/presenter/cubits/container_cubit.dart';
@@ -80,7 +81,8 @@ class _ContainerPageState extends State<ContainerPage>
                 context,
                 SearchPage.routeName,
                 arguments: SearchPageArguments(
-                  title: 'Search in ${widget.containerPageArguments.containerModel.name}',
+                  title:
+                      'Search in ${widget.containerPageArguments.containerModel.name}',
                   hintText: 'Search containers, items...',
                   containerModel: widget.containerPageArguments.containerModel,
                 ),
@@ -191,7 +193,9 @@ class _ContainerPageState extends State<ContainerPage>
                                       .containerModel.itemList
                                       .map((itemModel) {
                                       return ItemCardWidget(
-                                          itemModel: itemModel);
+                                        itemModel: itemModel,
+                                        itemStorage: ItemStorage.container,
+                                      );
                                     }).toList())
                                   : Center(
                                       child: Text(

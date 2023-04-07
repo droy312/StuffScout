@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stuff_scout/core/enums/storage_enums.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/presenter/cubits/room_cubit.dart';
@@ -36,8 +37,6 @@ class RoomPage extends StatefulWidget {
 
 class _RoomPageState extends State<RoomPage>
     with SingleTickerProviderStateMixin {
-  late final RoomCubit _roomCubit;
-
   late final TabController _tabController;
 
   Widget _listOfWidgetsInGridView(List<Widget> list) {
@@ -58,218 +57,209 @@ class _RoomPageState extends State<RoomPage>
   void initState() {
     super.initState();
 
-    _roomCubit = RoomCubit(
-      context: context,
-      roomModel: widget.roomPageArguments.roomModel,
-    );
-    _roomCubit.init();
+    context.read<RoomCubit>().init(context, widget.roomPageArguments.roomModel);
     _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<RoomCubit>.value(
-      value: _roomCubit,
-      child: DefaultTabController(
-        length: 2,
-        child: BlocBuilder<RoomCubit, RoomState>(
-          builder: (context, state) {
-            return Scaffold(
-              appBar: BackSearchEditAppBar(
-                context: context,
-                onSearchPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    SearchPage.routeName,
-                    arguments: SearchPageArguments(
-                      title:
-                          'Search in ${widget.roomPageArguments.roomModel.name}',
-                      hintText: 'Search containers, items...',
-                      roomModel: widget.roomPageArguments.roomModel,
-                    ),
-                  );
-                },
-                onMovePressed: () {},
-                onEditPressed: () {},
-                onDeletePressed: () {
-                  _roomCubit.deleteRoomFromHouse();
-                },
-              ),
-              body: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).colorScheme.primary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Nums.horizontalPaddingWidth),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-
-                        // Title
-                        Text(
-                          widget.roomPageArguments.roomModel.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                        ),
-                        const SizedBox(height: 4),
-
-                        // Description
-                        if (widget.roomPageArguments.roomModel.description !=
-                            null)
-                          Text(
-                            widget.roomPageArguments.roomModel.description!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary
-                                      .withOpacity(.6),
-                                ),
-                          ),
-                        const SizedBox(height: 16),
-
-                        // Location
-                        Text(
-                          'Location',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.roomPageArguments.roomModel.locationModel
-                              .toLocationString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary
-                                      .withOpacity(.6)),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+    return DefaultTabController(
+      length: 2,
+      child: BlocBuilder<RoomCubit, RoomState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: BackSearchEditAppBar(
+              context: context,
+              onSearchPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  SearchPage.routeName,
+                  arguments: SearchPageArguments(
+                    title:
+                        'Search in ${widget.roomPageArguments.roomModel.name}',
+                    hintText: 'Search containers, items...',
+                    roomModel: widget.roomPageArguments.roomModel,
                   ),
-                  TabBar(
-                    controller: _tabController,
-                    labelPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
-                    ),
-                    tabs: const [
-                      Text('Containers'),
-                      Text('Items'),
+                );
+              },
+              onMovePressed: () {},
+              onEditPressed: () {},
+              onDeletePressed: () {
+                context.read<RoomCubit>().deleteRoomFromHouse(context);
+              },
+            ),
+            body: Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: Theme.of(context).colorScheme.primary,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: Nums.horizontalPaddingWidth),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+
+                      // Title
+                      Text(
+                        widget.roomPageArguments.roomModel.name,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                      ),
+                      const SizedBox(height: 4),
+
+                      // Description
+                      if (widget.roomPageArguments.roomModel.description !=
+                          null)
+                        Text(
+                          widget.roomPageArguments.roomModel.description!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary
+                                        .withOpacity(.6),
+                                  ),
+                        ),
+                      const SizedBox(height: 16),
+
+                      // Location
+                      Text(
+                        'Location',
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        widget.roomPageArguments.roomModel.locationModel
+                            .toLocationString(),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimary
+                                .withOpacity(.6)),
+                      ),
+                      const SizedBox(height: 16),
                     ],
                   ),
-                  Expanded(
-                    // Containers and Items
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: !state.isLoading
-                          ? [
-                              state.roomModel.containerList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .roomModel.containerList
-                                      .map((containerModel) {
-                                      return ContainerCardWidget(
-                                          containerModel: containerModel);
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Containers present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                              state.roomModel.itemList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(
-                                      state.roomModel.itemList.map((itemModel) {
-                                      return ItemCardWidget(
-                                          itemModel: itemModel);
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Items present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                            ]
-                          : [
-                              const Center(child: LoadingWidget()),
-                              const Center(child: LoadingWidget()),
-                            ],
-                    ),
+                ),
+                TabBar(
+                  controller: _tabController,
+                  labelPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
                   ),
-                ],
-              ),
-              floatingActionButton: AddFloatingActionButton(
-                context: context,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AddContainerItemAlertDialog(
-                        context: context,
-                        onContainerPressed: () async {
+                  tabs: const [
+                    Text('Containers'),
+                    Text('Items'),
+                  ],
+                ),
+                Expanded(
+                  // Containers and Items
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: !state.isLoading
+                        ? [
+                            state.roomModel.containerList.isNotEmpty
+                                ? _listOfWidgetsInGridView(state
+                                    .roomModel.containerList
+                                    .map((containerModel) {
+                                    return ContainerCardWidget(
+                                        containerModel: containerModel);
+                                  }).toList())
+                                : Center(
+                                    child: Text(
+                                    'No Containers present',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  )),
+                            state.roomModel.itemList.isNotEmpty
+                                ? _listOfWidgetsInGridView(
+                                    state.roomModel.itemList.map((itemModel) {
+                                    return ItemCardWidget(
+                                      itemModel: itemModel,
+                                      itemStorage: ItemStorage.room,
+                                    );
+                                  }).toList())
+                                : Center(
+                                    child: Text(
+                                    'No Items present',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  )),
+                          ]
+                        : [
+                            const Center(child: LoadingWidget()),
+                            const Center(child: LoadingWidget()),
+                          ],
+                  ),
+                ),
+              ],
+            ),
+            floatingActionButton: AddFloatingActionButton(
+              context: context,
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AddContainerItemAlertDialog(
+                      context: context,
+                      onContainerPressed: () async {
+                        await Navigator.pushNamed(
+                          context,
+                          AddContainerPage.routeName,
+                          arguments: AddContainerPageArguments(
+                            onAddContainerPressed: (containerModel) => context
+                                .read<RoomCubit>()
+                                .addContainer(context, containerModel),
+                            containerLocationModel: widget
+                                .roomPageArguments.roomModel.locationModel
+                                .addRoom(widget.roomPageArguments.roomModel),
+                          ),
+                        );
+                        if (context.mounted) {
                           Navigator.pop(context);
-                          await Navigator.pushNamed(
-                            context,
-                            AddContainerPage.routeName,
-                            arguments: AddContainerPageArguments(
-                              onAddContainerPressed: _roomCubit.addContainer,
-                              containerLocationModel: widget
-                                  .roomPageArguments.roomModel.locationModel
-                                  .addRoom(widget.roomPageArguments.roomModel),
-                            ),
-                          );
-                          _tabController.animateTo(0);
-                        },
-                        onItemPressed: () async {
+                        }
+                        _tabController.animateTo(0);
+                      },
+                      onItemPressed: () async {
+                        await Navigator.pushNamed(
+                          context,
+                          AddItemPage.routeName,
+                          arguments: AddItemPageArguments(
+                            onAddItemPressed: (itemModel) => context
+                                .read<RoomCubit>()
+                                .addItem(context, itemModel),
+                            itemLocationModel: widget
+                                .roomPageArguments.roomModel.locationModel
+                                .addRoom(widget.roomPageArguments.roomModel),
+                          ),
+                        );
+                        if (context.mounted) {
                           Navigator.pop(context);
-                          await Navigator.pushNamed(
-                            context,
-                            AddItemPage.routeName,
-                            arguments: AddItemPageArguments(
-                              onAddItemPressed: _roomCubit.addItem,
-                              itemLocationModel: widget
-                                  .roomPageArguments.roomModel.locationModel
-                                  .addRoom(widget.roomPageArguments.roomModel),
-                            ),
-                          );
-                          _tabController.animateTo(1);
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-            );
-          },
-        ),
+                        }
+                        _tabController.animateTo(1);
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

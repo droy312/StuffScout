@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stuff_scout/core/enums/storage_enums.dart';
 import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
@@ -181,7 +182,10 @@ class _HousePageState extends State<HousePage>
                             state.houseModel.itemList.isNotEmpty
                                 ? _listOfWidgetsInGridView(
                                     state.houseModel.itemList.map((itemModel) {
-                                    return ItemCardWidget(itemModel: itemModel);
+                                    return ItemCardWidget(
+                                      itemModel: itemModel,
+                                      itemStorage: ItemStorage.house,
+                                    );
                                   }).toList())
                                 : Center(
                                     child: Text(

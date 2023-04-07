@@ -2,18 +2,22 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stuff_scout/core/enums/storage_enums.dart';
 import 'package:stuff_scout/core/widgets/back_icon_button.dart';
 import 'package:stuff_scout/core/widgets/more_popup_menu_button.dart';
 import 'package:stuff_scout/features/item/data/models/item_model.dart';
 import 'package:stuff_scout/features/item/presenter/cubits/item_cubit.dart';
 
 import '../../../../core/nums.dart';
-import '../../../house/presenter/cubits/house_cubit.dart';
 
 class ItemPageArguments {
-  const ItemPageArguments({required this.itemModel});
+  const ItemPageArguments({
+    required this.itemModel,
+    required this.itemStorage,
+  });
 
   final ItemModel itemModel;
+  final ItemStorage itemStorage;
 }
 
 class ItemPage extends StatefulWidget {
@@ -63,8 +67,7 @@ class _ItemPageState extends State<ItemPage> {
                   onMovePressed: () {},
                   onEditPressed: () {},
                   onDeletePressed: () {
-                    context.read<ItemCubit>().deleteRoom(() =>
-                        context.read<HouseCubit>().deleteItem(state.itemModel));
+                    context.read<ItemCubit>().deleteItem(widget.itemPageArguments.itemStorage);
                   },
                 )
               ],

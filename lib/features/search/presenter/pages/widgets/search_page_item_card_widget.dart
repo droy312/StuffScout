@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stuff_scout/core/enums/storage_enums.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 
 import '../../../../item/data/models/item_model.dart';
@@ -15,14 +16,17 @@ class SearchPageItemCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color borderColor =
-    Theme.of(context).colorScheme.onBackground.withOpacity(.2);
+        Theme.of(context).colorScheme.onBackground.withOpacity(.2);
 
     return UnsplashInkWell(
       onTap: () {
         Navigator.pushNamed(
           context,
           ItemPage.routeName,
-          arguments: ItemPageArguments(itemModel: itemModel),
+          arguments: ItemPageArguments(
+            itemModel: itemModel,
+            itemStorage: ItemStorage.undefined,
+          ),
         );
       },
       child: Container(

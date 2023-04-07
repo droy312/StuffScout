@@ -8,6 +8,8 @@ import 'package:stuff_scout/features/search/presenter/cubits/search_cubit.dart';
 import 'package:stuff_scout/service_locator.dart';
 import 'package:stuff_scout/route_generator.dart';
 
+import 'features/room/presenter/cubits/room_cubit.dart';
+
 void main() async {
   await setUpServices();
   runApp(const MyApp());
@@ -31,6 +33,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SearchCubit()),
         BlocProvider(create: (_) => HomeCubit()),
         BlocProvider(create: (_) => HouseCubit()),
+        BlocProvider(create: (_) => RoomCubit()),
       ],
       child: MaterialApp(
         title: 'StuffScout',

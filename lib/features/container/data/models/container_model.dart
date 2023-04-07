@@ -54,6 +54,11 @@ class ContainerModel {
     itemList = newItemList;
   }
 
+  void deleteItem(ItemModel itemModel) {
+    itemList.remove(itemModel);
+    itemIdList.removeWhere((itemId) => itemId == itemModel.id);
+  }
+
   Map<String, dynamic> toMapForLocalStorage() {
     return {
       'id': id,

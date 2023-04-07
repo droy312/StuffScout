@@ -54,6 +54,11 @@ class RoomModel {
     itemList = newItemList;
   }
 
+  void deleteItem(ItemModel itemModel) {
+    itemList.remove(itemModel);
+    itemIdList.removeWhere((itemId) => itemId == itemModel.id);
+  }
+
   Map<String, dynamic> toMapForLocalStorage() {
     return {
       'id': id,
@@ -79,6 +84,14 @@ class RoomModel {
       itemIdList: ((map['itemIdList'] ?? []) as List<dynamic>)
           .map((e) => e.toString())
           .toList(),
+    );
+  }
+
+  factory RoomModel.empty() {
+    return RoomModel(
+      id: 'id',
+      name: 'name',
+      locationModel: LocationModel.empty(),
     );
   }
 }

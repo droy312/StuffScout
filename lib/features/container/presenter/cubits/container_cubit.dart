@@ -102,4 +102,10 @@ class ContainerCubit extends Cubit<ContainerState> {
       }
     });
   }
+
+  void deleteItem(ItemModel itemModel) {
+    state.containerModel.deleteItem(itemModel);
+
+    emit(ContainerState(containerModel: state.containerModel));
+  }
 }
