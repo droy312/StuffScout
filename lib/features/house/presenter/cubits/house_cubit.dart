@@ -106,35 +106,6 @@ class HouseCubit extends Cubit<HouseState> {
     });
   }
 
-  Future<void> deleteHouse(Function()? deleteFunction) async {
-    final result = await _houseUsecase.deleteHouseModel(state.houseModel);
-    result.fold(
-      (l) {
-        if (l.message != null) {
-          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
-            context: context,
-            text: l.message!,
-            isError: true,
-          ));
-        }
-      },
-      (r) {
-        if (r.message != null) {
-          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
-            context: context,
-            text: r.message!,
-          ));
-        }
-        if (deleteFunction != null) {
-          deleteFunction();
-        }
-        if (context.mounted) {
-          Navigator.pop(context);
-        }
-      },
-    );
-  }
-
   void deleteRoom(RoomModel roomModel) {
     state.houseModel.deleteRoom(roomModel);
 

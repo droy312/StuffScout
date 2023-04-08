@@ -41,6 +41,17 @@ class HomeUsecase {
     }
   }
 
+  Future<Either<Failure, Success>> deleteHouseModel(
+      HouseModel houseModel) async {
+    try {
+      await _homeRepo.deleteHouseIdFromHouseList(houseModel.id);
+      await _homeRepo.deleteHouseInfo(houseModel.id);
+      return const Right(Success(message: 'Deleted House successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
   Future<Either<Failure, File?>> getImageFileFromCamera() async {
     try {
       return Right(await _homeRepo.getImageFileFromCamera());

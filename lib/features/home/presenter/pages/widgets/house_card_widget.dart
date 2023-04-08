@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/nums.dart';
+import 'package:stuff_scout/core/widgets/more_popup_menu_button.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
@@ -37,8 +38,7 @@ class HouseCardWidget extends StatelessWidget {
           context,
           HousePage.routeName,
           arguments: HousePageArguments(
-              houseModel: houseModel,
-              deleteFunction: deleteFunction),
+              houseModel: houseModel, deleteFunction: deleteFunction),
         );
       },
       child: Container(
@@ -56,66 +56,82 @@ class HouseCardWidget extends StatelessWidget {
               Radius.circular(Nums.textFieldElevatedButtonBorderRadius)),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(_cardPadding),
+          padding: const EdgeInsets.only(
+            left: _cardPadding,
+            bottom: _cardPadding,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: imageContainerSize,
-                width: imageContainerSize,
-                decoration: BoxDecoration(
-                  color: houseModel.imageUrl == null
-                      ? Theme.of(context).colorScheme.secondaryContainer
-                      : null,
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(_imageContainerBorderRadius)),
+              Padding(
+                padding: const EdgeInsets.only(top: _cardPadding),
+                child: Container(
+                  height: imageContainerSize,
+                  width: imageContainerSize,
+                  decoration: BoxDecoration(
+                    color: houseModel.imageUrl == null
+                        ? Theme.of(context).colorScheme.secondaryContainer
+                        : null,
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(_imageContainerBorderRadius)),
+                  ),
+                  child: houseModel.imageUrl != null
+                      ? ClipRRect(
+                          borderRadius: const BorderRadius.all(
+                              Radius.circular(_imageContainerBorderRadius)),
+                          child: Image.file(
+                            File(houseModel.imageUrl!),
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : Center(
+                          child: Text(
+                            houseModel.name[0].toUpperCase(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMedium!
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer),
+                          ),
+                        ),
                 ),
-                child: houseModel.imageUrl != null
-                    ? ClipRRect(
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(_imageContainerBorderRadius)),
-                        child: Image.file(
-                          File(houseModel.imageUrl!),
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : Center(
-                        child: Text(
-                          houseModel.name[0].toUpperCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium!
-                              .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSecondaryContainer),
-                        ),
-                      ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      houseModel.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 4),
-                    if (houseModel.description != null)
-                      Expanded(
-                        child: Text(
-                          houseModel.description!,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: _cardPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        houseModel.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
-                  ],
+                      const SizedBox(height: 4),
+                      if (houseModel.description != null)
+                        Expanded(
+                          child: Text(
+                            houseModel.description!,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
+              ),
+              MorePopupMenuButton(
+                context: context,
+                onDeletePressed: () {
+                  context.read<HomeCubit>().deleteHouse(houseModel);
+                },
+                iconColor: Theme.of(context).colorScheme.onBackground,
               ),
             ],
           ),

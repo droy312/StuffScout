@@ -98,11 +98,6 @@ class _HousePageState extends State<HousePage>
                 ),
               );
             },
-            onEditPressed: () {},
-            onDeletePressed: () async {
-              await _houseCubit
-                  .deleteHouse(widget.housePageArguments.deleteFunction);
-            },
           ),
           body: Column(
             children: [

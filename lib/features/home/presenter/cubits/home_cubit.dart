@@ -60,11 +60,33 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  void deleteHouse(HouseModel houseModel) async {
-    final List<HouseModel> houseList = state.houseList.toList();
-    houseList.remove(houseModel);
+  Future<void> deleteHouse(HouseModel houseModel) async {
+    emit(state.copyWith(isLoading: true));
 
-    emit(HomeState(houseList: houseList));
+    List<HouseModel> updatedHouseList = state.houseList.toList();
 
+    final result = await _homeUsecase.deleteHouseModel(houseModel);
+    result.fold(
+          (l) {
+        if (l.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: l.message!,
+            isError: true,
+          ));
+        }
+      },
+          (r) {
+        if (r.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: r.message!,
+          ));
+        }
+        updatedHouseList.remove(houseModel);
+      },
+    );
+
+    emit(HomeState(houseList: updatedHouseList));
   }
 }
