@@ -7,8 +7,6 @@ import 'package:stuff_scout/features/search/presenter/cubits/search_cubit.dart';
 import 'package:stuff_scout/service_locator.dart';
 import 'package:stuff_scout/route_generator.dart';
 
-import 'features/room/presenter/cubits/room_cubit.dart';
-
 void main() async {
   await setUpServices();
   runApp(const MyApp());
@@ -30,7 +28,6 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => SearchCubit()),
-        BlocProvider(create: (_) => RoomCubit()),
         BlocProvider(create: (_) => ContainerCubit()),
       ],
       child: MaterialApp(

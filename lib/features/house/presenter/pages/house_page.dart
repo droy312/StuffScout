@@ -169,11 +169,7 @@ class _HousePageState extends State<HousePage>
                                       .houseModel.roomList
                                       .map((roomModel) {
                                       return RoomCardWidget(
-                                        roomModel: roomModel,
-                                        deleteFunction: () => context
-                                            .read<HouseCubit>()
-                                            .deleteRoom(roomModel),
-                                      );
+                                          roomModel: roomModel);
                                     }).toList())
                                   : Center(
                                       child: Text(

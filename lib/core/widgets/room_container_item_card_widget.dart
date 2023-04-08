@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:stuff_scout/core/widgets/more_popup_menu_button.dart';
 
 class RoomContainerItemCardWidget extends StatelessWidget {
   const RoomContainerItemCardWidget({
@@ -8,11 +9,13 @@ class RoomContainerItemCardWidget extends StatelessWidget {
     this.size = 40,
     required this.label,
     this.imageUrl,
+    this.onDeletePressed,
   }) : super(key: key);
 
   final double size;
   final String label;
   final String? imageUrl;
+  final Function()? onDeletePressed;
 
   static const double _borderRadius = 16;
 
@@ -68,6 +71,14 @@ class RoomContainerItemCardWidget extends StatelessWidget {
                   color: imageUrl != null
                       ? Colors.white
                       : Theme.of(context).colorScheme.onBackground),
+            ),
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: MorePopupMenuButton(
+              context: context,
+              onDeletePressed: onDeletePressed,
             ),
           ),
         ],

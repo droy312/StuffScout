@@ -9,6 +9,7 @@ import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../service_locator.dart';
 import '../../../item/data/models/item_model.dart';
+import '../../data/models/house_model.dart';
 
 class HouseUsecase {
   final HouseRepo _houseRepo = sl<HouseRepo>();
@@ -38,6 +39,16 @@ class HouseUsecase {
       await _houseRepo.addRoomIdToHouseInfo(houseId, roomModel.id);
 
       return const Right(Success(message: 'Added Room successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
+  Future<Either<Failure, Success>> deleteRoomModelFromHouseModel(HouseModel houseModel, RoomModel roomModel) async {
+    try {
+      await _houseRepo.deleteRoomIdFromHouseInfo(houseModel.id, roomModel.id);
+      await _houseRepo.deleteRoomInfo(roomModel.id);
+      return const Right(Success(message: 'Deleted Room successfully'));
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }

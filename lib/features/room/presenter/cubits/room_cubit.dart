@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:stuff_scout/core/widgets/snackbar_widget.dart';
-import 'package:stuff_scout/features/house/data/models/house_model.dart';
-import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/domain/usecases/room_usecase.dart';
 
@@ -16,12 +14,17 @@ import '../../../item/data/models/item_model.dart';
 part 'room_state.dart';
 
 class RoomCubit extends Cubit<RoomState> {
-  RoomCubit() : super(RoomState(roomModel: RoomModel.empty()));
+  RoomCubit({
+    required this.context,
+    required RoomModel roomModel,
+  }) : super(RoomState(roomModel: roomModel));
 
   final RoomUsecase _roomUsecase = sl<RoomUsecase>();
 
-  void init(BuildContext context, RoomModel roomModel) async {
-    emit(RoomState(roomModel: roomModel, isLoading: true));
+  final BuildContext context;
+
+  void init() async {
+    emit(state.copyWith(isLoading: true));
 
     final result = await _roomUsecase
         .getContainerModelList(state.roomModel.containerIdList);
@@ -54,7 +57,7 @@ class RoomCubit extends Cubit<RoomState> {
     emit(RoomState(roomModel: state.roomModel));
   }
 
-  Future<void> addContainer(BuildContext context, ContainerModel containerModel) async {
+  Future<void> addContainer(ContainerModel containerModel) async {
     final result = await _roomUsecase.putContainerModel(
         state.roomModel.id, containerModel);
     result.fold((l) {
@@ -78,9 +81,9 @@ class RoomCubit extends Cubit<RoomState> {
     });
   }
 
-  Future<void> addItem(BuildContext context, ItemModel itemModel) async {
-    final result = await _roomUsecase.putItemModel(
-        state.roomModel.id, itemModel);
+  Future<void> addItem(ItemModel itemModel) async {
+    final result =
+        await _roomUsecase.putItemModel(state.roomModel.id, itemModel);
     result.fold((l) {
       if (l.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
@@ -100,36 +103,6 @@ class RoomCubit extends Cubit<RoomState> {
         ));
       }
     });
-  }
-
-  Future<void> deleteRoom(BuildContext context, Function()? deleteFunction) async {
-    final HouseModel houseModel = context.read<HouseCubit>().state.houseModel;
-    final result = await _roomUsecase.deleteRoomModelFromHouseModel(houseModel, state.roomModel);
-    result.fold(
-          (l) {
-        if (l.message != null) {
-          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
-            context: context,
-            text: l.message!,
-            isError: true,
-          ));
-        }
-      },
-          (r) {
-        if (r.message != null) {
-          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
-            context: context,
-            text: r.message!,
-          ));
-        }
-        if (deleteFunction != null) {
-          deleteFunction();
-        }
-        if (context.mounted) {
-          Navigator.pop(context);
-        }
-      },
-    );
   }
 
   void deleteItem(ItemModel itemModel) {
