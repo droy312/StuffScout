@@ -14,6 +14,7 @@ class HouseCardWidget extends StatelessWidget {
   const HouseCardWidget({
     Key? key,
     required this.houseModel,
+    required this.deleteFunction,
   }) : super(key: key);
 
   static const double _imageContainerBorderRadius =
@@ -21,6 +22,7 @@ class HouseCardWidget extends StatelessWidget {
   static const double _cardPadding = 12;
 
   final HouseModel houseModel;
+  final Function() deleteFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +38,7 @@ class HouseCardWidget extends StatelessWidget {
           HousePage.routeName,
           arguments: HousePageArguments(
               houseModel: houseModel,
-              deleteFunction: () =>
-                  context.read<HomeCubit>().deleteHouse(houseModel)),
+              deleteFunction: deleteFunction),
         );
       },
       child: Container(

@@ -10,10 +10,12 @@ class RoomCardWidget extends StatelessWidget {
     Key? key,
     this.size = 40,
     required this.roomModel,
+    required this.deleteFunction,
   }) : super(key: key);
 
   final double size;
   final RoomModel roomModel;
+  final Function() deleteFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,10 @@ class RoomCardWidget extends StatelessWidget {
         Navigator.pushNamed(
           context,
           RoomPage.routeName,
-          arguments: RoomPageArguments(roomModel: roomModel),
+          arguments: RoomPageArguments(
+            roomModel: roomModel,
+            deleteFunction: deleteFunction,
+          ),
         );
       },
       child: RoomContainerItemCardWidget(

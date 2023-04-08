@@ -25,11 +25,15 @@ class HouseUsecase {
 
       return Right(roomModelList);
     } on CustomException catch (e) {
-      return Left(Failure(message: e.message, code: e.code,));
+      return Left(Failure(
+        message: e.message,
+        code: e.code,
+      ));
     }
   }
 
-  Future<Either<Failure, Success>> putRoomModel(String houseId, RoomModel roomModel) async {
+  Future<Either<Failure, Success>> putRoomModel(
+      String houseId, RoomModel roomModel) async {
     try {
       await _houseRepo.putRoomModel(roomModel);
       await _houseRepo.addRoomIdToHouseInfo(houseId, roomModel.id);
@@ -67,7 +71,8 @@ class HouseUsecase {
     }
   }
 
-  Future<Either<Failure, Success>> deleteHouseModel(HouseModel houseModel) async {
+  Future<Either<Failure, Success>> deleteHouseModel(
+      HouseModel houseModel) async {
     try {
       await _houseRepo.deleteHouseIdFromHouseList(houseModel.id);
       await _houseRepo.deleteHouseInfo(houseModel.id);

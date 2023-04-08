@@ -149,7 +149,11 @@ class _HomePageState extends State<HomePage> {
                                 padding: const EdgeInsets.symmetric(
                                         horizontal: Nums.horizontalPaddingWidth)
                                     .copyWith(bottom: 16),
-                                child: HouseCardWidget(houseModel: houseModel),
+                                child: HouseCardWidget(
+                                  houseModel: houseModel,
+                                  deleteFunction: () =>
+                                      _homeCubit.deleteHouse(houseModel),
+                                ),
                               );
                             })
                           ],

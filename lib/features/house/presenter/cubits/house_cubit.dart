@@ -14,12 +14,17 @@ import '../../data/models/house_model.dart';
 part 'house_state.dart';
 
 class HouseCubit extends Cubit<HouseState> {
-  HouseCubit() : super(HouseState(houseModel: HouseModel.empty()));
+  HouseCubit({
+    required this.context,
+    required HouseModel houseModel,
+  }) : super(HouseState(houseModel: houseModel));
 
   final HouseUsecase _houseUsecase = sl<HouseUsecase>();
 
-  void init(BuildContext context, HouseModel houseModel) async {
-    emit(HouseState(houseModel: houseModel, isLoading: true));
+  final BuildContext context;
+
+  void init() async {
+    emit(state.copyWith(isLoading: true));
 
     final result1 =
         await _houseUsecase.getRoomModelList(state.houseModel.roomIdList);
@@ -53,7 +58,7 @@ class HouseCubit extends Cubit<HouseState> {
     emit(HouseState(houseModel: state.houseModel));
   }
 
-  Future<void> addRoom(BuildContext context, RoomModel roomModel) async {
+  Future<void> addRoom(RoomModel roomModel) async {
     final result =
         await _houseUsecase.putRoomModel(state.houseModel.id, roomModel);
     result.fold((l) {
@@ -77,7 +82,7 @@ class HouseCubit extends Cubit<HouseState> {
     });
   }
 
-  Future<void> addItem(BuildContext context, ItemModel itemModel) async {
+  Future<void> addItem(ItemModel itemModel) async {
     final result =
         await _houseUsecase.putItemModel(state.houseModel.id, itemModel);
     result.fold((l) {
@@ -101,7 +106,7 @@ class HouseCubit extends Cubit<HouseState> {
     });
   }
 
-  Future<void> deleteHouse(BuildContext context, Function()? deleteFunction) async {
+  Future<void> deleteHouse(Function()? deleteFunction) async {
     final result = await _houseUsecase.deleteHouseModel(state.houseModel);
     result.fold(
       (l) {

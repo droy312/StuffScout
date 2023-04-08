@@ -15,9 +15,13 @@ import '../../../../core/widgets/container_card_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
 
 class RoomPageArguments {
-  const RoomPageArguments({required this.roomModel});
+  const RoomPageArguments({
+    required this.roomModel,
+    this.deleteFunction,
+  });
 
   final RoomModel roomModel;
+  final Function()? deleteFunction;
 }
 
 class RoomPage extends StatefulWidget {
@@ -84,7 +88,8 @@ class _RoomPageState extends State<RoomPage>
               onMovePressed: () {},
               onEditPressed: () {},
               onDeletePressed: () {
-                context.read<RoomCubit>().deleteRoom(context);
+                context.read<RoomCubit>().deleteRoom(
+                    context, widget.roomPageArguments.deleteFunction);
               },
             ),
             body: Column(
