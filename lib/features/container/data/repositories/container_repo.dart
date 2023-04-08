@@ -67,15 +67,6 @@ class ContainerRepo {
     }
   }
 
-  Future<void> deleteContainerIdFromRoomInfo(String roomId, String containerId) async {
-    try {
-      return _localStorageService.deleteContainerIdFromRoomInfo(roomId, containerId);
-    } catch (e) {
-      throw const CustomException(
-          message: 'Couldn\'t delete Container. Please try again.');
-    }
-  }
-
   Future<void> deleteContainerIdFromContainerInfo(String containerId, String nestedContainerId) async {
     try {
       return _localStorageService.deleteContainerIdFromContainerInfo(containerId, nestedContainerId);

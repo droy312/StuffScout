@@ -7,7 +7,6 @@ import 'package:stuff_scout/features/container/data/repositories/container_repo.
 
 import '../../../../service_locator.dart';
 import '../../../item/data/models/item_model.dart';
-import '../../../room/data/models/room_model.dart';
 
 class ContainerUsecase {
   final ContainerRepo _containerRepo = sl<ContainerRepo>();
@@ -62,16 +61,6 @@ class ContainerUsecase {
       await _containerRepo.addItemIdToContainerInfo(containerId, itemModel.id);
       await _containerRepo.putItemModel(itemModel);
       return const Right(Success(message: 'Added Item successfully'));
-    } on CustomException catch (e) {
-      return Left(Failure(message: e.message, code: e.code));
-    }
-  }
-
-  Future<Either<Failure, Success>> deleteContainerModelFromRoomModel(RoomModel roomModel, ContainerModel containerModel) async {
-    try {
-      await _containerRepo.deleteContainerIdFromRoomInfo(roomModel.id, containerModel.id);
-      await _containerRepo.deleteContainerInfo(containerModel.id);
-      return const Right(Success(message: 'Deleted Container successfully'));
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }

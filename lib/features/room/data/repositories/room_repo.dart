@@ -44,6 +44,24 @@ class RoomRepo {
     }
   }
 
+  Future<void> deleteContainerIdFromRoomInfo(String roomId, String containerId) async {
+    try {
+      return _localStorageService.deleteContainerIdFromRoomInfo(roomId, containerId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t delete Container. Please try again.');
+    }
+  }
+
+  Future<void> deleteContainerInfo(String containerId) async {
+    try {
+      return _localStorageService.deleteContainerInfo(containerId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t delete Container. Please try again.');
+    }
+  }
+
   Future<ItemModel> getItemModel(String itemId) async {
     final Map<dynamic, dynamic>? map =
         await _localStorageService.getItemInfo(itemId);

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stuff_scout/core/models/storage_model.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 import 'package:stuff_scout/features/container/data/models/container_model.dart';
 
@@ -23,10 +22,7 @@ class SearchPageContainerCardWidget extends StatelessWidget {
         Navigator.pushNamed(
           context,
           ContainerPage.routeName,
-          arguments: ContainerPageArguments(
-            containerModel: containerModel,
-            storageModel: StorageModel.empty(),
-          ),
+          arguments: ContainerPageArguments(containerModel: containerModel),
         );
       },
       child: Container(

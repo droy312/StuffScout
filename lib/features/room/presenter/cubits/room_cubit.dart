@@ -105,14 +105,39 @@ class RoomCubit extends Cubit<RoomState> {
     });
   }
 
-  void deleteItem(ItemModel itemModel) {
-    state.roomModel.deleteItem(itemModel);
+  Future<void> deleteContainer(ContainerModel containerModel) async {
+    emit(state.copyWith(isLoading: true));
+
+    final result = await _roomUsecase.deleteContainerModelFromRoomModel(
+          state.roomModel, containerModel);
+
+    result.fold(
+          (l) {
+        if (l.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: l.message!,
+            isError: true,
+          ));
+        }
+      },
+          (r) {
+        if (r.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: r.message!,
+          ));
+        }
+
+        state.roomModel.deleteContainer(containerModel);
+      },
+    );
 
     emit(RoomState(roomModel: state.roomModel));
   }
 
-  void deleteContainer(ContainerModel containerModel) {
-    state.roomModel.deleteContainer(containerModel);
+  void deleteItem(ItemModel itemModel) {
+    state.roomModel.deleteItem(itemModel);
 
     emit(RoomState(roomModel: state.roomModel));
   }

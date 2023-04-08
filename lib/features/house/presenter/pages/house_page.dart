@@ -171,9 +171,7 @@ class _HousePageState extends State<HousePage>
                                       return RoomCardWidget(
                                         roomModel: roomModel,
                                         onDeletePressed: () {
-                                          context
-                                              .read<HouseCubit>()
-                                              .deleteRoom(roomModel);
+                                          _houseCubit.deleteRoom(roomModel);
                                         },
                                       );
                                     }).toList())
@@ -195,9 +193,7 @@ class _HousePageState extends State<HousePage>
                                       return ItemCardWidget(
                                         itemModel: itemModel,
                                         onDeletePressed: () {
-                                          context
-                                              .read<HouseCubit>()
-                                              .deleteItem(itemModel);
+                                          _houseCubit.deleteItem(itemModel);
                                         },
                                       );
                                     }).toList())

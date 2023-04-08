@@ -9,6 +9,7 @@ import 'package:stuff_scout/features/room/data/repositories/room_repo.dart';
 
 import '../../../../service_locator.dart';
 import '../../../item/data/models/item_model.dart';
+import '../../data/models/room_model.dart';
 
 class RoomUsecase {
   final RoomRepo _roomRepo = sl<RoomRepo>();
@@ -36,6 +37,18 @@ class RoomUsecase {
       await _roomRepo.addContainerIdToRoomInfo(roomId, containerModel.id);
       await _roomRepo.putContainerModel(containerModel);
       return const Right(Success(message: 'Added Container successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
+  Future<Either<Failure, Success>> deleteContainerModelFromRoomModel(
+      RoomModel roomModel, ContainerModel containerModel) async {
+    try {
+      await _roomRepo.deleteContainerIdFromRoomInfo(
+          roomModel.id, containerModel.id);
+      await _roomRepo.deleteContainerInfo(containerModel.id);
+      return const Right(Success(message: 'Deleted Container successfully'));
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }

@@ -180,7 +180,9 @@ class _RoomPageState extends State<RoomPage>
                                       .map((containerModel) {
                                       return ContainerCardWidget(
                                         containerModel: containerModel,
-                                        storageModel: state.roomModel,
+                                        onDeletePressed: () {
+                                          _roomCubit.deleteContainer(containerModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
