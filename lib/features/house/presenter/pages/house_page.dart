@@ -18,13 +18,9 @@ import '../../data/models/house_model.dart';
 import 'add_room_page.dart';
 
 class HousePageArguments {
-  const HousePageArguments({
-    required this.houseModel,
-    this.deleteFunction,
-  });
+  const HousePageArguments({required this.houseModel});
 
   final HouseModel houseModel;
-  final Function()? deleteFunction;
 }
 
 class HousePage extends StatefulWidget {
