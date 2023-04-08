@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stuff_scout/color_scheme.dart';
 import 'package:stuff_scout/features/container/presenter/cubits/container_cubit.dart';
-import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/search/presenter/cubits/search_cubit.dart';
 import 'package:stuff_scout/service_locator.dart';
 import 'package:stuff_scout/route_generator.dart';
