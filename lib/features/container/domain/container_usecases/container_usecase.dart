@@ -18,7 +18,7 @@ class ContainerUsecase {
     for (final containerId in containerIdList) {
       try {
         final ContainerModel containerModel =
-        await _containerRepo.getContainerModel(containerId);
+            await _containerRepo.getContainerModel(containerId);
         containerList.add(containerModel);
       } on CustomException catch (e) {
         return Left(Failure(message: e.message, code: e.code));
@@ -31,9 +31,23 @@ class ContainerUsecase {
   Future<Either<Failure, Success>> putContainerModel(
       String containerId, ContainerModel containerModel) async {
     try {
-      await _containerRepo.addContainerIdToContainerInfo(containerId, containerModel.id);
+      await _containerRepo.addContainerIdToContainerInfo(
+          containerId, containerModel.id);
       await _containerRepo.putContainerModel(containerModel);
       return const Right(Success(message: 'Added Container successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
+  Future<Either<Failure, Success>> deleteContainerModelFromContainerModel(
+      ContainerModel containerModel,
+      ContainerModel nestedContainerModel) async {
+    try {
+      await _containerRepo.deleteContainerIdFromContainerInfo(
+          containerModel.id, nestedContainerModel.id);
+      await _containerRepo.deleteContainerInfo(nestedContainerModel.id);
+      return const Right(Success(message: 'Deleted Container successfully'));
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }
@@ -66,11 +80,13 @@ class ContainerUsecase {
     }
   }
 
-  Future<Either<Failure, Success>> deleteContainerModelFromContainerModel(ContainerModel containerModel, ContainerModel nestedContainerModel) async {
+  Future<Either<Failure, Success>> deleteItemModelFromContainerModel(
+      ContainerModel containerModel, ItemModel itemModel) async {
     try {
-      await _containerRepo.deleteContainerIdFromContainerInfo(containerModel.id, nestedContainerModel.id);
-      await _containerRepo.deleteContainerInfo(nestedContainerModel.id);
-      return const Right(Success(message: 'Deleted Container successfully'));
+      await _containerRepo.deleteItemIdFromContainerInfo(
+          containerModel.id, itemModel.id);
+      await _containerRepo.deleteItemInfo(itemModel.id);
+      return const Right(Success(message: 'Deleted Item successfully'));
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }

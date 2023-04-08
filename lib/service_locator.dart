@@ -9,8 +9,6 @@ import 'package:stuff_scout/features/container/domain/container_usecases/contain
 import 'package:stuff_scout/features/home/data/repositories/home_repo.dart';
 import 'package:stuff_scout/features/home/domain/usercases/home_usecase.dart';
 import 'package:stuff_scout/features/house/data/repositories/house_repo.dart';
-import 'package:stuff_scout/features/item/data/repositories/item_repo.dart';
-import 'package:stuff_scout/features/item/domain/usecases/item_usecase.dart';
 import 'package:stuff_scout/features/room/data/repositories/room_repo.dart';
 import 'package:stuff_scout/features/room/domain/usecases/room_usecase.dart';
 import 'package:stuff_scout/features/search/data/repositories/search_repo.dart';
@@ -39,7 +37,6 @@ Future<void> setUpServices() async {
   sl.registerSingleton<HouseRepo>(HouseRepo());
   sl.registerSingleton<RoomRepo>(RoomRepo());
   sl.registerSingleton<ContainerRepo>(ContainerRepo());
-  sl.registerSingleton<ItemRepo>(ItemRepo());
   sl.registerSingleton<SearchRepo>(SearchRepo());
 
   // Usecases
@@ -47,6 +44,5 @@ Future<void> setUpServices() async {
   sl.registerSingleton<HouseUsecase>(HouseUsecase());
   sl.registerSingleton<RoomUsecase>(RoomUsecase());
   sl.registerSingleton<ContainerUsecase>(ContainerUsecase());
-  sl.registerSingleton<ItemUsecase>(ItemUsecase());
   sl.registerSingleton<SearchUsecase>(SearchUsecase());
 }

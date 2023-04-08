@@ -38,6 +38,24 @@ class ContainerRepo {
     }
   }
 
+  Future<void> deleteContainerIdFromContainerInfo(String containerId, String nestedContainerId) async {
+    try {
+      return _localStorageService.deleteContainerIdFromContainerInfo(containerId, nestedContainerId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t delete Container. Please try again.');
+    }
+  }
+
+  Future<void> deleteContainerInfo(String containerId) async {
+    try {
+      return _localStorageService.deleteContainerInfo(containerId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t delete Container. Please try again.');
+    }
+  }
+
   Future<ItemModel> getItemModel(String itemId) async {
     final Map<dynamic, dynamic>? map =
     await _localStorageService.getItemInfo(itemId);
@@ -67,21 +85,21 @@ class ContainerRepo {
     }
   }
 
-  Future<void> deleteContainerIdFromContainerInfo(String containerId, String nestedContainerId) async {
+  Future<void> deleteItemIdFromContainerInfo(String containerId, String itemId) async {
     try {
-      return _localStorageService.deleteContainerIdFromContainerInfo(containerId, nestedContainerId);
+      return _localStorageService.deleteItemIdFromContainerInfo(containerId, itemId);
     } catch (e) {
       throw const CustomException(
-          message: 'Couldn\'t delete Container. Please try again.');
+          message: 'Couldn\'t delete Item. Please try again.');
     }
   }
 
-  Future<void> deleteContainerInfo(String containerId) async {
+  Future<void> deleteItemInfo(String itemId) async {
     try {
-      return _localStorageService.deleteContainerInfo(containerId);
+      return _localStorageService.deleteItemInfo(itemId);
     } catch (e) {
       throw const CustomException(
-          message: 'Couldn\'t delete Container. Please try again.');
+          message: 'Couldn\'t delete Item. Please try again.');
     }
   }
 }
