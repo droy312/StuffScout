@@ -81,6 +81,17 @@ class RoomUsecase {
     }
   }
 
+  Future<Either<Failure, Success>> deleteItemModelFromRoomModel(
+      RoomModel roomModel, ItemModel itemModel) async {
+    try {
+      await _roomRepo.deleteItemIdFromRoomInfo(roomModel.id, itemModel.id);
+      await _roomRepo.deleteItemInfo(itemModel.id);
+      return const Right(Success(message: 'Deleted Item successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
   Future<Either<Failure, File?>> getImageFileFromCamera() async {
     try {
       return Right(await _roomRepo.getImageFileFromCamera());

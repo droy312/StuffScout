@@ -201,8 +201,9 @@ class _RoomPageState extends State<RoomPage>
                                       state.roomModel.itemList.map((itemModel) {
                                       return ItemCardWidget(
                                         itemModel: itemModel,
-                                        // TODO: onDeletePressed function
-                                        onDeletePressed: () {},
+                                        onDeletePressed: () {
+                                          _roomCubit.deleteItem(itemModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(

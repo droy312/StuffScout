@@ -92,6 +92,24 @@ class RoomRepo {
     }
   }
 
+  Future<void> deleteItemIdFromRoomInfo(String roomId, String itemId) async {
+    try {
+      return _localStorageService.deleteItemIdFromRoomInfo(roomId, itemId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t delete Item. Please try again.');
+    }
+  }
+
+  Future<void> deleteItemInfo(String itemId) async {
+    try {
+      return _localStorageService.deleteItemInfo(itemId);
+    } catch (e) {
+      throw const CustomException(
+          message: 'Couldn\'t delete Item. Please try again.');
+    }
+  }
+
   Future<File?> getImageFileFromCamera() {
     try {
       return _imagePickerService.getImageFileFromCamera();
