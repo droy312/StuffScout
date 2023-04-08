@@ -196,7 +196,8 @@ class _ContainerPageState extends State<ContainerPage>
                                     .map((itemModel) {
                                     return ItemCardWidget(
                                       itemModel: itemModel,
-                                      storageModel: state.containerModel,
+                                      // TODO: onDeletePressed function
+                                      onDeletePressed: () {},
                                     );
                                   }).toList())
                                 : Center(

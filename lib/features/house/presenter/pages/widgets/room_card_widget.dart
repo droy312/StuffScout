@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/widgets/room_container_item_card_widget.dart';
-import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 
 import '../../../../room/data/models/room_model.dart';
 import '../../../../room/presenter/pages/room_page.dart';
@@ -12,10 +10,12 @@ class RoomCardWidget extends StatelessWidget {
     Key? key,
     this.size = 40,
     required this.roomModel,
+    required this.onDeletePressed,
   }) : super(key: key);
 
   final double size;
   final RoomModel roomModel;
+  final Function() onDeletePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +30,7 @@ class RoomCardWidget extends StatelessWidget {
       child: RoomContainerItemCardWidget(
         label: roomModel.name,
         imageUrl: roomModel.imageUrl,
-        onDeletePressed: () {
-          context.read<HouseCubit>().deleteRoom(roomModel);
-        },
+        onDeletePressed: onDeletePressed,
       ),
     );
   }

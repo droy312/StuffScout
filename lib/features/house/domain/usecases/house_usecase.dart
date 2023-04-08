@@ -44,11 +44,23 @@ class HouseUsecase {
     }
   }
 
-  Future<Either<Failure, Success>> deleteRoomModelFromHouseModel(HouseModel houseModel, RoomModel roomModel) async {
+  Future<Either<Failure, Success>> deleteRoomModelFromHouseModel(
+      HouseModel houseModel, RoomModel roomModel) async {
     try {
       await _houseRepo.deleteRoomIdFromHouseInfo(houseModel.id, roomModel.id);
       await _houseRepo.deleteRoomInfo(roomModel.id);
       return const Right(Success(message: 'Deleted Room successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
+  Future<Either<Failure, Success>> deleteItemModelFromHouseModel(
+      HouseModel houseModel, ItemModel itemModel) async {
+    try {
+      await _houseRepo.deleteItemIdFromHouseInfo(houseModel.id, itemModel.id);
+      await _houseRepo.deleteItemInfo(itemModel.id);
+      return const Right(Success(message: 'Deleted Item successfully'));
     } on CustomException catch (e) {
       return Left(Failure(message: e.message, code: e.code));
     }

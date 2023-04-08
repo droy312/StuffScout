@@ -136,8 +136,33 @@ class HouseCubit extends Cubit<HouseState> {
     emit(HouseState(houseModel: state.houseModel));
   }
 
-  void deleteItem(ItemModel itemModel) {
-    state.houseModel.deleteItem(itemModel);
+  Future<void> deleteItem(ItemModel itemModel) async {
+    emit(state.copyWith(isLoading: true));
+
+    final result = await _houseUsecase.deleteItemModelFromHouseModel(
+          state.houseModel, itemModel);
+
+    result.fold(
+          (l) {
+        if (l.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: l.message!,
+            isError: true,
+          ));
+        }
+      },
+          (r) {
+        if (r.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: r.message!,
+          ));
+        }
+
+        state.houseModel.deleteItem(itemModel);
+      },
+    );
 
     emit(HouseState(houseModel: state.houseModel));
   }

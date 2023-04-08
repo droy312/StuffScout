@@ -169,7 +169,13 @@ class _HousePageState extends State<HousePage>
                                       .houseModel.roomList
                                       .map((roomModel) {
                                       return RoomCardWidget(
-                                          roomModel: roomModel);
+                                        roomModel: roomModel,
+                                        onDeletePressed: () {
+                                          context
+                                              .read<HouseCubit>()
+                                              .deleteRoom(roomModel);
+                                        },
+                                      );
                                     }).toList())
                                   : Center(
                                       child: Text(
@@ -188,7 +194,11 @@ class _HousePageState extends State<HousePage>
                                       .map((itemModel) {
                                       return ItemCardWidget(
                                         itemModel: itemModel,
-                                        storageModel: state.houseModel,
+                                        onDeletePressed: () {
+                                          context
+                                              .read<HouseCubit>()
+                                              .deleteItem(itemModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(

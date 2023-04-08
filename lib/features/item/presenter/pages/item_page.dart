@@ -2,22 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stuff_scout/core/models/storage_model.dart';
 import 'package:stuff_scout/core/widgets/back_icon_button.dart';
-import 'package:stuff_scout/core/widgets/more_popup_menu_button.dart';
 import 'package:stuff_scout/features/item/data/models/item_model.dart';
 import 'package:stuff_scout/features/item/presenter/cubits/item_cubit.dart';
 
 import '../../../../core/nums.dart';
 
 class ItemPageArguments {
-  const ItemPageArguments({
-    required this.itemModel,
-    required this.storageModel,
-  });
+  const ItemPageArguments({required this.itemModel});
 
   final ItemModel itemModel;
-  final StorageModel storageModel;
 }
 
 class ItemPage extends StatefulWidget {
@@ -61,18 +55,6 @@ class _ItemPageState extends State<ItemPage> {
           return Scaffold(
             appBar: AppBar(
               leading: BackIconButton(context: context),
-              actions: [
-                MorePopupMenuButton(
-                  context: context,
-                  onMovePressed: () {},
-                  onEditPressed: () {},
-                  onDeletePressed: () {
-                    context
-                        .read<ItemCubit>()
-                        .deleteItem(widget.itemPageArguments.storageModel);
-                  },
-                )
-              ],
               title: Text(
                 state.itemModel.name,
                 overflow: TextOverflow.ellipsis,
