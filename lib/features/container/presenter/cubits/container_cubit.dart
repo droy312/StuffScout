@@ -104,6 +104,37 @@ class ContainerCubit extends Cubit<ContainerState> {
     });
   }
 
+  Future<void> deleteContainer(ContainerModel containerModel) async {
+    emit(state.copyWith(isLoading: true));
+
+    final result = await _containerUsecase.deleteContainerModelFromContainerModel(
+        state.containerModel, containerModel);
+
+    result.fold(
+          (l) {
+        if (l.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: l.message!,
+            isError: true,
+          ));
+        }
+      },
+          (r) {
+        if (r.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: r.message!,
+          ));
+        }
+
+        state.containerModel.deleteContainer(containerModel);
+      },
+    );
+
+    emit(ContainerState(containerModel: state.containerModel));
+  }
+
   void deleteItem(ItemModel itemModel) {
     state.containerModel.deleteItem(itemModel);
 

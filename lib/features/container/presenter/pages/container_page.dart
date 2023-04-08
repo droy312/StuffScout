@@ -180,8 +180,9 @@ class _ContainerPageState extends State<ContainerPage>
                                       .map((containerModel) {
                                       return ContainerCardWidget(
                                         containerModel: containerModel,
-                                        // TODO: onDeletePressed function
-                                        onDeletePressed: () {},
+                                        onDeletePressed: () {
+                                          _containerCubit.deleteContainer(containerModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
