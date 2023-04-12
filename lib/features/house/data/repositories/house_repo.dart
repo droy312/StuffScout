@@ -8,6 +8,7 @@ import '../../../../core/services/image_picker_service.dart';
 import '../../../../service_locator.dart';
 import '../../../item/data/models/item_model.dart';
 import '../../../room/data/models/room_model.dart';
+import '../models/house_model.dart';
 
 class HouseRepo {
   final LocalStorageService _localStorageService = sl<LocalStorageService>();
@@ -107,6 +108,14 @@ class HouseRepo {
     } catch (e) {
       throw const CustomException(
           message: 'Couldn\'t delete Item. Please try again.');
+    }
+  }
+
+  Future<void> updateHouseInfo(HouseModel houseModel) async {
+    try {
+      return _localStorageService.updateHouseInfo(houseModel.id, houseModel.toMapForLocalStorage());
+    } catch (e) {
+      throw const CustomException(message: 'Chouln\'t update House. Please try again');
     }
   }
 

@@ -66,6 +66,15 @@ class HouseUsecase {
     }
   }
 
+  Future<Either<Failure, Success>> updateHouseModel(HouseModel houseModel) async {
+    try {
+      await _houseRepo.updateHouseInfo(houseModel);
+      return const Right(Success(message: 'Updated House successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
   Future<Either<Failure, List<ItemModel>>> getItemModelList(
       List<String> itemIdList) async {
     final List<ItemModel> itemList = [];

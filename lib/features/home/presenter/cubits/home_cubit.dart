@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/widgets/snackbar_widget.dart';
 import 'package:stuff_scout/features/home/domain/usercases/home_usecase.dart';
+import 'package:stuff_scout/features/house/domain/usecases/house_usecase.dart';
 
 import '../../../../service_locator.dart';
 import '../../../house/data/models/house_model.dart';
@@ -12,6 +13,7 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit({required this.context}) : super(const HomeState());
 
   final HomeUsecase _homeUsecase = sl<HomeUsecase>();
+  final HouseUsecase _houseUsecase = sl<HouseUsecase>();
 
   final BuildContext context;
 
@@ -91,7 +93,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> updateHouse(HouseModel houseModel) async {
-    final result = await _homeUsecase.updateHouseModel(houseModel);
+    final result = await _houseUsecase.updateHouseModel(houseModel);
     result.fold(
       (l) {
         if (l.message != null) {

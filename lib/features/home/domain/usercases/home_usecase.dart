@@ -52,15 +52,6 @@ class HomeUsecase {
     }
   }
 
-  Future<Either<Failure, Success>> updateHouseModel(HouseModel houseModel) async {
-    try {
-      await _homeRepo.updateHouseInfo(houseModel);
-      return const Right(Success(message: 'Updated House successfully'));
-    } on CustomException catch (e) {
-      return Left(Failure(message: e.message, code: e.code));
-    }
-  }
-
   Future<Either<Failure, File?>> getImageFileFromCamera() async {
     try {
       return Right(await _homeRepo.getImageFileFromCamera());

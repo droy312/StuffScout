@@ -64,14 +64,6 @@ class HomeRepo {
     }
   }
 
-  Future<void> updateHouseInfo(HouseModel houseModel) async {
-    try {
-      return _localStorageService.updateHouseInfo(houseModel.id, houseModel.toMapForLocalStorage());
-    } catch (e) {
-      throw const CustomException(message: 'Chouln\'t update House. Please try again');
-    }
-  }
-
   Future<File?> getImageFileFromCamera() {
     try {
       return _imagePickerService.getImageFileFromCamera();
