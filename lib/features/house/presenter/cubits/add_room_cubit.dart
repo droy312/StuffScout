@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:stuff_scout/features/house/domain/usecases/house_usecase.dart';
+import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
 import '../../../../core/widgets/snackbar_widget.dart';
 import '../../../../service_locator.dart';
@@ -13,6 +14,10 @@ class AddRoomCubit extends Cubit<AddRoomState> {
   AddRoomCubit() : super(const AddRoomState());
 
   final HouseUsecase _houseUsecase = sl<HouseUsecase>();
+
+  void addRoomFromRoomModel(RoomModel roomModel) {
+    emit(AddRoomState(name: roomModel.name, imageUrl: roomModel.imageUrl));
+  }
 
   void addRoomName(String name) {
     if (name.isEmpty) {

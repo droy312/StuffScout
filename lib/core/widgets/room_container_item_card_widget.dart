@@ -10,12 +10,14 @@ class RoomContainerItemCardWidget extends StatelessWidget {
     required this.label,
     this.imageUrl,
     this.onDeletePressed,
+    this.onEditPressed,
   }) : super(key: key);
 
   final double size;
   final String label;
   final String? imageUrl;
   final Function()? onDeletePressed;
+  final Function()? onEditPressed;
 
   static const double _borderRadius = 16;
 
@@ -79,6 +81,7 @@ class RoomContainerItemCardWidget extends StatelessWidget {
             child: MorePopupMenuButton(
               context: context,
               onDeletePressed: onDeletePressed,
+              onEditPressed: onEditPressed,
             ),
           ),
         ],

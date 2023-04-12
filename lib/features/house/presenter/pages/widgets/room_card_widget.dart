@@ -11,11 +11,13 @@ class RoomCardWidget extends StatelessWidget {
     this.size = 40,
     required this.roomModel,
     required this.onDeletePressed,
+    required this.onEditPressed,
   }) : super(key: key);
 
   final double size;
   final RoomModel roomModel;
   final Function() onDeletePressed;
+  final Function() onEditPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class RoomCardWidget extends StatelessWidget {
         label: roomModel.name,
         imageUrl: roomModel.imageUrl,
         onDeletePressed: onDeletePressed,
+        onEditPressed: onEditPressed,
       ),
     );
   }

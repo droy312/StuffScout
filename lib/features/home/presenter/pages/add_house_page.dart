@@ -67,11 +67,7 @@ class _AddHousePageState extends State<AddHousePage> {
           text: widget.addHousePageArguments.houseModel!.description);
 
       _addHouseCubit
-          .addHouseName(widget.addHousePageArguments.houseModel!.name);
-      if (widget.addHousePageArguments.houseModel!.imageUrl != null) {
-        _addHouseCubit.addImageUrlFromHouse(
-            widget.addHousePageArguments.houseModel!.imageUrl!);
-      }
+          .addHouseFromHouseModel(widget.addHousePageArguments.houseModel!);
     } else {
       _nameController = TextEditingController();
       _descriptionController = TextEditingController();
@@ -101,7 +97,9 @@ class _AddHousePageState extends State<AddHousePage> {
                   enabled: !state.isLoading,
                 ),
                 title: Text(
-                  'Add House',
+                  !widget.addHousePageArguments.isEditing
+                      ? 'Add House'
+                      : 'Update House',
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!

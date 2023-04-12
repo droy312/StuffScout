@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:stuff_scout/core/widgets/snackbar_widget.dart';
 import 'package:stuff_scout/features/home/domain/usercases/home_usecase.dart';
+import 'package:stuff_scout/features/house/data/models/house_model.dart';
 
 import '../../../../service_locator.dart';
 
@@ -15,6 +16,10 @@ class AddHouseCubit extends Cubit<AddHouseState> {
   final HomeUsecase _homeUsecase = sl<HomeUsecase>();
 
   final BuildContext context;
+
+  void addHouseFromHouseModel(HouseModel houseModel) {
+    emit(AddHouseState(name: houseModel.name, imageUrl: houseModel.imageUrl));
+  }
 
   void addHouseName(String name) {
     if (name.isEmpty) {
@@ -66,10 +71,6 @@ class AddHouseCubit extends Cubit<AddHouseState> {
         emit(state.copyWith(imageUrl: imageFile.path));
       }
     });
-  }
-
-  void addImageUrlFromHouse(String imageUrl) {
-    emit(state.copyWith(imageUrl: imageUrl));
   }
 
   void removeImageFile() {

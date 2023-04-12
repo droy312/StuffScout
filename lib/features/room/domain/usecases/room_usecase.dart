@@ -92,6 +92,15 @@ class RoomUsecase {
     }
   }
 
+  Future<Either<Failure, Success>> updateRoomModel(RoomModel roomModel) async {
+    try {
+      await _roomRepo.updateRoomInfo(roomModel);
+      return const Right(Success(message: 'Updated Room successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
+
   Future<Either<Failure, File?>> getImageFileFromCamera() async {
     try {
       return Right(await _roomRepo.getImageFileFromCamera());

@@ -8,6 +8,7 @@ import '../../../../core/strs.dart';
 import '../../../../service_locator.dart';
 import '../../../container/data/models/container_model.dart';
 import '../../../item/data/models/item_model.dart';
+import '../models/room_model.dart';
 
 class RoomRepo {
   final LocalStorageService _localStorageService = sl<LocalStorageService>();
@@ -107,6 +108,14 @@ class RoomRepo {
     } catch (e) {
       throw const CustomException(
           message: 'Couldn\'t delete Item. Please try again.');
+    }
+  }
+
+  Future<void> updateRoomInfo(RoomModel roomModel) async {
+    try {
+      return _localStorageService.updateRoomInfo(roomModel.id, roomModel.toMapForLocalStorage());
+    } catch (e) {
+      throw const CustomException(message: 'Chouln\'t update Room. Please try again');
     }
   }
 

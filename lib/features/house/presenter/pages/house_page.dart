@@ -173,6 +173,29 @@ class _HousePageState extends State<HousePage>
                                         onDeletePressed: () {
                                           _houseCubit.deleteRoom(roomModel);
                                         },
+                                        onEditPressed: () {
+                                          final LocationModel
+                                              roomLocationModel = LocationModel(
+                                            id: _idService.generateRandomId(),
+                                            house: widget.housePageArguments
+                                                .houseModel.name,
+                                          );
+
+                                          Navigator.pushNamed(
+                                            context,
+                                            AddRoomPage.routeName,
+                                            arguments: AddRoomPageArguments(
+                                              onRoomPressed: (roomModel) async {
+                                                _houseCubit
+                                                    .updateRoom(roomModel);
+                                              },
+                                              roomLocationModel:
+                                                  roomLocationModel,
+                                              isEditing: true,
+                                              roomModel: roomModel,
+                                            ),
+                                          );
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -239,7 +262,7 @@ class _HousePageState extends State<HousePage>
                             context,
                             AddRoomPage.routeName,
                             arguments: AddRoomPageArguments(
-                              onAddRoomPressed: (roomModel) =>
+                              onRoomPressed: (roomModel) =>
                                   _houseCubit.addRoom(roomModel),
                               roomLocationModel: roomLocationModel,
                             ),

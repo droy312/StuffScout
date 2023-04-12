@@ -18,15 +18,20 @@ import '../../../../core/widgets/back_icon_button.dart';
 
 class AddRoomPageArguments {
   const AddRoomPageArguments({
-    required this.onAddRoomPressed,
+    required this.onRoomPressed,
     required this.roomLocationModel,
-  });
+    this.isEditing = false,
+    this.roomModel,
+  }) : assert((isEditing && roomModel != null) ||
+            (!isEditing && roomModel == null));
 
-  final Function(RoomModel) onAddRoomPressed;
+  final Function(RoomModel) onRoomPressed;
   final LocationModel roomLocationModel;
+  final bool isEditing;
+  final RoomModel? roomModel;
 }
 
-class AddRoomPage extends StatelessWidget {
+class AddRoomPage extends StatefulWidget {
   AddRoomPage({
     Key? key,
     required this.addRoomPageArguments,
@@ -36,12 +41,38 @@ class AddRoomPage extends StatelessWidget {
 
   final AddRoomPageArguments addRoomPageArguments;
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+  @override
+  State<AddRoomPage> createState() => _AddRoomPageState();
+}
 
-  final IdService _idService = sl<IdService>();
+class _AddRoomPageState extends State<AddRoomPage> {
+  late final TextEditingController _nameController;
 
-  final AddRoomCubit _addRoomCubit = AddRoomCubit();
+  late final TextEditingController _descriptionController;
+
+  late final IdService _idService;
+
+  late final AddRoomCubit _addRoomCubit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _idService = sl<IdService>();
+    _addRoomCubit = AddRoomCubit();
+
+    if (widget.addRoomPageArguments.isEditing) {
+      _nameController = TextEditingController(
+          text: widget.addRoomPageArguments.roomModel!.name);
+      _descriptionController = TextEditingController(
+          text: widget.addRoomPageArguments.roomModel!.description);
+      _addRoomCubit
+          .addRoomFromRoomModel(widget.addRoomPageArguments.roomModel!);
+    } else {
+      _nameController = TextEditingController();
+      _descriptionController = TextEditingController();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +97,9 @@ class AddRoomPage extends StatelessWidget {
                   enabled: !state.isLoading,
                 ),
                 title: Text(
-                  'Add Room',
+                  !widget.addRoomPageArguments.isEditing
+                      ? 'Add Room'
+                      : 'Update Room',
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
@@ -133,11 +166,11 @@ class AddRoomPage extends StatelessWidget {
                                         ),
                                       ),
                                       child: ClipRRect(
-                                          borderRadius:
-                                          const BorderRadius.all(
+                                          borderRadius: const BorderRadius.all(
                                               Radius.circular(16)),
-                                          child:
-                                          Center(child: Image.file(File(state.imageUrl!)))),
+                                          child: Center(
+                                              child: Image.file(
+                                                  File(state.imageUrl!)))),
                                     ),
                                     Positioned(
                                       top: 0,
@@ -208,26 +241,31 @@ class AddRoomPage extends StatelessWidget {
                         onPressed: isAddButtonEnabled
                             ? () {
                                 final RoomModel roomModel = RoomModel(
-                                  id: _idService.generateRandomId(),
+                                  id: widget.addRoomPageArguments.isEditing
+                                      ? widget
+                                          .addRoomPageArguments.roomModel!.id
+                                      : _idService.generateRandomId(),
                                   name: _nameController.text,
                                   description:
                                       _descriptionController.text.isNotEmpty
                                           ? _descriptionController.text
                                           : null,
-                                  locationModel:
-                                      addRoomPageArguments.roomLocationModel,
+                                  locationModel: widget
+                                      .addRoomPageArguments.roomLocationModel,
                                   imageUrl: state.imageUrl,
                                 );
                                 _addRoomCubit.addRoom(
                                     context,
-                                    addRoomPageArguments
-                                        .onAddRoomPressed(roomModel));
+                                    widget.addRoomPageArguments
+                                        .onRoomPressed(roomModel));
                               }
                             : null,
                         child: Center(
                           child: !state.isLoading
                               ? Text(
-                                  'Add Room',
+                                  !widget.addRoomPageArguments.isEditing
+                                      ? 'Add Room'
+                                      : 'Update Room',
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelLarge!
