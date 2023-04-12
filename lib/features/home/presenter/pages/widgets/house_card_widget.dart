@@ -7,6 +7,7 @@ import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/widgets/more_popup_menu_button.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
+import 'package:stuff_scout/features/home/presenter/pages/add_house_page.dart';
 import 'package:stuff_scout/features/house/presenter/pages/house_page.dart';
 
 import '../../../../house/data/models/house_model.dart';
@@ -127,6 +128,19 @@ class HouseCardWidget extends StatelessWidget {
                 context: context,
                 onDeletePressed: () {
                   context.read<HomeCubit>().deleteHouse(houseModel);
+                },
+                onEditPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    AddHousePage.routeName,
+                    arguments: AddHousePageArguments(
+                      onHousePressed: (houseModel) async {
+                        context.read<HomeCubit>().updateHouse(houseModel);
+                      },
+                      isEditing: true,
+                      houseModel: houseModel,
+                    ),
+                  );
                 },
                 iconColor: Theme.of(context).colorScheme.onBackground,
               ),

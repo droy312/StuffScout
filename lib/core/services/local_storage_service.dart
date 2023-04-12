@@ -110,6 +110,10 @@ class LocalStorageService {
     return _removeIdFromList(_houseBox, houseId, 'itemIdList', itemId);
   }
 
+  Future<void> updateHouseInfo(String houseId, Map<String, dynamic> houseMap) async {
+    await _houseBox.put(houseId, houseMap);
+  }
+
   // Room
 
   Future<void> putRoomInfo(String roomId, Map<String, dynamic> roomMap) async {
@@ -138,6 +142,10 @@ class LocalStorageService {
 
   Future<void> deleteItemIdFromRoomInfo(String roomId, String itemId) async {
     return _removeIdFromList(_roomBox, roomId, 'itemIdList', itemId);
+  }
+
+  Future<void> updateRoomInfo(String roomId, Map<String, dynamic> roomMap) async {
+    await _roomBox.put(roomId, roomMap);
   }
 
   // Container
@@ -173,6 +181,10 @@ class LocalStorageService {
     return _removeIdFromList(_containerBox, containerId, 'itemIdList', itemId);
   }
 
+  Future<void> updateContainerInfo(String containerId, Map<String, dynamic> containerMap) async {
+    await _containerBox.put(containerId, containerMap);
+  }
+
   // Item
 
   Future<void> putItemInfo(String itemId, Map<String, dynamic> itemMap) async {
@@ -185,5 +197,9 @@ class LocalStorageService {
 
   Future<void> deleteItemInfo(String itemId) async {
     return _itemBox.delete(itemId);
+  }
+
+  Future<void> updateItemInfo(String itemId, Map<String, dynamic> itemMap) async {
+    await _itemBox.put(itemId, itemMap);
   }
 }

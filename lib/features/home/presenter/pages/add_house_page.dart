@@ -15,28 +15,68 @@ import '../../../../service_locator.dart';
 import '../../../../core/widgets/back_icon_button.dart';
 import '../../../house/data/models/house_model.dart';
 
+/// [onHousePressed] should be a function to add a house when [isEditing] is
+/// false else [onHousePressed] should be a function to edit a given house
 class AddHousePageArguments {
-  const AddHousePageArguments({required this.onAddHousePressed});
+  const AddHousePageArguments({
+    required this.onHousePressed,
+    this.isEditing = false,
+    this.houseModel,
+  }) : assert((isEditing && houseModel != null) ||
+            (!isEditing && houseModel == null));
 
-  final Function(HouseModel) onAddHousePressed;
+  final Function(HouseModel) onHousePressed;
+  final bool isEditing;
+  final HouseModel? houseModel;
 }
 
-class AddHousePage extends StatelessWidget {
-  AddHousePage({
+class AddHousePage extends StatefulWidget {
+  const AddHousePage({
     Key? key,
     required this.addHousePageArguments,
   }) : super(key: key);
 
   static const String routeName = '/add_house';
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-
-  final IdService _idService = sl<IdService>();
-
-  final AddHouseCubit _addHouseCubit = AddHouseCubit();
-
   final AddHousePageArguments addHousePageArguments;
+
+  @override
+  State<AddHousePage> createState() => _AddHousePageState();
+}
+
+class _AddHousePageState extends State<AddHousePage> {
+  late final TextEditingController _nameController;
+
+  late final TextEditingController _descriptionController;
+
+  late final IdService _idService;
+
+  late final AddHouseCubit _addHouseCubit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _idService = sl<IdService>();
+    _addHouseCubit = AddHouseCubit(context: context);
+
+    if (widget.addHousePageArguments.isEditing) {
+      _nameController = TextEditingController(
+          text: widget.addHousePageArguments.houseModel!.name);
+      _descriptionController = TextEditingController(
+          text: widget.addHousePageArguments.houseModel!.description);
+
+      _addHouseCubit
+          .addHouseName(widget.addHousePageArguments.houseModel!.name);
+      if (widget.addHousePageArguments.houseModel!.imageUrl != null) {
+        _addHouseCubit.addImageUrlFromHouse(
+            widget.addHousePageArguments.houseModel!.imageUrl!);
+      }
+    } else {
+      _nameController = TextEditingController();
+      _descriptionController = TextEditingController();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,11 +168,11 @@ class AddHousePage extends StatelessWidget {
                                         ),
                                       ),
                                       child: ClipRRect(
-                                          borderRadius:
-                                              const BorderRadius.all(
-                                                  Radius.circular(16)),
-                                          child:
-                                              Center(child: Image.file(File(state.imageUrl!)))),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(16)),
+                                          child: Center(
+                                              child: Image.file(
+                                                  File(state.imageUrl!)))),
                                     ),
                                     Positioned(
                                       top: 0,
@@ -179,7 +219,7 @@ class AddHousePage extends StatelessWidget {
                             child: GetImageFromCameraOutlinedButton(
                               context: context,
                               onPressed: () {
-                                _addHouseCubit.addImageUrlFromCamera(context);
+                                _addHouseCubit.addImageUrlFromCamera();
                               },
                             ),
                           ),
@@ -188,7 +228,7 @@ class AddHousePage extends StatelessWidget {
                             child: GetImageFromGalleryOutlinedButton(
                               context: context,
                               onPressed: () {
-                                _addHouseCubit.addImageUrlFromGallery(context);
+                                _addHouseCubit.addImageUrlFromGallery();
                               },
                             ),
                           ),
@@ -202,7 +242,11 @@ class AddHousePage extends StatelessWidget {
                         onPressed: isAddButtonEnabled
                             ? () async {
                                 final HouseModel houseModel = HouseModel(
-                                  id: _idService.generateRandomId(),
+                                  id: widget.addHousePageArguments.houseModel !=
+                                          null
+                                      ? widget
+                                          .addHousePageArguments.houseModel!.id
+                                      : _idService.generateRandomId(),
                                   name: _nameController.text,
                                   description:
                                       _descriptionController.text.isNotEmpty
@@ -210,16 +254,24 @@ class AddHousePage extends StatelessWidget {
                                           : null,
                                   imageUrl: state.imageUrl,
                                 );
-                                await _addHouseCubit.addHouse(
-                                    context,
-                                    addHousePageArguments
-                                        .onAddHousePressed(houseModel));
+
+                                if (!widget.addHousePageArguments.isEditing) {
+                                  await _addHouseCubit.addHouse(widget
+                                      .addHousePageArguments
+                                      .onHousePressed(houseModel));
+                                } else {
+                                  await _addHouseCubit.updateHouse(widget
+                                      .addHousePageArguments
+                                      .onHousePressed(houseModel));
+                                }
                               }
                             : null,
                         child: Center(
                           child: !state.isLoading
                               ? Text(
-                                  'Add House',
+                                  !widget.addHousePageArguments.isEditing
+                                      ? 'Add House'
+                                      : 'Update House',
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelLarge!

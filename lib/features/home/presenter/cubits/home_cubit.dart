@@ -67,7 +67,7 @@ class HomeCubit extends Cubit<HomeState> {
 
     final result = await _homeUsecase.deleteHouseModel(houseModel);
     result.fold(
-          (l) {
+      (l) {
         if (l.message != null) {
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
@@ -76,7 +76,7 @@ class HomeCubit extends Cubit<HomeState> {
           ));
         }
       },
-          (r) {
+      (r) {
         if (r.message != null) {
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
@@ -88,5 +88,39 @@ class HomeCubit extends Cubit<HomeState> {
     );
 
     emit(HomeState(houseList: updatedHouseList));
+  }
+
+  Future<void> updateHouse(HouseModel houseModel) async {
+    final result = await _homeUsecase.updateHouseModel(houseModel);
+    result.fold(
+      (l) {
+        if (l.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: l.message!,
+            isError: true,
+          ));
+        }
+      },
+      (r) {
+        if (r.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: r.message!,
+          ));
+        }
+
+        final List<HouseModel> houseList = [];
+        for (final house in state.houseList) {
+          if (house.id != houseModel.id) {
+            houseList.add(house);
+          } else {
+            houseList.add(houseModel);
+          }
+        }
+
+        emit(HomeState(houseList: houseList));
+      },
+    );
   }
 }

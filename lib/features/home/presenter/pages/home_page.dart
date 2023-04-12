@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
               context,
               AddHousePage.routeName,
               arguments: AddHousePageArguments(
-                  onAddHousePressed: (houseModel) =>
+                  onHousePressed: (houseModel) =>
                       _homeCubit.addHouse(houseModel)),
             );
           },

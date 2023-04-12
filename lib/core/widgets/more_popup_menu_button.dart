@@ -17,7 +17,15 @@ class MorePopupMenuButton extends PopupMenuButton {
             color: iconColor ?? Theme.of(context).colorScheme.primary,
             size: size,
           ),
-          itemBuilder: (_) {
+          onSelected: (value) {
+            if (value != null && value == 1) {
+              if (onEditPressed != null) {
+                print('This is working');
+                onEditPressed();
+              }
+            }
+          },
+          itemBuilder: (context) {
             return [
               if (onMovePressed != null)
                 PopupMenuItem(
@@ -25,9 +33,9 @@ class MorePopupMenuButton extends PopupMenuButton {
                   child: const Text('Move'),
                 ),
               if (onEditPressed != null)
-                PopupMenuItem(
-                  onTap: onEditPressed,
-                  child: const Text('Edit'),
+                const PopupMenuItem(
+                  value: 1,
+                  child: Text('Edit'),
                 ),
               if (onDeletePressed != null)
                 PopupMenuItem(
