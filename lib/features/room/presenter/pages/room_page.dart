@@ -223,7 +223,24 @@ class _RoomPageState extends State<RoomPage>
                                         onDeletePressed: () {
                                           _roomCubit.deleteItem(itemModel);
                                         },
-                                        onEditPressed: () {},
+                                        onEditPressed: () async {
+                                          Navigator.pushNamed(
+                                            context,
+                                            AddItemPage.routeName,
+                                            arguments:
+                                            AddItemPageArguments(
+                                              onItemPressed:
+                                                  (itemModel) async {
+                                                _roomCubit.updateItem(
+                                                    itemModel);
+                                              },
+                                              itemLocationModel:
+                                              itemModel.locationModel,
+                                              isEditing: true,
+                                              itemModel: itemModel,
+                                            ),
+                                          );
+                                        },
                                       );
                                     }).toList())
                                   : Center(
