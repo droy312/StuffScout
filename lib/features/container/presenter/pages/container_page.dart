@@ -181,9 +181,27 @@ class _ContainerPageState extends State<ContainerPage>
                                       return ContainerCardWidget(
                                         containerModel: containerModel,
                                         onDeletePressed: () {
-                                          _containerCubit.deleteContainer(containerModel);
+                                          _containerCubit
+                                              .deleteContainer(containerModel);
                                         },
-                                        onEditPressed: () {},
+                                        onEditPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            AddContainerPage.routeName,
+                                            arguments:
+                                                AddContainerPageArguments(
+                                              onContainerPressed:
+                                                  (containerModel) async {
+                                                _containerCubit.updateContainer(
+                                                    containerModel);
+                                              },
+                                              containerLocationModel:
+                                                  containerModel.locationModel,
+                                              isEditing: true,
+                                              containerModel: containerModel,
+                                            ),
+                                          );
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -206,7 +224,22 @@ class _ContainerPageState extends State<ContainerPage>
                                         onDeletePressed: () {
                                           _containerCubit.deleteItem(itemModel);
                                         },
-                                        onEditPressed: () {},
+                                        onEditPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            AddItemPage.routeName,
+                                            arguments: AddItemPageArguments(
+                                              onItemPressed: (itemModel) async {
+                                                _containerCubit
+                                                    .updateItem(itemModel);
+                                              },
+                                              itemLocationModel:
+                                                  itemModel.locationModel,
+                                              isEditing: true,
+                                              itemModel: itemModel,
+                                            ),
+                                          );
+                                        },
                                       );
                                     }).toList())
                                   : Center(
