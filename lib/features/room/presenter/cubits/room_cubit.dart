@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:stuff_scout/core/widgets/snackbar_widget.dart';
+import 'package:stuff_scout/features/container/domain/container_usecases/container_usecase.dart';
+import 'package:stuff_scout/features/item/domain/usecases/item_usecase.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/domain/usecases/room_usecase.dart';
 
@@ -20,6 +22,8 @@ class RoomCubit extends Cubit<RoomState> {
   }) : super(RoomState(roomModel: roomModel));
 
   final RoomUsecase _roomUsecase = sl<RoomUsecase>();
+  final ContainerUsecase _containerUsecase = sl<ContainerUsecase>();
+  final ItemUsecase _itemUsecase = sl<ItemUsecase>();
 
   final BuildContext context;
 
@@ -165,5 +169,75 @@ class RoomCubit extends Cubit<RoomState> {
     );
 
     emit(RoomState(roomModel: state.roomModel));
+  }
+
+  Future<void> updateContainer(ContainerModel containerModel) async {
+    final result = await _containerUsecase.updateContainerModel(containerModel);
+    result.fold(
+          (l) {
+        if (l.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: l.message!,
+            isError: true,
+          ));
+        }
+      },
+          (r) {
+        if (r.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: r.message!,
+          ));
+        }
+
+        final List<ContainerModel> containerList = [];
+        for (final container in state.roomModel.containerList) {
+          if (container.id != containerModel.id) {
+            containerList.add(container);
+          } else {
+            containerList.add(containerModel);
+          }
+        }
+
+        state.roomModel.addContainerList(containerList);
+        emit(RoomState(roomModel: state.roomModel));
+      },
+    );
+  }
+
+  Future<void> updateItem(ItemModel itemModel) async {
+    final result = await _itemUsecase.updateItemModel(itemModel);
+    result.fold(
+          (l) {
+        if (l.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: l.message!,
+            isError: true,
+          ));
+        }
+      },
+          (r) {
+        if (r.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: r.message!,
+          ));
+        }
+
+        final List<ItemModel> itemList = [];
+        for (final item in state.roomModel.itemList) {
+          if (item.id != itemModel.id) {
+            itemList.add(item);
+          } else {
+            itemList.add(itemModel);
+          }
+        }
+
+        state.roomModel.addItemList(itemList);
+        emit(RoomState(roomModel: state.roomModel));
+      },
+    );
   }
 }

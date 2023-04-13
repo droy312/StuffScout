@@ -183,6 +183,7 @@ class _ContainerPageState extends State<ContainerPage>
                                         onDeletePressed: () {
                                           _containerCubit.deleteContainer(containerModel);
                                         },
+                                        onEditPressed: () {},
                                       );
                                     }).toList())
                                   : Center(
@@ -241,7 +242,7 @@ class _ContainerPageState extends State<ContainerPage>
                             context,
                             AddContainerPage.routeName,
                             arguments: AddContainerPageArguments(
-                              onAddContainerPressed: (containerModel) =>
+                              onContainerPressed: (containerModel) =>
                                   _containerCubit.addContainer(containerModel),
                               containerLocationModel: state
                                   .containerModel.locationModel

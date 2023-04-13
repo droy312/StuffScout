@@ -279,7 +279,7 @@ class _AddItemPageState extends State<AddItemPage> {
                             child: GetImageFromCameraOutlinedButton(
                               context: context,
                               onPressed: () {
-                                _addItemCubit.addImageUrlFromCamera(context);
+                                _addItemCubit.addImageUrlFromCamera();
                               },
                             ),
                           ),
@@ -288,7 +288,7 @@ class _AddItemPageState extends State<AddItemPage> {
                             child: GetImageFromGalleryOutlinedButton(
                               context: context,
                               onPressed: () {
-                                _addItemCubit.addImageUrlFromGallery(context);
+                                _addItemCubit.addImageUrlFromGallery();
                               },
                             ),
                           ),
@@ -332,7 +332,6 @@ class _AddItemPageState extends State<AddItemPage> {
                                   imageUrl: state.imageUrl,
                                 );
                                 _addItemCubit.addItem(
-                                    context,
                                     widget.addItemPageArguments
                                         .onItemPressed(itemModel));
                               }

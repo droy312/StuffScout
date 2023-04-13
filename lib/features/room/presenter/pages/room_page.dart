@@ -181,7 +181,26 @@ class _RoomPageState extends State<RoomPage>
                                       return ContainerCardWidget(
                                         containerModel: containerModel,
                                         onDeletePressed: () {
-                                          _roomCubit.deleteContainer(containerModel);
+                                          _roomCubit
+                                              .deleteContainer(containerModel);
+                                        },
+                                        onEditPressed: () async {
+                                          Navigator.pushNamed(
+                                            context,
+                                            AddContainerPage.routeName,
+                                            arguments:
+                                                AddContainerPageArguments(
+                                              onContainerPressed:
+                                                  (containerModel) async {
+                                                _roomCubit.updateContainer(
+                                                    containerModel);
+                                              },
+                                              containerLocationModel:
+                                                  containerModel.locationModel,
+                                              isEditing: true,
+                                              containerModel: containerModel,
+                                            ),
+                                          );
                                         },
                                       );
                                     }).toList())
@@ -240,7 +259,7 @@ class _RoomPageState extends State<RoomPage>
                             context,
                             AddContainerPage.routeName,
                             arguments: AddContainerPageArguments(
-                              onAddContainerPressed: (containerModel) =>
+                              onContainerPressed: (containerModel) =>
                                   _roomCubit.addContainer(containerModel),
                               containerLocationModel: state
                                   .roomModel.locationModel

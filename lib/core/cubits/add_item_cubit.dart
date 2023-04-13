@@ -28,7 +28,7 @@ class AddItemCubit extends Cubit<AddItemState> {
     }
   }
 
-  void addItem(BuildContext context, Future addItem) async {
+  void addItem(Future addItem) async {
     emit(state.copyWith(isLoading: true));
 
     await addItem;
@@ -40,7 +40,7 @@ class AddItemCubit extends Cubit<AddItemState> {
     }
   }
 
-  void addImageUrlFromCamera(BuildContext context) async {
+  void addImageUrlFromCamera() async {
     final result = await _roomUsecase.getImageFileFromCamera();
     result.fold((l) {
       if (l.message != null) {
@@ -62,7 +62,7 @@ class AddItemCubit extends Cubit<AddItemState> {
     });
   }
 
-  void addImageUrlFromGallery(BuildContext context) async {
+  void addImageUrlFromGallery() async {
     final result = await _roomUsecase.getImageFileFromGallery();
     result.fold((l) {
       if (l.message != null) {

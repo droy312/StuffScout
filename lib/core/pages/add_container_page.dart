@@ -18,15 +18,19 @@ import '../widgets/get_image_from_gallery_outlined_button.dart';
 
 class AddContainerPageArguments {
   const AddContainerPageArguments({
-    required this.onAddContainerPressed,
+    required this.onContainerPressed,
     required this.containerLocationModel,
+    this.isEditing = false,
+    this.containerModel,
   });
 
-  final Function(ContainerModel) onAddContainerPressed;
+  final Function(ContainerModel) onContainerPressed;
   final LocationModel containerLocationModel;
+  final bool isEditing;
+  final ContainerModel? containerModel;
 }
 
-class AddContainerPage extends StatelessWidget {
+class AddContainerPage extends StatefulWidget {
   AddContainerPage({
     Key? key,
     required this.addContainerPageArguments,
@@ -34,14 +38,40 @@ class AddContainerPage extends StatelessWidget {
 
   static const String routeName = '/add_container';
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-
-  final IdService _idService = sl<IdService>();
-
-  final AddContainerCubit _addContainerCubit = AddContainerCubit();
-
   final AddContainerPageArguments addContainerPageArguments;
+
+  @override
+  State<AddContainerPage> createState() => _AddContainerPageState();
+}
+
+class _AddContainerPageState extends State<AddContainerPage> {
+  late final TextEditingController _nameController;
+  late final TextEditingController _descriptionController;
+
+  late final IdService _idService;
+
+  late final AddContainerCubit _addContainerCubit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _idService = sl<IdService>();
+    _addContainerCubit = AddContainerCubit(context: context);
+
+    if (widget.addContainerPageArguments.isEditing) {
+      _nameController = TextEditingController(
+          text: widget.addContainerPageArguments.containerModel!.name);
+      _descriptionController = TextEditingController(
+          text: widget.addContainerPageArguments.containerModel!.description);
+
+      _addContainerCubit.addContainerFromContainerModel(
+          widget.addContainerPageArguments.containerModel!);
+    } else {
+      _nameController = TextEditingController();
+      _descriptionController = TextEditingController();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +96,9 @@ class AddContainerPage extends StatelessWidget {
                   enabled: !state.isLoading,
                 ),
                 title: Text(
-                  'Add Container',
+                  !widget.addContainerPageArguments.isEditing
+                      ? 'Add Container'
+                      : 'Update Container',
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
@@ -133,11 +165,11 @@ class AddContainerPage extends StatelessWidget {
                                         ),
                                       ),
                                       child: ClipRRect(
-                                          borderRadius:
-                                          const BorderRadius.all(
+                                          borderRadius: const BorderRadius.all(
                                               Radius.circular(16)),
-                                          child:
-                                          Center(child: Image.file(File(state.imageUrl!)))),
+                                          child: Center(
+                                              child: Image.file(
+                                                  File(state.imageUrl!)))),
                                     ),
                                     Positioned(
                                       top: 0,
@@ -184,7 +216,7 @@ class AddContainerPage extends StatelessWidget {
                             child: GetImageFromCameraOutlinedButton(
                               context: context,
                               onPressed: () {
-                                _addContainerCubit.addImageUrlFromCamera(context);
+                                _addContainerCubit.addImageUrlFromCamera();
                               },
                             ),
                           ),
@@ -193,7 +225,7 @@ class AddContainerPage extends StatelessWidget {
                             child: GetImageFromGalleryOutlinedButton(
                               context: context,
                               onPressed: () {
-                                _addContainerCubit.addImageUrlFromGallery(context);
+                                _addContainerCubit.addImageUrlFromGallery();
                               },
                             ),
                           ),
@@ -208,26 +240,32 @@ class AddContainerPage extends StatelessWidget {
                             ? () {
                                 final ContainerModel containerModel =
                                     ContainerModel(
-                                  id: _idService.generateRandomId(),
+                                  id: !widget
+                                          .addContainerPageArguments.isEditing
+                                      ? _idService.generateRandomId()
+                                      : widget.addContainerPageArguments
+                                          .containerModel!.id,
                                   name: _nameController.text,
                                   description:
                                       _descriptionController.text.isNotEmpty
                                           ? _descriptionController.text
                                           : null,
-                                  locationModel: addContainerPageArguments
+                                  locationModel: widget
+                                      .addContainerPageArguments
                                       .containerLocationModel,
-                                   imageUrl: state.imageUrl,
+                                  imageUrl: state.imageUrl,
                                 );
-                                _addContainerCubit.addContainer(
-                                    context,
-                                    addContainerPageArguments
-                                        .onAddContainerPressed(containerModel));
+                                _addContainerCubit.addContainer(widget
+                                    .addContainerPageArguments
+                                    .onContainerPressed(containerModel));
                               }
                             : null,
                         child: Center(
                           child: !state.isLoading
                               ? Text(
-                                  'Add Container',
+                                  !widget.addContainerPageArguments.isEditing
+                                      ? 'Add Container'
+                                      : 'Update Container',
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelLarge!

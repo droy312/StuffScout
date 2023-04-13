@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:stuff_scout/features/container/data/models/container_model.dart';
 import 'package:stuff_scout/features/room/domain/usecases/room_usecase.dart';
 
 import '../../service_locator.dart';
@@ -9,9 +10,18 @@ import '../widgets/snackbar_widget.dart';
 part 'add_container_state.dart';
 
 class AddContainerCubit extends Cubit<AddContainerState> {
-  AddContainerCubit() : super(const AddContainerState());
+  AddContainerCubit({required this.context}) : super(const AddContainerState());
 
   final RoomUsecase _roomUsecase = sl<RoomUsecase>();
+
+  final BuildContext context;
+
+  void addContainerFromContainerModel(ContainerModel containerModel) {
+    emit(AddContainerState(
+      name: containerModel.name,
+      imageUrl: containerModel.imageUrl,
+    ));
+  }
 
   void addContainerName(String name) {
     if (name.isEmpty) {
@@ -21,7 +31,7 @@ class AddContainerCubit extends Cubit<AddContainerState> {
     }
   }
 
-  void addContainer(BuildContext context, Future addContainer) async {
+  void addContainer(Future addContainer) async {
     emit(state.copyWith(isLoading: true));
 
     await addContainer;
@@ -33,7 +43,7 @@ class AddContainerCubit extends Cubit<AddContainerState> {
     }
   }
 
-  void addImageUrlFromCamera(BuildContext context) async {
+  void addImageUrlFromCamera() async {
     final result = await _roomUsecase.getImageFileFromCamera();
     result.fold((l) {
       if (l.message != null) {
@@ -55,7 +65,7 @@ class AddContainerCubit extends Cubit<AddContainerState> {
     });
   }
 
-  void addImageUrlFromGallery(BuildContext context) async {
+  void addImageUrlFromGallery() async {
     final result = await _roomUsecase.getImageFileFromGallery();
     result.fold((l) {
       if (l.message != null) {

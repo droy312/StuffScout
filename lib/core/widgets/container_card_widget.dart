@@ -11,11 +11,13 @@ class ContainerCardWidget extends StatelessWidget {
     this.size = 40,
     required this.containerModel,
     required this.onDeletePressed,
+    required this.onEditPressed,
   }) : super(key: key);
 
   final double size;
   final ContainerModel containerModel;
   final Function() onDeletePressed;
+  final Function() onEditPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class ContainerCardWidget extends StatelessWidget {
         label: containerModel.name,
         imageUrl: containerModel.imageUrl,
         onDeletePressed: onDeletePressed,
+        onEditPressed: onEditPressed,
       ),
     );
   }
