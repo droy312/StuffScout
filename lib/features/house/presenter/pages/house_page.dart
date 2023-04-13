@@ -174,13 +174,6 @@ class _HousePageState extends State<HousePage>
                                           _houseCubit.deleteRoom(roomModel);
                                         },
                                         onEditPressed: () {
-                                          final LocationModel
-                                              roomLocationModel = LocationModel(
-                                            id: _idService.generateRandomId(),
-                                            house: widget.housePageArguments
-                                                .houseModel.name,
-                                          );
-
                                           Navigator.pushNamed(
                                             context,
                                             AddRoomPage.routeName,
@@ -190,7 +183,7 @@ class _HousePageState extends State<HousePage>
                                                     .updateRoom(roomModel);
                                               },
                                               roomLocationModel:
-                                                  roomLocationModel,
+                                                  roomModel.locationModel,
                                               isEditing: true,
                                               roomModel: roomModel,
                                             ),
@@ -217,6 +210,22 @@ class _HousePageState extends State<HousePage>
                                         itemModel: itemModel,
                                         onDeletePressed: () {
                                           _houseCubit.deleteItem(itemModel);
+                                        },
+                                        onEditPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            AddItemPage.routeName,
+                                            arguments: AddItemPageArguments(
+                                              onItemPressed: (itemModel) async {
+                                                _houseCubit
+                                                    .updateItem(itemModel);
+                                              },
+                                              itemLocationModel:
+                                                  itemModel.locationModel,
+                                              isEditing: true,
+                                              itemModel: itemModel,
+                                            ),
+                                          );
                                         },
                                       );
                                     }).toList())
@@ -282,7 +291,7 @@ class _HousePageState extends State<HousePage>
                             context,
                             AddItemPage.routeName,
                             arguments: AddItemPageArguments(
-                              onAddItemPressed: (itemModel) =>
+                              onItemPressed: (itemModel) =>
                                   _houseCubit.addItem(itemModel),
                               itemLocationModel: itemLocationModel,
                             ),

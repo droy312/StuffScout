@@ -102,4 +102,12 @@ class ContainerRepo {
           message: 'Couldn\'t delete Item. Please try again.');
     }
   }
+
+  Future<void> updateContainerInfo(ContainerModel containerModel) async {
+    try {
+      return _localStorageService.updateContainerInfo(containerModel.id, containerModel.toMapForLocalStorage());
+    } catch (e) {
+      throw const CustomException(message: 'Chouln\'t update Container. Please try again');
+    }
+  }
 }

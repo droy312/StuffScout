@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:stuff_scout/features/item/data/models/item_model.dart';
 import 'package:stuff_scout/features/room/domain/usecases/room_usecase.dart';
 
 import '../../service_locator.dart';
@@ -9,9 +10,15 @@ import '../widgets/snackbar_widget.dart';
 part 'add_item_state.dart';
 
 class AddItemCubit extends Cubit<AddItemState> {
-  AddItemCubit() : super(const AddItemState());
+  AddItemCubit({required this.context}) : super(const AddItemState());
 
   final RoomUsecase _roomUsecase = sl<RoomUsecase>();
+
+  final BuildContext context;
+
+  void addItemFromItemModel(ItemModel itemModel) {
+    emit(AddItemState(name: itemModel.name, imageUrl: itemModel.imageUrl));
+  }
 
   void addItemName(String name) {
     if (name.isEmpty) {

@@ -18,15 +18,20 @@ import '../widgets/get_image_from_gallery_outlined_button.dart';
 
 class AddItemPageArguments {
   const AddItemPageArguments({
-    required this.onAddItemPressed,
+    required this.onItemPressed,
     required this.itemLocationModel,
-  });
+    this.isEditing = false,
+    this.itemModel,
+  }) : assert((isEditing && itemModel != null) ||
+            (!isEditing && itemModel == null));
 
-  final Function(ItemModel) onAddItemPressed;
+  final Function(ItemModel) onItemPressed;
   final LocationModel itemLocationModel;
+  final bool isEditing;
+  final ItemModel? itemModel;
 }
 
-class AddItemPage extends StatelessWidget {
+class AddItemPage extends StatefulWidget {
   AddItemPage({
     Key? key,
     required this.addItemPageArguments,
@@ -34,19 +39,60 @@ class AddItemPage extends StatelessWidget {
 
   static const String routeName = '/add_item';
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _brandController = TextEditingController();
-  final TextEditingController _modelController = TextEditingController();
-  final TextEditingController _serialNumberController = TextEditingController();
-  final TextEditingController _quantityController = TextEditingController();
-  final TextEditingController _pricePerItemController = TextEditingController();
-
-  final IdService _idService = sl<IdService>();
-
-  final AddItemCubit _addItemCubit = AddItemCubit();
-
   final AddItemPageArguments addItemPageArguments;
+
+  @override
+  State<AddItemPage> createState() => _AddItemPageState();
+}
+
+class _AddItemPageState extends State<AddItemPage> {
+  late final TextEditingController _nameController;
+  late final TextEditingController _descriptionController;
+  late final TextEditingController _brandController;
+  late final TextEditingController _modelController;
+  late final TextEditingController _serialNumberController;
+  late final TextEditingController _quantityController;
+  late final TextEditingController _pricePerItemController;
+
+  late final IdService _idService;
+
+  late final AddItemCubit _addItemCubit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _idService = sl<IdService>();
+    _addItemCubit = AddItemCubit(context: context);
+
+    if (widget.addItemPageArguments.isEditing) {
+      _nameController = TextEditingController(
+          text: widget.addItemPageArguments.itemModel!.name);
+      _descriptionController = TextEditingController(
+          text: widget.addItemPageArguments.itemModel!.description);
+      _brandController = TextEditingController(
+          text: widget.addItemPageArguments.itemModel!.brand);
+      _modelController = TextEditingController(
+          text: widget.addItemPageArguments.itemModel!.model);
+      _serialNumberController = TextEditingController(
+          text: widget.addItemPageArguments.itemModel!.serialNumber);
+      _quantityController = TextEditingController(
+          text: widget.addItemPageArguments.itemModel!.quantity.toString());
+      _pricePerItemController = TextEditingController(
+          text: widget.addItemPageArguments.itemModel!.pricePerItem.toString());
+
+      _addItemCubit
+          .addItemFromItemModel(widget.addItemPageArguments.itemModel!);
+    } else {
+      _nameController = TextEditingController();
+      _descriptionController = TextEditingController();
+      _brandController = TextEditingController();
+      _modelController = TextEditingController();
+      _serialNumberController = TextEditingController();
+      _quantityController = TextEditingController();
+      _pricePerItemController = TextEditingController();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +117,9 @@ class AddItemPage extends StatelessWidget {
                   enabled: !state.isLoading,
                 ),
                 title: Text(
-                  'Add Item',
+                  !widget.addItemPageArguments.isEditing
+                      ? 'Add Item'
+                      : 'Update Item',
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
@@ -180,11 +228,11 @@ class AddItemPage extends StatelessWidget {
                                         ),
                                       ),
                                       child: ClipRRect(
-                                          borderRadius:
-                                          const BorderRadius.all(
+                                          borderRadius: const BorderRadius.all(
                                               Radius.circular(16)),
-                                          child:
-                                          Center(child: Image.file(File(state.imageUrl!)))),
+                                          child: Center(
+                                              child: Image.file(
+                                                  File(state.imageUrl!)))),
                                     ),
                                     Positioned(
                                       top: 0,
@@ -258,7 +306,10 @@ class AddItemPage extends StatelessWidget {
                                 final double? pricePerItem = double.tryParse(
                                     _pricePerItemController.text);
                                 final ItemModel itemModel = ItemModel(
-                                  id: _idService.generateRandomId(),
+                                  id: !widget.addItemPageArguments.isEditing
+                                      ? _idService.generateRandomId()
+                                      : widget
+                                          .addItemPageArguments.itemModel!.id,
                                   name: _nameController.text,
                                   description:
                                       _descriptionController.text.isNotEmpty
@@ -276,20 +327,22 @@ class AddItemPage extends StatelessWidget {
                                           : null,
                                   quantity: quantity,
                                   pricePerItem: pricePerItem,
-                                  locationModel:
-                                      addItemPageArguments.itemLocationModel,
+                                  locationModel: widget
+                                      .addItemPageArguments.itemLocationModel,
                                   imageUrl: state.imageUrl,
                                 );
                                 _addItemCubit.addItem(
                                     context,
-                                    addItemPageArguments
-                                        .onAddItemPressed(itemModel));
+                                    widget.addItemPageArguments
+                                        .onItemPressed(itemModel));
                               }
                             : null,
                         child: Center(
                           child: !state.isLoading
                               ? Text(
-                                  'Add Item',
+                                  !widget.addItemPageArguments.isEditing
+                                      ? 'Add Item'
+                                      : 'Update Item',
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelLarge!

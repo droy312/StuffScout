@@ -204,6 +204,7 @@ class _RoomPageState extends State<RoomPage>
                                         onDeletePressed: () {
                                           _roomCubit.deleteItem(itemModel);
                                         },
+                                        onEditPressed: () {},
                                       );
                                     }).toList())
                                   : Center(
@@ -256,7 +257,7 @@ class _RoomPageState extends State<RoomPage>
                             context,
                             AddItemPage.routeName,
                             arguments: AddItemPageArguments(
-                              onAddItemPressed: (itemModel) =>
+                              onItemPressed: (itemModel) =>
                                   _roomCubit.addItem(itemModel),
                               itemLocationModel: state.roomModel.locationModel
                                   .addRoom(state.roomModel),

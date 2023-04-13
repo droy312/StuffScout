@@ -91,4 +91,13 @@ class ContainerUsecase {
       return Left(Failure(message: e.message, code: e.code));
     }
   }
+
+  Future<Either<Failure, Success>> updateContainerModel(ContainerModel containerModel) async {
+    try {
+      await _containerRepo.updateContainerInfo(containerModel);
+      return const Right(Success(message: 'Updated Container successfully'));
+    } on CustomException catch (e) {
+      return Left(Failure(message: e.message, code: e.code));
+    }
+  }
 }
