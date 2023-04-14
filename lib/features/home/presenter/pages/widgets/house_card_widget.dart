@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/nums.dart';
+import 'package:stuff_scout/core/widgets/delete_alert_dialog.dart';
 import 'package:stuff_scout/core/widgets/more_popup_menu_button.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
@@ -127,7 +128,25 @@ class HouseCardWidget extends StatelessWidget {
               MorePopupMenuButton(
                 context: context,
                 onDeletePressed: () {
-                  context.read<HomeCubit>().deleteHouse(houseModel);
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return DeleteAlertDialog(
+                        context: context,
+                        label: 'Do you want to delete ${houseModel.name} House?',
+                        onDeletePressed: () {
+                          context.read<HomeCubit>().deleteHouse(houseModel);
+
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        onCancelPressed: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  );
                 },
                 onEditPressed: () {
                   Navigator.pushNamed(

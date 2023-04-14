@@ -18,29 +18,42 @@ class MorePopupMenuButton extends PopupMenuButton {
             size: size,
           ),
           onSelected: (value) {
-            if (value != null && value == 1) {
-              if (onEditPressed != null) {
-                print('This is working');
-                onEditPressed();
+            if (value != null) {
+              switch (value) {
+                case 'move':
+                  if (onMovePressed != null) {
+                    onMovePressed();
+                  }
+                  break;
+                case 'edit':
+                  if (onEditPressed != null) {
+                    onEditPressed();
+                  }
+                  break;
+                case 'delete':
+                  if (onDeletePressed != null) {
+                    onDeletePressed();
+                  }
+                  break;
               }
             }
           },
           itemBuilder: (context) {
             return [
               if (onMovePressed != null)
-                PopupMenuItem(
-                  onTap: onMovePressed,
-                  child: const Text('Move'),
+                const PopupMenuItem(
+                  value: 'move',
+                  child: Text('Move'),
                 ),
               if (onEditPressed != null)
                 const PopupMenuItem(
-                  value: 1,
+                  value: 'edit',
                   child: Text('Edit'),
                 ),
               if (onDeletePressed != null)
-                PopupMenuItem(
-                  onTap: onDeletePressed,
-                  child: const Text('Delete'),
+                const PopupMenuItem(
+                  value: 'delete',
+                  child: Text('Delete'),
                 ),
             ];
           },
