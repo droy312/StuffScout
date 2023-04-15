@@ -11,6 +11,9 @@ import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../../core/widgets/back_search_edit_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
+import '../../../../core/widgets/move_here_bottom_sheet.dart';
+import '../../../item/data/models/item_model.dart';
+import '../../../move/presenter/cubits/move_cubit.dart';
 import '../../../search/presenter/pages/search_page.dart';
 import '../../data/models/container_model.dart';
 
@@ -202,7 +205,17 @@ class _ContainerPageState extends State<ContainerPage>
                                             ),
                                           );
                                         },
-                                        onMovePressed: () {},
+                                        onMovePressed: () {
+                                          context
+                                              .read<MoveCubit>()
+                                              .copyStorageModel(() {
+                                            _containerCubit.addContainer(containerModel,
+                                                showSuccessSnackbar: false);
+                                          }, () {
+                                            _containerCubit.deleteContainer(containerModel,
+                                                showSuccessSnackbar: false);
+                                          }, state.containerModel, containerModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -241,7 +254,17 @@ class _ContainerPageState extends State<ContainerPage>
                                             ),
                                           );
                                         },
-                                        onMovePressed: () {},
+                                        onMovePressed: () {
+                                          context
+                                              .read<MoveCubit>()
+                                              .copyStorageModel(() {
+                                            _containerCubit.addItem(itemModel,
+                                                showSuccessSnackbar: false);
+                                          }, () {
+                                            _containerCubit.deleteItem(itemModel,
+                                                showSuccessSnackbar: false);
+                                          }, state.containerModel, itemModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -309,6 +332,33 @@ class _ContainerPageState extends State<ContainerPage>
                       );
                     },
                   );
+                },
+              ),
+              bottomSheet: BlocBuilder<MoveCubit, MoveState>(
+                builder: (context, state) {
+                  return context.read<MoveCubit>().canMoveHere()
+                      ? MoveHereBottomSheet(
+                    onCancelPressed: () {
+                      context.read<MoveCubit>().cancelMove();
+                    },
+                    onMoveHerePressed: () {
+                      context.read<MoveCubit>().moveStorageModel(
+                        context,
+                            () {
+                          if (state.storageModel is ContainerModel) {
+                            _containerCubit.addContainer(
+                                state.storageModel as ContainerModel,
+                                showSuccessSnackbar: false);
+                          } else if (state.storageModel is ItemModel) {
+                            _containerCubit.addItem(
+                                state.storageModel as ItemModel,
+                                showSuccessSnackbar: false);
+                          }
+                        },
+                      );
+                    },
+                  )
+                      : const SizedBox();
                 },
               ),
             );

@@ -39,9 +39,8 @@ class ContainerModel extends StorageModel {
   }
 
   void addContainer(ContainerModel containerModel) {
-    List<ContainerModel> newContainerList = containerList.toList();
-    newContainerList.add(containerModel);
-    containerList = newContainerList;
+    containerList.add(containerModel);
+    containerIdList.add(containerModel.id);
   }
 
   void deleteContainer(ContainerModel containerModel) {
@@ -59,9 +58,8 @@ class ContainerModel extends StorageModel {
   }
 
   void addItem(ItemModel itemModel) {
-    List<ItemModel> newItemList = itemList.toList();
-    newItemList.add(itemModel);
-    itemList = newItemList;
+    itemList.add(itemModel);
+    itemIdList.add(itemModel.id);
   }
 
   void deleteItem(ItemModel itemModel) {

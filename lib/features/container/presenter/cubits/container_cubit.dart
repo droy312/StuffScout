@@ -58,7 +58,7 @@ class ContainerCubit extends Cubit<ContainerState> {
     emit(ContainerState(containerModel: state.containerModel));
   }
 
-  Future<void> addContainer(ContainerModel containerModel) async {
+  Future<void> addContainer(ContainerModel containerModel, {bool showSuccessSnackbar = true}) async {
     final result = await _containerUsecase.putContainerModel(
         state.containerModel.id, containerModel);
     result.fold((l) {
@@ -73,7 +73,7 @@ class ContainerCubit extends Cubit<ContainerState> {
       state.containerModel.addContainer(containerModel);
       emit(ContainerState(containerModel: state.containerModel));
 
-      if (r.message != null) {
+      if (r.message != null && showSuccessSnackbar) {
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: r.message!,
@@ -82,7 +82,7 @@ class ContainerCubit extends Cubit<ContainerState> {
     });
   }
 
-  Future<void> addItem(ItemModel itemModel) async {
+  Future<void> addItem(ItemModel itemModel, {bool showSuccessSnackbar = true}) async {
     final result = await _containerUsecase.putItemModel(
         state.containerModel.id, itemModel);
     result.fold((l) {
@@ -97,7 +97,7 @@ class ContainerCubit extends Cubit<ContainerState> {
       state.containerModel.addItem(itemModel);
       emit(ContainerState(containerModel: state.containerModel));
 
-      if (r.message != null) {
+      if (r.message != null && showSuccessSnackbar) {
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: r.message!,
@@ -106,7 +106,7 @@ class ContainerCubit extends Cubit<ContainerState> {
     });
   }
 
-  Future<void> deleteContainer(ContainerModel containerModel) async {
+  Future<void> deleteContainer(ContainerModel containerModel, {bool showSuccessSnackbar = true}) async {
     emit(state.copyWith(isLoading: true));
 
     final result = await _containerUsecase.deleteContainerModelFromContainerModel(
@@ -123,7 +123,7 @@ class ContainerCubit extends Cubit<ContainerState> {
         }
       },
           (r) {
-        if (r.message != null) {
+        if (r.message != null && showSuccessSnackbar) {
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
             text: r.message!,
@@ -137,7 +137,7 @@ class ContainerCubit extends Cubit<ContainerState> {
     emit(ContainerState(containerModel: state.containerModel));
   }
 
-  Future<void> deleteItem(ItemModel itemModel) async {
+  Future<void> deleteItem(ItemModel itemModel, {bool showSuccessSnackbar = true}) async {
     emit(state.copyWith(isLoading: true));
 
     final result = await _containerUsecase.deleteItemModelFromContainerModel(
@@ -145,7 +145,7 @@ class ContainerCubit extends Cubit<ContainerState> {
 
     result.fold(
           (l) {
-        if (l.message != null) {
+        if (l.message != null && showSuccessSnackbar) {
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
             text: l.message!,
