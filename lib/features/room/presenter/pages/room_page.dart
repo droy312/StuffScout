@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
+import 'package:stuff_scout/core/widgets/move_here_bottom_sheet.dart';
+import 'package:stuff_scout/features/container/data/models/container_model.dart';
+import 'package:stuff_scout/features/item/data/models/item_model.dart';
 import 'package:stuff_scout/features/room/data/models/room_model.dart';
 import 'package:stuff_scout/features/room/presenter/cubits/room_cubit.dart';
 import 'package:stuff_scout/features/search/presenter/pages/search_page.dart';
@@ -13,6 +16,7 @@ import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../../core/widgets/back_search_edit_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
+import '../../../move/presenter/cubits/move_cubit.dart';
 
 class RoomPageArguments {
   const RoomPageArguments({required this.roomModel});
@@ -64,6 +68,12 @@ class _RoomPageState extends State<RoomPage>
     );
     _roomCubit.init();
     _tabController = TabController(length: 2, vsync: this);
+
+    if (context.mounted) {
+      context
+          .read<MoveCubit>()
+          .setParentStorageModel(widget.roomPageArguments.roomModel);
+    }
   }
 
   @override
@@ -202,6 +212,19 @@ class _RoomPageState extends State<RoomPage>
                                             ),
                                           );
                                         },
+                                        onMovePressed: () {
+                                          context
+                                              .read<MoveCubit>()
+                                              .copyStorageModel(() {
+                                            _roomCubit.addContainer(
+                                                containerModel,
+                                                showSuccessSnackbar: false);
+                                          }, () {
+                                            _roomCubit.deleteContainer(
+                                                containerModel,
+                                                showSuccessSnackbar: false);
+                                          }, state.roomModel, containerModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -227,19 +250,28 @@ class _RoomPageState extends State<RoomPage>
                                           Navigator.pushNamed(
                                             context,
                                             AddItemPage.routeName,
-                                            arguments:
-                                            AddItemPageArguments(
-                                              onItemPressed:
-                                                  (itemModel) async {
-                                                _roomCubit.updateItem(
-                                                    itemModel);
+                                            arguments: AddItemPageArguments(
+                                              onItemPressed: (itemModel) async {
+                                                _roomCubit
+                                                    .updateItem(itemModel);
                                               },
                                               itemLocationModel:
-                                              itemModel.locationModel,
+                                                  itemModel.locationModel,
                                               isEditing: true,
                                               itemModel: itemModel,
                                             ),
                                           );
+                                        },
+                                        onMovePressed: () {
+                                          context
+                                              .read<MoveCubit>()
+                                              .copyStorageModel(() {
+                                            _roomCubit.addItem(itemModel,
+                                                showSuccessSnackbar: false);
+                                          }, () {
+                                            _roomCubit.deleteItem(itemModel,
+                                                showSuccessSnackbar: false);
+                                          }, state.roomModel, itemModel);
                                         },
                                       );
                                     }).toList())
@@ -307,6 +339,33 @@ class _RoomPageState extends State<RoomPage>
                       );
                     },
                   );
+                },
+              ),
+              bottomSheet: BlocBuilder<MoveCubit, MoveState>(
+                builder: (context, state) {
+                  return context.read<MoveCubit>().canMoveHere()
+                      ? MoveHereBottomSheet(
+                          onCancelPressed: () {
+                            context.read<MoveCubit>().cancelMove();
+                          },
+                          onMoveHerePressed: () {
+                            context.read<MoveCubit>().moveStorageModel(
+                              context,
+                              () {
+                                if (state.storageModel is ContainerModel) {
+                                  _roomCubit.addContainer(
+                                      state.storageModel as ContainerModel,
+                                      showSuccessSnackbar: false);
+                                } else if (state.storageModel is ItemModel) {
+                                  _roomCubit.addItem(
+                                      state.storageModel as ItemModel,
+                                      showSuccessSnackbar: false);
+                                }
+                              },
+                            );
+                          },
+                        )
+                      : const SizedBox();
                 },
               ),
             );

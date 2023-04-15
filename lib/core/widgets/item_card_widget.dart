@@ -13,12 +13,14 @@ class ItemCardWidget extends StatelessWidget {
     required this.itemModel,
     required this.onDeletePressed,
     required this.onEditPressed,
+    required this.onMovePressed,
   }) : super(key: key);
 
   final double size;
   final ItemModel itemModel;
   final Function() onDeletePressed;
   final Function() onEditPressed;
+  final Function() onMovePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class ItemCardWidget extends StatelessWidget {
           );
         },
         onEditPressed: onEditPressed,
+        onMovePressed: onMovePressed,
       ),
     );
   }

@@ -15,7 +15,10 @@ class RoomModel extends StorageModel {
     this.containerIdList = const [],
     this.itemList = const [],
     this.itemIdList = const [],
-  }) : super(modelId: id);
+  }) : super(
+          modelId: id,
+          modelName: name,
+        );
 
   final String id;
   final String name;
@@ -36,9 +39,8 @@ class RoomModel extends StorageModel {
   }
 
   void addContainer(ContainerModel containerModel) {
-    List<ContainerModel> newContainerList = containerList.toList();
-    newContainerList.add(containerModel);
-    containerList = newContainerList;
+    containerList.add(containerModel);
+    containerIdList.add(containerModel.id);
   }
 
   void addItemList(List<ItemModel> itemList) {
@@ -50,20 +52,19 @@ class RoomModel extends StorageModel {
   }
 
   void addItem(ItemModel itemModel) {
-    List<ItemModel> newItemList = itemList.toList();
-    newItemList.add(itemModel);
-    itemList = newItemList;
-  }
-
-  void deleteItem(ItemModel itemModel) {
-    itemList.remove(itemModel);
-    itemIdList.removeWhere((itemId) => itemId == itemModel.id);
+    itemList.add(itemModel);
+    itemIdList.add(itemModel.id);
   }
 
   void deleteContainer(ContainerModel containerModel) {
     containerList.remove(containerModel);
     containerIdList
         .removeWhere((containerId) => containerId == containerModel.id);
+  }
+
+  void deleteItem(ItemModel itemModel) {
+    itemList.remove(itemModel);
+    itemIdList.removeWhere((itemId) => itemId == itemModel.id);
   }
 
   Map<String, dynamic> toMapForLocalStorage() {

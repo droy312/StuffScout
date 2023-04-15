@@ -11,6 +11,7 @@ class RoomContainerItemCardWidget extends StatelessWidget {
     this.imageUrl,
     this.onDeletePressed,
     this.onEditPressed,
+    this.onMovePressed,
   }) : super(key: key);
 
   final double size;
@@ -18,6 +19,7 @@ class RoomContainerItemCardWidget extends StatelessWidget {
   final String? imageUrl;
   final Function()? onDeletePressed;
   final Function()? onEditPressed;
+  final Function()? onMovePressed;
 
   static const double _borderRadius = 16;
 
@@ -82,6 +84,7 @@ class RoomContainerItemCardWidget extends StatelessWidget {
               context: context,
               onDeletePressed: onDeletePressed,
               onEditPressed: onEditPressed,
+              onMovePressed: onMovePressed,
             ),
           ),
         ],

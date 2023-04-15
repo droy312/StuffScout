@@ -202,6 +202,7 @@ class _ContainerPageState extends State<ContainerPage>
                                             ),
                                           );
                                         },
+                                        onMovePressed: () {},
                                       );
                                     }).toList())
                                   : Center(
@@ -240,6 +241,7 @@ class _ContainerPageState extends State<ContainerPage>
                                             ),
                                           );
                                         },
+                                        onMovePressed: () {},
                                       );
                                     }).toList())
                                   : Center(

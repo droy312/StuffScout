@@ -14,7 +14,10 @@ class ItemModel extends StorageModel {
     this.tagList,
     required this.locationModel,
     this.imageUrl,
-  }) : super(modelId: id);
+  }) : super(
+          modelId: id,
+          modelName: name,
+        );
 
   final String id;
   final String name;

@@ -227,6 +227,7 @@ class _HousePageState extends State<HousePage>
                                             ),
                                           );
                                         },
+                                        onMovePressed: () {},
                                       );
                                     }).toList())
                                   : Center(

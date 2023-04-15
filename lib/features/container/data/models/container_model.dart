@@ -15,7 +15,10 @@ class ContainerModel extends StorageModel {
     this.containerIdList = const [],
     this.itemList = const [],
     this.itemIdList = const [],
-  }) : super(modelId: id);
+  }) : super(
+          modelId: id,
+          modelName: name,
+        );
 
   final String id;
   final String name;
@@ -43,7 +46,8 @@ class ContainerModel extends StorageModel {
 
   void deleteContainer(ContainerModel containerModel) {
     containerList.remove(containerModel);
-    containerIdList.removeWhere((containerId) => containerId == containerModel.id);
+    containerIdList
+        .removeWhere((containerId) => containerId == containerModel.id);
   }
 
   void addItemList(List<ItemModel> itemList) {

@@ -14,7 +14,10 @@ class HouseModel extends StorageModel {
     this.itemList = const [],
     this.itemIdList = const [],
     this.mapLocationLink,
-  }) : super(modelId: id);
+  }) : super(
+          modelId: id,
+          modelName: name,
+        );
 
   final String id;
   final String name;
