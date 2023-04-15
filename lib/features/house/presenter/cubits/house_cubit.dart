@@ -62,7 +62,7 @@ class HouseCubit extends Cubit<HouseState> {
     emit(HouseState(houseModel: state.houseModel));
   }
 
-  Future<void> addRoom(RoomModel roomModel) async {
+  Future<void> addRoom(RoomModel roomModel, {bool showSuccessSnackbar = true}) async {
     final result =
         await _houseUsecase.putRoomModel(state.houseModel.id, roomModel);
     result.fold((l) {
@@ -77,7 +77,7 @@ class HouseCubit extends Cubit<HouseState> {
       state.houseModel.addRoom(roomModel);
       emit(HouseState(houseModel: state.houseModel));
 
-      if (r.message != null) {
+      if (r.message != null && showSuccessSnackbar) {
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: r.message!,
@@ -86,7 +86,7 @@ class HouseCubit extends Cubit<HouseState> {
     });
   }
 
-  Future<void> addItem(ItemModel itemModel) async {
+  Future<void> addItem(ItemModel itemModel, {bool showSuccessSnackbar = true}) async {
     final result =
         await _houseUsecase.putItemModel(state.houseModel.id, itemModel);
     result.fold((l) {
@@ -101,7 +101,7 @@ class HouseCubit extends Cubit<HouseState> {
       state.houseModel.addItem(itemModel);
       emit(HouseState(houseModel: state.houseModel));
 
-      if (r.message != null) {
+      if (r.message != null && showSuccessSnackbar) {
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
           text: r.message!,
@@ -110,7 +110,7 @@ class HouseCubit extends Cubit<HouseState> {
     });
   }
 
-  Future<void> deleteRoom(RoomModel roomModel) async {
+  Future<void> deleteRoom(RoomModel roomModel, {bool showSuccessSnackbar = true}) async {
     emit(state.copyWith(isLoading: true));
 
     final result = await _houseUsecase.deleteRoomModelFromHouseModel(
@@ -126,7 +126,7 @@ class HouseCubit extends Cubit<HouseState> {
         }
       },
           (r) {
-        if (r.message != null) {
+        if (r.message != null && showSuccessSnackbar) {
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
             text: r.message!,
@@ -140,7 +140,7 @@ class HouseCubit extends Cubit<HouseState> {
     emit(HouseState(houseModel: state.houseModel));
   }
 
-  Future<void> deleteItem(ItemModel itemModel) async {
+  Future<void> deleteItem(ItemModel itemModel, {bool showSuccessSnackbar = true}) async {
     emit(state.copyWith(isLoading: true));
 
     final result = await _houseUsecase.deleteItemModelFromHouseModel(
@@ -157,7 +157,7 @@ class HouseCubit extends Cubit<HouseState> {
         }
       },
           (r) {
-        if (r.message != null) {
+        if (r.message != null && showSuccessSnackbar) {
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
             text: r.message!,

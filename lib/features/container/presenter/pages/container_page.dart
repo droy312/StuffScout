@@ -67,6 +67,12 @@ class _ContainerPageState extends State<ContainerPage>
     );
     _containerCubit.init();
     _tabController = TabController(length: 2, vsync: this);
+
+    if (context.mounted) {
+      context
+          .read<MoveCubit>()
+          .setParentStorageModel(widget.containerPageArguments.containerModel);
+    }
   }
 
   @override

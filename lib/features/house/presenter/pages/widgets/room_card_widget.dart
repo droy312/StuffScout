@@ -13,12 +13,14 @@ class RoomCardWidget extends StatelessWidget {
     required this.roomModel,
     required this.onDeletePressed,
     required this.onEditPressed,
+    required this.onMovePressed,
   }) : super(key: key);
 
   final double size;
   final RoomModel roomModel;
   final Function() onDeletePressed;
   final Function() onEditPressed;
+  final Function() onMovePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class RoomCardWidget extends StatelessWidget {
           );
         },
         onEditPressed: onEditPressed,
+        onMovePressed: onMovePressed,
       ),
     );
   }

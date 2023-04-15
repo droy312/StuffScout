@@ -7,9 +7,13 @@ import 'package:stuff_scout/core/widgets/back_search_edit_app_bar.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/add_room_item_alert_dialog.dart';
+import 'package:stuff_scout/features/room/data/models/room_model.dart';
 
 import '../../../../core/pages/add_item_page.dart';
 import '../../../../core/widgets/item_card_widget.dart';
+import '../../../../core/widgets/move_here_bottom_sheet.dart';
+import '../../../item/data/models/item_model.dart';
+import '../../../move/presenter/cubits/move_cubit.dart';
 import '../../../search/presenter/pages/search_page.dart';
 import 'widgets/room_card_widget.dart';
 import '../../../../service_locator.dart';
@@ -71,6 +75,12 @@ class _HousePageState extends State<HousePage>
     );
     _houseCubit.init();
     _tabController = TabController(length: 2, vsync: this);
+
+    if (context.mounted) {
+      context
+          .read<MoveCubit>()
+          .setParentStorageModel(widget.housePageArguments.houseModel);
+    }
   }
 
   @override
@@ -189,6 +199,17 @@ class _HousePageState extends State<HousePage>
                                             ),
                                           );
                                         },
+                                        onMovePressed: () {
+                                          context
+                                              .read<MoveCubit>()
+                                              .copyStorageModel(() {
+                                            _houseCubit.addRoom(roomModel,
+                                                showSuccessSnackbar: false);
+                                          }, () {
+                                            _houseCubit.deleteRoom(roomModel,
+                                                showSuccessSnackbar: false);
+                                          }, state.houseModel, roomModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -227,7 +248,17 @@ class _HousePageState extends State<HousePage>
                                             ),
                                           );
                                         },
-                                        onMovePressed: () {},
+                                        onMovePressed: () {
+                                          context
+                                              .read<MoveCubit>()
+                                              .copyStorageModel(() {
+                                            _houseCubit.addItem(itemModel,
+                                                showSuccessSnackbar: false);
+                                          }, () {
+                                            _houseCubit.deleteItem(itemModel,
+                                                showSuccessSnackbar: false);
+                                          }, state.houseModel, itemModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -307,6 +338,35 @@ class _HousePageState extends State<HousePage>
                   );
                 },
               );
+            },
+          ),
+          bottomSheet: BlocBuilder<MoveCubit, MoveState>(
+            builder: (context, state) {
+              print('Can move here: ${context.read<MoveCubit>().canMoveHere()}');
+
+              return context.read<MoveCubit>().canMoveHere()
+                  ? MoveHereBottomSheet(
+                      onCancelPressed: () {
+                        context.read<MoveCubit>().cancelMove();
+                      },
+                      onMoveHerePressed: () {
+                        context.read<MoveCubit>().moveStorageModel(
+                          context,
+                          () {
+                            if (state.storageModel is RoomModel) {
+                              _houseCubit.addRoom(
+                                  state.storageModel as RoomModel,
+                                  showSuccessSnackbar: false);
+                            } else if (state.storageModel is ItemModel) {
+                              _houseCubit.addItem(
+                                  state.storageModel as ItemModel,
+                                  showSuccessSnackbar: false);
+                            }
+                          },
+                        );
+                      },
+                    )
+                  : const SizedBox();
             },
           ),
         ),
