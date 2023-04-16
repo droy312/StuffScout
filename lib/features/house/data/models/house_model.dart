@@ -29,14 +29,30 @@ class HouseModel extends StorageModel {
   List<String> itemIdList;
   final String? mapLocationLink;
 
-  void addRoom(RoomModel roomModel) {
-    List<RoomModel> newRoomList = roomList.toList();
-    newRoomList.add(roomModel);
-    roomList = newRoomList;
+  void addRoomList(List<RoomModel> roomList) {
+    this.roomList = roomList;
 
-    List<String> newRoomIdList = roomIdList.toList();
-    newRoomIdList.add(roomModel.id);
+    List<String> newRoomIdList =
+    roomList.map((roomModel) => roomModel.id).toList();
     roomIdList = newRoomIdList;
+  }
+
+  void addRoom(RoomModel roomModel) {
+    roomList.add(roomModel);
+    roomIdList.add(roomModel.id);
+  }
+
+  void addItemList(List<ItemModel> itemList) {
+    this.itemList = itemList;
+
+    List<String> newItemIdList =
+    itemList.map((itemModel) => itemModel.id).toList();
+    itemIdList = newItemIdList;
+  }
+
+  void addItem(ItemModel itemModel) {
+    itemList.add(itemModel);
+    itemIdList.add(itemModel.id);
   }
 
   void deleteRoom(RoomModel roomModel) {
@@ -47,32 +63,6 @@ class HouseModel extends StorageModel {
   void deleteItem(ItemModel itemModel) {
     itemList.remove(itemModel);
     itemIdList.removeWhere((itemId) => itemId == itemModel.id);
-  }
-
-  void addRoomList(List<RoomModel> roomList) {
-    this.roomList = roomList;
-
-    List<String> newRoomIdList =
-        roomList.map((roomModel) => roomModel.id).toList();
-    roomIdList = newRoomIdList;
-  }
-
-  void addItem(ItemModel itemModel) {
-    List<ItemModel> newItemList = itemList.toList();
-    newItemList.add(itemModel);
-    itemList = newItemList;
-
-    List<String> newItemIdList = itemIdList.toList();
-    newItemIdList.add(itemModel.id);
-    itemIdList = newItemIdList;
-  }
-
-  void addItemList(List<ItemModel> itemList) {
-    this.itemList = itemList;
-
-    List<String> newItemIdList =
-        itemList.map((itemModel) => itemModel.id).toList();
-    itemIdList = newItemIdList;
   }
 
   Map<String, dynamic> toMapForLocalStorage() {
