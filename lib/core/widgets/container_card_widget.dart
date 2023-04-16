@@ -14,6 +14,7 @@ class ContainerCardWidget extends StatelessWidget {
     required this.onDeletePressed,
     required this.onEditPressed,
     required this.onMovePressed,
+    required this.onNavigateBack,
   }) : super(key: key);
 
   final double size;
@@ -21,16 +22,21 @@ class ContainerCardWidget extends StatelessWidget {
   final Function() onDeletePressed;
   final Function() onEditPressed;
   final Function() onMovePressed;
+  /// The function which will be called when the user goes back to room page
+  /// or parent container page from container page
+  final Function() onNavigateBack;
 
   @override
   Widget build(BuildContext context) {
     return UnsplashInkWell(
-      onTap: () {
-        Navigator.pushNamed(
+      onTap: () async {
+        await Navigator.pushNamed(
           context,
           ContainerPage.routeName,
           arguments: ContainerPageArguments(containerModel: containerModel),
         );
+
+        onNavigateBack();
       },
       child: RoomContainerItemCardWidget(
         label: containerModel.name,

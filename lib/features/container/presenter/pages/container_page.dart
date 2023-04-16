@@ -222,6 +222,9 @@ class _ContainerPageState extends State<ContainerPage>
                                                 showSuccessSnackbar: false);
                                           }, state.containerModel, containerModel);
                                         },
+                                        onNavigateBack: () {
+                                          context.read<MoveCubit>().setParentStorageModel(state.containerModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -270,6 +273,9 @@ class _ContainerPageState extends State<ContainerPage>
                                             _containerCubit.deleteItem(itemModel,
                                                 showSuccessSnackbar: false);
                                           }, state.containerModel, itemModel);
+                                        },
+                                        onNavigateBack: () {
+                                          context.read<MoveCubit>().setParentStorageModel(state.containerModel);
                                         },
                                       );
                                     }).toList())

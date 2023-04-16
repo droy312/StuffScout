@@ -210,6 +210,9 @@ class _HousePageState extends State<HousePage>
                                                 showSuccessSnackbar: false);
                                           }, state.houseModel, roomModel);
                                         },
+                                        onNavigateBack: () {
+                                          context.read<MoveCubit>().setParentStorageModel(state.houseModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -258,6 +261,9 @@ class _HousePageState extends State<HousePage>
                                             _houseCubit.deleteItem(itemModel,
                                                 showSuccessSnackbar: false);
                                           }, state.houseModel, itemModel);
+                                        },
+                                        onNavigateBack: () {
+                                          context.read<MoveCubit>().setParentStorageModel(state.houseModel);
                                         },
                                       );
                                     }).toList())
@@ -342,8 +348,6 @@ class _HousePageState extends State<HousePage>
           ),
           bottomSheet: BlocBuilder<MoveCubit, MoveState>(
             builder: (context, state) {
-              print('Can move here: ${context.read<MoveCubit>().canMoveHere()}');
-
               return context.read<MoveCubit>().canMoveHere()
                   ? MoveHereBottomSheet(
                       onCancelPressed: () {

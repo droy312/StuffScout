@@ -12,9 +12,14 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   static TextStyle _textStyle(double size,
       [FontWeight weight = FontWeight.w400]) {
     return GoogleFonts.poppins(
@@ -23,12 +28,28 @@ class MyApp extends StatelessWidget {
     );
   }
 
+  late final MoveCubit _moveCubit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _moveCubit = MoveCubit();
+  }
+
+  @override
+  void dispose() {
+    _moveCubit.cancelMove();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => SearchCubit()),
-        BlocProvider(create: (_) => MoveCubit()),
+        BlocProvider.value(value: _moveCubit),
       ],
       child: MaterialApp(
         title: 'StuffScout',

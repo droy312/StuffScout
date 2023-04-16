@@ -225,6 +225,9 @@ class _RoomPageState extends State<RoomPage>
                                                 showSuccessSnackbar: false);
                                           }, state.roomModel, containerModel);
                                         },
+                                        onNavigateBack: () {
+                                          context.read<MoveCubit>().setParentStorageModel(state.roomModel);
+                                        },
                                       );
                                     }).toList())
                                   : Center(
@@ -272,6 +275,9 @@ class _RoomPageState extends State<RoomPage>
                                             _roomCubit.deleteItem(itemModel,
                                                 showSuccessSnackbar: false);
                                           }, state.roomModel, itemModel);
+                                        },
+                                        onNavigateBack: () {
+                                          context.read<MoveCubit>().setParentStorageModel(state.roomModel);
                                         },
                                       );
                                     }).toList())

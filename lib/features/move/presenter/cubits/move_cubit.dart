@@ -29,7 +29,14 @@ class MoveCubit extends Cubit<MoveState> {
   }
 
   void moveStorageModel(BuildContext context, Function() addFunction) {
-    if (state.moveToStorageModel != null && state.storageModel != null) {
+    print(
+        'copiedFromStorageModel: ${state.copiedFromStorageModel.runtimeType}');
+    print('moveToStorageModel: ${state.moveToStorageModel.runtimeType}');
+    print('storageModel: ${state.storageModel.runtimeType}');
+
+    if (state.copiedFromStorageModel != null &&
+        state.moveToStorageModel != null &&
+        state.storageModel != null) {
       if (state.storageModel is ItemModel) {
         addFunction();
 
@@ -62,9 +69,25 @@ class MoveCubit extends Cubit<MoveState> {
           ));
 
           emit(MoveState(moveToStorageModel: state.moveToStorageModel));
+        } else if (state.moveToStorageModel is ContainerModel) {
+          addFunction();
+
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text:
+                '${state.storageModel!.modelName} Container moved successfully',
+          ));
+
+          emit(MoveState(moveToStorageModel: state.moveToStorageModel));
         }
       } else if (state.storageModel is RoomModel) {
-        if (state.moveToStorageModel is ContainerModel) {
+        if (state.moveToStorageModel is RoomModel) {
+          ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
+            context: context,
+            text: 'Room can not be moved to Room',
+            isError: true,
+          ));
+        } else if (state.moveToStorageModel is ContainerModel) {
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
             text: 'Room can not be moved to Container',
@@ -99,24 +122,10 @@ class MoveCubit extends Cubit<MoveState> {
   }
 
   bool canMoveHere() {
-    if (state.moveToStorageModel != null && state.storageModel != null) {
-      if (state.storageModel is ItemModel) {
-        return true;
-      } else if (state.storageModel is ContainerModel) {
-        if (state.moveToStorageModel is RoomModel) {
-          return true;
-        } else {
-          return false;
-        }
-      } else if (state.storageModel is RoomModel) {
-        if (state.moveToStorageModel is HouseModel) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
+    if (state.copiedFromStorageModel != null &&
+        state.moveToStorageModel != null &&
+        state.storageModel != null) {
+      return true;
     } else {
       return false;
     }
