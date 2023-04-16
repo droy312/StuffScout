@@ -66,14 +66,6 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
-        context.read<SearchCubit>().initSearchList(
-          context: context,
-          houseList: widget.searchPageArguments.houseList,
-          houseModel: widget.searchPageArguments.houseModel,
-          roomModel: widget.searchPageArguments.roomModel,
-          containerModel: widget.searchPageArguments.containerModel,
-        );
-
         return Scaffold(
           appBar: AppBar(
             leading: BackIconButton(context: context),
