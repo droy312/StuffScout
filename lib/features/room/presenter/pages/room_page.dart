@@ -15,6 +15,7 @@ import '../../../../core/widgets/add_container_item_alert_dialog.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../../core/widgets/back_search_edit_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
+import '../../../../core/widgets/header_title_image_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
 import '../../../move/presenter/cubits/move_cubit.dart';
 
@@ -111,15 +112,10 @@ class _RoomPageState extends State<RoomPage>
                       children: [
                         const SizedBox(height: 16),
 
-                        // Title
-                        Text(
-                          state.roomModel.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
+                        // Title and Image
+                        HeaderTitleImageWidget(
+                          title: state.roomModel.name,
+                          imageUrl: state.roomModel.imageUrl,
                         ),
                         const SizedBox(height: 4),
 

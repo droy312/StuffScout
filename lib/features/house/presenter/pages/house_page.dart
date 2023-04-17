@@ -4,6 +4,7 @@ import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/back_search_edit_app_bar.dart';
+import 'package:stuff_scout/core/widgets/header_title_image_widget.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/add_room_item_alert_dialog.dart';
@@ -89,88 +90,79 @@ class _HousePageState extends State<HousePage>
       value: _houseCubit,
       child: DefaultTabController(
         length: 2,
-        child: Scaffold(
-          appBar: BackSearchEditAppBar(
-            context: context,
-            onSearchPressed: () {
-              Navigator.pushNamed(
-                context,
-                SearchPage.routeName,
-                arguments: SearchPageArguments(
-                  title:
-                      'Search in ${widget.housePageArguments.houseModel.name}',
-                  hintText: 'Search rooms, containers, items...',
-                  houseModel: widget.housePageArguments.houseModel,
-                ),
-              );
-            },
-          ),
-          body: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                color: Theme.of(context).colorScheme.primary,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Nums.horizontalPaddingWidth),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: _titleContainerTopAndBottomPadding),
-                    Text(
-                      widget.housePageArguments.houseModel.name,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
+        child: BlocBuilder<HouseCubit, HouseState>(
+          builder: (context, state) {
+            return Scaffold(
+              appBar: BackSearchEditAppBar(
+                context: context,
+                onSearchPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    SearchPage.routeName,
+                    arguments: SearchPageArguments(
+                      title:
+                          'Search in ${widget.housePageArguments.houseModel.name}',
+                      hintText: 'Search rooms, containers, items...',
+                      houseModel: widget.housePageArguments.houseModel,
                     ),
-                    const SizedBox(height: 4),
+                  );
+                },
+              ),
+              body: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    color: Theme.of(context).colorScheme.primary,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Nums.horizontalPaddingWidth),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                            height: _titleContainerTopAndBottomPadding),
 
-                    // Description
-                    if (widget.housePageArguments.houseModel.description !=
-                        null)
-                      Text(
-                        widget.housePageArguments.houseModel.description!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimary
-                                  .withOpacity(.6),
-                            ),
-                      ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Location',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary),
+                        // Title and Image
+                        HeaderTitleImageWidget(
+                          title: state.houseModel.name,
+                          imageUrl: state.houseModel.imageUrl,
+                        ),
+                        const SizedBox(height: 4),
+
+                        // Description
+                        if (widget.housePageArguments.houseModel.description !=
+                            null)
+                          Text(
+                            widget.housePageArguments.houseModel.description!,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary
+                                      .withOpacity(.6),
+                                ),
+                          ),
+                        const SizedBox(
+                            height: _titleContainerTopAndBottomPadding),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'https://goo.gl/maps/HdRczVX9i6sPaJsR8',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.blue[400]),
+                  ),
+                  TabBar(
+                    controller: _tabController,
+                    labelPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
                     ),
-                    const SizedBox(height: _titleContainerTopAndBottomPadding),
-                  ],
-                ),
-              ),
-              TabBar(
-                controller: _tabController,
-                labelPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
-                ),
-                tabs: const [
-                  Text('Rooms'),
-                  Text('Items'),
-                ],
-              ),
-              Expanded(
-                child: BlocBuilder<HouseCubit, HouseState>(
-                  builder: (context, state) {
-                    return TabBarView(
+                    tabs: const [
+                      Text('Rooms'),
+                      Text('Items'),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
                       controller: _tabController,
                       children: !state.isLoading
                           ? [
@@ -211,7 +203,10 @@ class _HousePageState extends State<HousePage>
                                           }, state.houseModel, roomModel);
                                         },
                                         onNavigateBack: () {
-                                          context.read<MoveCubit>().setParentStorageModel(state.houseModel);
+                                          context
+                                              .read<MoveCubit>()
+                                              .setParentStorageModel(
+                                                  state.houseModel);
                                         },
                                       );
                                     }).toList())
@@ -263,7 +258,10 @@ class _HousePageState extends State<HousePage>
                                           }, state.houseModel, itemModel);
                                         },
                                         onNavigateBack: () {
-                                          context.read<MoveCubit>().setParentStorageModel(state.houseModel);
+                                          context
+                                              .read<MoveCubit>()
+                                              .setParentStorageModel(
+                                                  state.houseModel);
                                         },
                                       );
                                     }).toList())
@@ -283,15 +281,11 @@ class _HousePageState extends State<HousePage>
                               const Center(child: LoadingWidget()),
                               const Center(child: LoadingWidget()),
                             ],
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          floatingActionButton: BlocBuilder<HouseCubit, HouseState>(
-            builder: (context, state) {
-              return AddFloatingActionButton(
+              floatingActionButton: AddFloatingActionButton(
                 context: context,
                 onPressed: () {
                   showDialog(
@@ -343,36 +337,36 @@ class _HousePageState extends State<HousePage>
                     },
                   );
                 },
-              );
-            },
-          ),
-          bottomSheet: BlocBuilder<MoveCubit, MoveState>(
-            builder: (context, state) {
-              return context.read<MoveCubit>().canMoveHere()
-                  ? MoveHereBottomSheet(
-                      onCancelPressed: () {
-                        context.read<MoveCubit>().cancelMove();
-                      },
-                      onMoveHerePressed: () {
-                        context.read<MoveCubit>().moveStorageModel(
-                          context,
-                          () {
-                            if (state.storageModel is RoomModel) {
-                              _houseCubit.addRoom(
-                                  state.storageModel as RoomModel,
-                                  showSuccessSnackbar: false);
-                            } else if (state.storageModel is ItemModel) {
-                              _houseCubit.addItem(
-                                  state.storageModel as ItemModel,
-                                  showSuccessSnackbar: false);
-                            }
+              ),
+              bottomSheet: BlocBuilder<MoveCubit, MoveState>(
+                builder: (context, state) {
+                  return context.read<MoveCubit>().canMoveHere()
+                      ? MoveHereBottomSheet(
+                          onCancelPressed: () {
+                            context.read<MoveCubit>().cancelMove();
                           },
-                        );
-                      },
-                    )
-                  : const SizedBox();
-            },
-          ),
+                          onMoveHerePressed: () {
+                            context.read<MoveCubit>().moveStorageModel(
+                              context,
+                              () {
+                                if (state.storageModel is RoomModel) {
+                                  _houseCubit.addRoom(
+                                      state.storageModel as RoomModel,
+                                      showSuccessSnackbar: false);
+                                } else if (state.storageModel is ItemModel) {
+                                  _houseCubit.addItem(
+                                      state.storageModel as ItemModel,
+                                      showSuccessSnackbar: false);
+                                }
+                              },
+                            );
+                          },
+                        )
+                      : const SizedBox();
+                },
+              ),
+            );
+          },
         ),
       ),
     );

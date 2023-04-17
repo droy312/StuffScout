@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/pages/add_item_page.dart';
+import 'package:stuff_scout/core/pages/view_image_page.dart';
 import 'package:stuff_scout/features/container/presenter/pages/container_page.dart';
 import 'package:stuff_scout/features/home/presenter/pages/add_house_page.dart';
 import 'package:stuff_scout/features/home/presenter/pages/home_page.dart';
@@ -62,6 +63,10 @@ class RouteGenerator {
             builder: (_) => SearchPage(
                 searchPageArguments:
                     settings.arguments as SearchPageArguments));
+      case ViewImagePage.routeName:
+        return MaterialPageRoute(
+            builder: (_) => ViewImagePage(
+                viewImagePageArguments: settings.arguments as ViewImagePageArguments));
       default:
         return MaterialPageRoute(
             builder: (_) => _NoRoutePage(settings: settings));
