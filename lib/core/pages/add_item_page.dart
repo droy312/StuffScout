@@ -58,6 +58,8 @@ class _AddItemPageState extends State<AddItemPage> {
 
   late final AddItemCubit _addItemCubit;
 
+  bool _addMoreInfo = false;
+
   @override
   void initState() {
     super.initState();
@@ -165,48 +167,6 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Brand text field
-                      InputTextField(
-                        controller: _brandController,
-                        context: context,
-                        hintText: 'Enter item brand',
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Model text field
-                      InputTextField(
-                        controller: _modelController,
-                        context: context,
-                        hintText: 'Enter item model',
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Serial number text field
-                      InputTextField(
-                        controller: _serialNumberController,
-                        context: context,
-                        hintText: 'Enter item serial number',
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Quantity text field
-                      InputTextField(
-                        controller: _quantityController,
-                        context: context,
-                        keyboardType: TextInputType.number,
-                        hintText: 'Enter item quantity',
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Price per item text field
-                      InputTextField(
-                        controller: _pricePerItemController,
-                        context: context,
-                        keyboardType: TextInputType.number,
-                        hintText: 'Enter price per item',
-                      ),
-                      const SizedBox(height: 16),
-
                       // Image display
                       BlocBuilder<AddItemCubit, AddItemState>(
                         builder: (context, state) {
@@ -294,7 +254,107 @@ class _AddItemPageState extends State<AddItemPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 16),
+
+                      if (_addMoreInfo) ...[
+                        // Brand text field
+                        InputTextField(
+                          controller: _brandController,
+                          context: context,
+                          hintText: 'Enter item brand',
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Model text field
+                        InputTextField(
+                          controller: _modelController,
+                          context: context,
+                          hintText: 'Enter item model',
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Serial number text field
+                        InputTextField(
+                          controller: _serialNumberController,
+                          context: context,
+                          hintText: 'Enter item serial number',
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Quantity text field
+                        InputTextField(
+                          controller: _quantityController,
+                          context: context,
+                          keyboardType: TextInputType.number,
+                          hintText: 'Enter item quantity',
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Price per item text field
+                        InputTextField(
+                          controller: _pricePerItemController,
+                          context: context,
+                          keyboardType: TextInputType.number,
+                          hintText: 'Enter price per item',
+                        ),
+                        const SizedBox(height: 16),
+
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _addMoreInfo = false;
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.keyboard_arrow_up_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              Text(
+                                'Add less info',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      if (!_addMoreInfo) ...[
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _addMoreInfo = true;
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.keyboard_arrow_down_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              Text(
+                                'Add more info',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
 
                       // Add house elevated button
                       CustomElevatedButton(
@@ -315,25 +375,28 @@ class _AddItemPageState extends State<AddItemPage> {
                                       _descriptionController.text.isNotEmpty
                                           ? _descriptionController.text
                                           : null,
-                                  brand: _brandController.text.isNotEmpty
+                                  brand: (_addMoreInfo &&
+                                          _brandController.text.isNotEmpty)
                                       ? _brandController.text
                                       : null,
-                                  model: _modelController.text.isNotEmpty
+                                  model: (_addMoreInfo &&
+                                          _modelController.text.isNotEmpty)
                                       ? _modelController.text
                                       : null,
-                                  serialNumber:
-                                      _serialNumberController.text.isNotEmpty
-                                          ? _serialNumberController.text
-                                          : null,
-                                  quantity: quantity,
-                                  pricePerItem: pricePerItem,
+                                  serialNumber: (_addMoreInfo &&
+                                          _serialNumberController
+                                              .text.isNotEmpty)
+                                      ? _serialNumberController.text
+                                      : null,
+                                  quantity: _addMoreInfo ? quantity : null,
+                                  pricePerItem: _addMoreInfo ? pricePerItem : null,
                                   locationModel: widget
                                       .addItemPageArguments.itemLocationModel,
                                   imageUrl: state.imageUrl,
                                 );
-                                _addItemCubit.addItem(
-                                    widget.addItemPageArguments
-                                        .onItemPressed(itemModel));
+                                _addItemCubit.addItem(widget
+                                    .addItemPageArguments
+                                    .onItemPressed(itemModel));
                               }
                             : null,
                         child: Center(
