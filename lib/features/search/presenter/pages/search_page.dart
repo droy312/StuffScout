@@ -102,76 +102,85 @@ class _SearchPageState extends State<SearchPage> {
                 const SizedBox(height: 16),
                 Expanded(
                   child: !state.isLoading
-                      ? SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (state.searchedItemList.isNotEmpty) ...[
-                                const Text('Items'),
-                                const SizedBox(height: 4),
-                                Column(
-                                  children: state.searchedItemList
-                                      .map((itemModel) => Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8),
-                                            child: SearchPageItemCardWidget(
-                                                itemModel: itemModel),
-                                          ))
-                                      .toList(),
-                                ),
-                                const SizedBox(height: 12),
-                              ],
-                              if (state.searchedContainerList.isNotEmpty) ...[
-                                const Text('Containers'),
-                                const SizedBox(height: 4),
-                                Column(
-                                  children: state.searchedContainerList
-                                      .map((containerModel) => Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8),
-                                            child:
-                                                SearchPageContainerCardWidget(
-                                                    containerModel:
-                                                        containerModel),
-                                          ))
-                                      .toList(),
-                                ),
-                                const SizedBox(height: 12),
-                              ],
-                              if (state.searchedRoomList.isNotEmpty) ...[
-                                const Text('Rooms'),
-                                const SizedBox(height: 4),
-                                Column(
-                                  children: state.searchedRoomList
-                                      .map((roomModel) => Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8),
-                                            child: SearchPageRoomCardWidget(
-                                                roomModel: roomModel),
-                                          ))
-                                      .toList(),
-                                ),
-                                const SizedBox(height: 12),
-                              ],
-                              if (state.searchedHouseList.isNotEmpty) ...[
-                                const Text('Houses'),
-                                const SizedBox(height: 4),
-                                Column(
-                                  children: state.searchedHouseList
-                                      .map((houseModel) => Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8),
-                                            child: SearchPageHouseCardWidget(
-                                                houseModel: houseModel),
-                                          ))
-                                      .toList(),
-                                ),
-                                const SizedBox(height: 12),
-                              ],
-                              const SizedBox(height: 100),
-                            ],
-                          ),
-                        )
+                      ? (state.searchedItemList.isNotEmpty ||
+                              state.searchedContainerList.isNotEmpty ||
+                              state.searchedRoomList.isNotEmpty ||
+                              state.searchedHouseList.isNotEmpty)
+                          ? SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (state.searchedItemList.isNotEmpty) ...[
+                                    const Text('Items'),
+                                    const SizedBox(height: 4),
+                                    Column(
+                                      children: state.searchedItemList
+                                          .map((itemModel) => Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 8),
+                                                child: SearchPageItemCardWidget(
+                                                    itemModel: itemModel),
+                                              ))
+                                          .toList(),
+                                    ),
+                                    const SizedBox(height: 12),
+                                  ],
+                                  if (state
+                                      .searchedContainerList.isNotEmpty) ...[
+                                    const Text('Containers'),
+                                    const SizedBox(height: 4),
+                                    Column(
+                                      children: state.searchedContainerList
+                                          .map((containerModel) => Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 8),
+                                                child:
+                                                    SearchPageContainerCardWidget(
+                                                        containerModel:
+                                                            containerModel),
+                                              ))
+                                          .toList(),
+                                    ),
+                                    const SizedBox(height: 12),
+                                  ],
+                                  if (state.searchedRoomList.isNotEmpty) ...[
+                                    const Text('Rooms'),
+                                    const SizedBox(height: 4),
+                                    Column(
+                                      children: state.searchedRoomList
+                                          .map((roomModel) => Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 8),
+                                                child: SearchPageRoomCardWidget(
+                                                    roomModel: roomModel),
+                                              ))
+                                          .toList(),
+                                    ),
+                                    const SizedBox(height: 12),
+                                  ],
+                                  if (state.searchedHouseList.isNotEmpty) ...[
+                                    const Text('Houses'),
+                                    const SizedBox(height: 4),
+                                    Column(
+                                      children: state.searchedHouseList
+                                          .map((houseModel) => Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 8),
+                                                child:
+                                                    SearchPageHouseCardWidget(
+                                                        houseModel: houseModel),
+                                              ))
+                                          .toList(),
+                                    ),
+                                    const SizedBox(height: 12),
+                                  ],
+                                  const SizedBox(height: 100),
+                                ],
+                              ),
+                            )
+                          : const Center(
+                              child: Text(
+                                  'No elements present'))
                       : const Center(child: LoadingWidget()),
                 ),
               ],

@@ -60,65 +60,8 @@ class SearchCubit extends Cubit<SearchState> {
           },
         );
       }
-    } else if (houseModel != null) {
-      final result1 = await _searchUsecase.getRoomList(houseModel.roomIdList);
-      result1.fold(
-        (l) {
-          if (l.message != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackBar(context: context, text: l.message!));
-          }
-        },
-        (roomList) {
-          initialRoomList.addAll(roomList);
-        },
-      );
 
-      final result2 = await _searchUsecase.getItemList(houseModel.itemIdList);
-      result2.fold(
-        (l) {
-          if (l.message != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackBar(context: context, text: l.message!));
-          }
-        },
-        (itemList) {
-          initialItemList.addAll(itemList);
-        },
-      );
-    }
-
-    for (final roomModel in initialRoomList) {
-      final result1 =
-          await _searchUsecase.getContainerList(roomModel.containerIdList);
-      result1.fold(
-        (l) {
-          if (l.message != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackBar(context: context, text: l.message!));
-          }
-        },
-        (containerList) {
-          initialContainerList.addAll(containerList);
-        },
-      );
-
-      final result2 = await _searchUsecase.getItemList(roomModel.itemIdList);
-      result2.fold(
-        (l) {
-          if (l.message != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackBar(context: context, text: l.message!));
-          }
-        },
-        (itemList) {
-          initialItemList.addAll(itemList);
-        },
-      );
-    }
-
-    if (initialRoomList.isEmpty) {
-      if (roomModel != null) {
+      for (final roomModel in initialRoomList) {
         final result1 =
             await _searchUsecase.getContainerList(roomModel.containerIdList);
         result1.fold(
@@ -146,43 +89,11 @@ class SearchCubit extends Cubit<SearchState> {
           },
         );
       }
-    }
 
-    for (final containerModel in initialContainerList) {
-      final result =
-          await _searchUsecase.getItemList(containerModel.itemIdList);
-      result.fold(
-        (l) {
-          if (l.message != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackBar(context: context, text: l.message!));
-          }
-        },
-        (itemList) {
-          initialItemList.addAll(itemList);
-        },
-      );
-    }
-
-    if (initialContainerList.isEmpty) {
-      if (containerModel != null) {
-        final result1 = await _searchUsecase
-            .getContainerList(containerModel.containerIdList);
-        result1.fold(
-          (l) {
-            if (l.message != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  CustomSnackBar(context: context, text: l.message!));
-            }
-          },
-          (containerList) {
-            initialContainerList.addAll(containerList);
-          },
-        );
-
-        final result2 =
+      for (final containerModel in initialContainerList) {
+        final result =
             await _searchUsecase.getItemList(containerModel.itemIdList);
-        result2.fold(
+        result.fold(
           (l) {
             if (l.message != null) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -194,18 +105,222 @@ class SearchCubit extends Cubit<SearchState> {
           },
         );
       }
+
+      emit(SearchState(
+        houseList: initialHouseList,
+        roomList: initialRoomList,
+        containerList: initialContainerList,
+        itemList: initialItemList,
+        searchedHouseList: initialHouseList,
+        searchedRoomList: initialRoomList,
+        searchedContainerList: initialContainerList,
+        searchedItemList: initialItemList,
+      ));
+
+      return;
     }
 
-    emit(SearchState(
-      houseList: initialHouseList,
-      roomList: initialRoomList,
-      containerList: initialContainerList,
-      itemList: initialItemList,
-      searchedHouseList: initialHouseList,
-      searchedRoomList: initialRoomList,
-      searchedContainerList: initialContainerList,
-      searchedItemList: initialItemList,
-    ));
+    if (houseModel != null) {
+      final result1 = await _searchUsecase.getRoomList(houseModel.roomIdList);
+      result1.fold(
+        (l) {
+          if (l.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(context: context, text: l.message!));
+          }
+        },
+        (roomList) {
+          initialRoomList.addAll(roomList);
+        },
+      );
+
+      final result2 = await _searchUsecase.getItemList(houseModel.itemIdList);
+      result2.fold(
+        (l) {
+          if (l.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(context: context, text: l.message!));
+          }
+        },
+        (itemList) {
+          initialItemList.addAll(itemList);
+        },
+      );
+
+      for (final roomModel in initialRoomList) {
+        final result1 =
+        await _searchUsecase.getContainerList(roomModel.containerIdList);
+        result1.fold(
+              (l) {
+            if (l.message != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  CustomSnackBar(context: context, text: l.message!));
+            }
+          },
+              (containerList) {
+            initialContainerList.addAll(containerList);
+          },
+        );
+
+        final result2 = await _searchUsecase.getItemList(roomModel.itemIdList);
+        result2.fold(
+              (l) {
+            if (l.message != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  CustomSnackBar(context: context, text: l.message!));
+            }
+          },
+              (itemList) {
+            initialItemList.addAll(itemList);
+          },
+        );
+      }
+
+      for (final containerModel in initialContainerList) {
+        final result =
+        await _searchUsecase.getItemList(containerModel.itemIdList);
+        result.fold(
+              (l) {
+            if (l.message != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  CustomSnackBar(context: context, text: l.message!));
+            }
+          },
+              (itemList) {
+            initialItemList.addAll(itemList);
+          },
+        );
+      }
+
+      emit(SearchState(
+        houseList: initialHouseList,
+        roomList: initialRoomList,
+        containerList: initialContainerList,
+        itemList: initialItemList,
+        searchedHouseList: initialHouseList,
+        searchedRoomList: initialRoomList,
+        searchedContainerList: initialContainerList,
+        searchedItemList: initialItemList,
+      ));
+
+      return;
+    }
+
+    if (roomModel != null) {
+      final result1 =
+      await _searchUsecase.getContainerList(roomModel.containerIdList);
+      result1.fold(
+            (l) {
+          if (l.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(context: context, text: l.message!));
+          }
+        },
+            (containerList) {
+          initialContainerList.addAll(containerList);
+        },
+      );
+
+      final result2 = await _searchUsecase.getItemList(roomModel.itemIdList);
+      result2.fold(
+            (l) {
+          if (l.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(context: context, text: l.message!));
+          }
+        },
+            (itemList) {
+          initialItemList.addAll(itemList);
+        },
+      );
+
+      for (final containerModel in initialContainerList) {
+        final result =
+        await _searchUsecase.getItemList(containerModel.itemIdList);
+        result.fold(
+              (l) {
+            if (l.message != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  CustomSnackBar(context: context, text: l.message!));
+            }
+          },
+              (itemList) {
+            initialItemList.addAll(itemList);
+          },
+        );
+      }
+
+      emit(SearchState(
+        houseList: initialHouseList,
+        roomList: initialRoomList,
+        containerList: initialContainerList,
+        itemList: initialItemList,
+        searchedHouseList: initialHouseList,
+        searchedRoomList: initialRoomList,
+        searchedContainerList: initialContainerList,
+        searchedItemList: initialItemList,
+      ));
+
+      return;
+    }
+
+    if (containerModel != null) {
+      final result1 =
+      await _searchUsecase.getContainerList(containerModel.containerIdList);
+      result1.fold(
+            (l) {
+          if (l.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(context: context, text: l.message!));
+          }
+        },
+            (containerList) {
+          initialContainerList.addAll(containerList);
+        },
+      );
+
+      final result2 = await _searchUsecase.getItemList(containerModel.itemIdList);
+      result2.fold(
+            (l) {
+          if (l.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(context: context, text: l.message!));
+          }
+        },
+            (itemList) {
+          initialItemList.addAll(itemList);
+        },
+      );
+
+      for (final containerModel in initialContainerList) {
+        final result =
+        await _searchUsecase.getItemList(containerModel.itemIdList);
+        result.fold(
+              (l) {
+            if (l.message != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  CustomSnackBar(context: context, text: l.message!));
+            }
+          },
+              (itemList) {
+            initialItemList.addAll(itemList);
+          },
+        );
+      }
+
+      emit(SearchState(
+        houseList: initialHouseList,
+        roomList: initialRoomList,
+        containerList: initialContainerList,
+        itemList: initialItemList,
+        searchedHouseList: initialHouseList,
+        searchedRoomList: initialRoomList,
+        searchedContainerList: initialContainerList,
+        searchedItemList: initialItemList,
+      ));
+
+      return;
+    }
   }
 
   void searchModelListFromLists(String searchText) {
