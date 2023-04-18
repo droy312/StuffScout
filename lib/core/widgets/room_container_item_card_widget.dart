@@ -81,6 +81,9 @@ class RoomContainerItemCardWidget extends StatelessWidget {
             right: 0,
             child: MorePopupMenuButton(
               context: context,
+              iconColor: imageUrl != null
+                  ? Colors.white
+                  : Theme.of(context).colorScheme.onBackground,
               onDeletePressed: onDeletePressed,
               onEditPressed: onEditPressed,
               onMovePressed: onMovePressed,
