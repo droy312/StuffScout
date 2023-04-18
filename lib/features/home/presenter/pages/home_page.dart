@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/widgets/add_floating_action_button.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
-import 'package:stuff_scout/core/widgets/menu_icon_button.dart';
-import 'package:stuff_scout/core/widgets/notification_icon_button.dart';
 import 'package:stuff_scout/core/widgets/unsplash_ink_well.dart';
 import 'package:stuff_scout/features/home/presenter/cubits/home_cubit.dart';
 import 'package:stuff_scout/features/home/presenter/pages/widgets/house_card_widget.dart';
@@ -24,7 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const double _userImageSize = 80;
+  static const double _userImageSize = 100;
   static const String _searchBarHintText =
       'Search houses, rooms, containers, items...';
 
@@ -45,20 +43,9 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider<HomeCubit>.value(
       value: _homeCubit,
       child: Scaffold(
-        appBar: AppBar(
-          leading: MenuIconButton(
-            context: context,
-            onPressed: () {},
-          ),
-          actions: [
-            NotificationIconButton(
-              context: context,
-              onPressed: () {},
-            ),
-          ],
-        ),
         body: Column(
           children: [
+            const SizedBox(height: 40),
             // Header
             Row(
               children: [
@@ -115,7 +102,6 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            const SizedBox(height: 12),
 
             // House list
             Expanded(
