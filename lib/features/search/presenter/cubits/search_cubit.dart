@@ -145,7 +145,27 @@ class SearchCubit extends Cubit<SearchState> {
             initialItemList.addAll(itemList);
           },
         );
-      } else if (containerModel != null) {
+      }
+    }
+
+    for (final containerModel in initialContainerList) {
+      final result =
+          await _searchUsecase.getItemList(containerModel.itemIdList);
+      result.fold(
+        (l) {
+          if (l.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(context: context, text: l.message!));
+          }
+        },
+        (itemList) {
+          initialItemList.addAll(itemList);
+        },
+      );
+    }
+
+    if (initialContainerList.isEmpty) {
+      if (containerModel != null) {
         final result1 = await _searchUsecase
             .getContainerList(containerModel.containerIdList);
         result1.fold(
