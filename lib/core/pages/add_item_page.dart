@@ -79,9 +79,9 @@ class _AddItemPageState extends State<AddItemPage> {
       _serialNumberController = TextEditingController(
           text: widget.addItemPageArguments.itemModel!.serialNumber);
       _quantityController = TextEditingController(
-          text: widget.addItemPageArguments.itemModel!.quantity.toString());
+          text: widget.addItemPageArguments.itemModel!.quantity?.toString());
       _pricePerItemController = TextEditingController(
-          text: widget.addItemPageArguments.itemModel!.pricePerItem.toString());
+          text: widget.addItemPageArguments.itemModel!.pricePerItem?.toString());
 
       _addItemCubit
           .addItemFromItemModel(widget.addItemPageArguments.itemModel!);
