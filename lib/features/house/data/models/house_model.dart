@@ -5,8 +5,8 @@ import '../../../room/data/models/room_model.dart';
 
 class HouseModel extends StorageModel {
   HouseModel({
-    required this.id,
-    required this.name,
+    required String id,
+    required String name,
     this.description,
     this.imageUrl,
     this.roomList = const [],
@@ -15,12 +15,10 @@ class HouseModel extends StorageModel {
     this.itemIdList = const [],
     this.mapLocationLink,
   }) : super(
-          modelId: id,
-          modelName: name,
+          id: id,
+          name: name,
         );
 
-  final String id;
-  final String name;
   final String? description;
   final String? imageUrl;
   List<RoomModel> roomList;

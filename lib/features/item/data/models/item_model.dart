@@ -3,8 +3,8 @@ import 'package:stuff_scout/core/models/storage_model.dart';
 
 class ItemModel extends StorageModel {
   const ItemModel({
-    required this.id,
-    required this.name,
+    required String id,
+    required String name,
     this.description,
     this.brand,
     this.model,
@@ -15,12 +15,10 @@ class ItemModel extends StorageModel {
     required this.locationModel,
     this.imageUrl,
   }) : super(
-          modelId: id,
-          modelName: name,
+          id: id,
+          name: name,
         );
 
-  final String id;
-  final String name;
   final String? description;
   final String? brand;
   final String? model;

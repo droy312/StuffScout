@@ -1,17 +1,17 @@
 /// Base Model for HouseModel, RoomMode, ContainerMode, ItemModel
 class StorageModel {
   const StorageModel({
-    required this.modelId,
-    required this.modelName,
+    required this.id,
+    required this.name,
   });
 
-  final String modelId;
-  final String modelName;
+  final String id;
+  final String name;
 
   factory StorageModel.empty() {
     return const StorageModel(
-      modelId: 'modelId',
-      modelName: 'modelName',
+      id: 'id',
+      name: 'name',
     );
   }
 }

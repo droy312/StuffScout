@@ -61,7 +61,10 @@ class SearchUsecase {
     final List<HouseModel> searchedHouseList = [];
 
     for (final houseModel in houseList) {
-      if (houseModel.name.toLowerCase().contains(searchText.toLowerCase())) {
+      if (houseModel.name.toLowerCase().contains(searchText.toLowerCase()) || (houseModel.description != null &&
+          houseModel.description!
+              .toLowerCase()
+              .contains(searchText.toLowerCase()))) {
         searchedHouseList.add(houseModel);
       }
     }
@@ -73,7 +76,10 @@ class SearchUsecase {
     final List<RoomModel> searchedRoomList = [];
 
     for (final roomModel in roomList) {
-      if (roomModel.name.toLowerCase().contains(searchText.toLowerCase())) {
+      if (roomModel.name.toLowerCase().contains(searchText.toLowerCase()) || (roomModel.description != null &&
+          roomModel.description!
+              .toLowerCase()
+              .contains(searchText.toLowerCase()))) {
         searchedRoomList.add(roomModel);
       }
     }
@@ -88,7 +94,10 @@ class SearchUsecase {
     for (final containerModel in containerList) {
       if (containerModel.name
           .toLowerCase()
-          .contains(searchText.toLowerCase())) {
+          .contains(searchText.toLowerCase()) || (containerModel.description != null &&
+          containerModel.description!
+              .toLowerCase()
+              .contains(searchText.toLowerCase()))) {
         searchedContainerList.add(containerModel);
       }
     }
@@ -100,7 +109,19 @@ class SearchUsecase {
     final List<ItemModel> searchedItemList = [];
 
     for (final itemModel in itemList) {
-      if (itemModel.name.toLowerCase().contains(searchText.toLowerCase())) {
+      if (itemModel.name.toLowerCase().contains(searchText.toLowerCase()) ||
+          (itemModel.description != null &&
+              itemModel.description!
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase())) ||
+          (itemModel.brand != null &&
+              itemModel.brand!
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase())) ||
+          (itemModel.model != null &&
+              itemModel.model!
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase()))) {
         searchedItemList.add(itemModel);
       } else {
         if (itemModel.tagList != null) {

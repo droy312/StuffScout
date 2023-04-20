@@ -42,7 +42,7 @@ class MoveCubit extends Cubit<MoveState> {
 
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
           context: context,
-          text: '${state.storageModel!.modelName} Item moved successfully',
+          text: '${state.storageModel!.name} Item moved successfully',
         ));
 
         emit(MoveState(moveToStorageModel: state.moveToStorageModel));
@@ -65,7 +65,7 @@ class MoveCubit extends Cubit<MoveState> {
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
             text:
-                '${state.storageModel!.modelName} Container moved successfully',
+                '${state.storageModel!.name} Container moved successfully',
           ));
 
           emit(MoveState(moveToStorageModel: state.moveToStorageModel));
@@ -75,7 +75,7 @@ class MoveCubit extends Cubit<MoveState> {
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
             text:
-                '${state.storageModel!.modelName} Container moved successfully',
+                '${state.storageModel!.name} Container moved successfully',
           ));
 
           emit(MoveState(moveToStorageModel: state.moveToStorageModel));
@@ -104,7 +104,7 @@ class MoveCubit extends Cubit<MoveState> {
 
           ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(
             context: context,
-            text: '${state.storageModel!.modelName} Room moved successfully',
+            text: '${state.storageModel!.name} Room moved successfully',
           ));
 
           emit(MoveState(moveToStorageModel: state.moveToStorageModel));

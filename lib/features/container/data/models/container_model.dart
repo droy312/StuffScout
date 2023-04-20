@@ -6,8 +6,8 @@ import '../../../item/data/models/item_model.dart';
 
 class ContainerModel extends StorageModel {
   ContainerModel({
-    required this.id,
-    required this.name,
+    required String id,
+    required String name,
     this.description,
     required this.locationModel,
     this.imageUrl,
@@ -16,12 +16,10 @@ class ContainerModel extends StorageModel {
     this.itemList = const [],
     this.itemIdList = const [],
   }) : super(
-          modelId: id,
-          modelName: name,
+          id: id,
+          name: name,
         );
 
-  final String id;
-  final String name;
   final String? description;
   final LocationModel locationModel;
   final String? imageUrl;
