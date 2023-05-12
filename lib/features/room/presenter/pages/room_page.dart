@@ -15,7 +15,6 @@ import '../../../../core/widgets/add_container_item_alert_dialog.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../../core/widgets/back_search_edit_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
-import '../../../../core/widgets/header_title_image_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
 import '../../../move/presenter/cubits/move_cubit.dart';
 
@@ -86,216 +85,172 @@ class _RoomPageState extends State<RoomPage>
         child: BlocBuilder<RoomCubit, RoomState>(
           builder: (context, state) {
             return Scaffold(
-              appBar: BackSearchEditAppBar(
-                context: context,
-                onSearchPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    SearchPage.routeName,
-                    arguments: SearchPageArguments(
-                      title: 'Search in ${state.roomModel.name}',
-                      hintText: 'Search containers, items...',
-                      roomModel: state.roomModel,
-                    ),
-                  );
-                },
-              ),
-              body: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).colorScheme.primary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Nums.horizontalPaddingWidth),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-
-                        // Title and Image
-                        HeaderTitleImageWidget(
-                          title: state.roomModel.name,
-                          imageUrl: state.roomModel.imageUrl,
-                        ),
-                        const SizedBox(height: 4),
-
-                        // Description
-                        if (state.roomModel.description != null)
-                          Text(
-                            state.roomModel.description!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary
-                                      .withOpacity(.6),
-                                ),
+              body: NestedScrollView(
+                headerSliverBuilder: (context, value) {
+                  return [
+                    BackSearchSliverAppBar(
+                      context: context,
+                      onSearchPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          SearchPage.routeName,
+                          arguments: SearchPageArguments(
+                            title:
+                                'Search in ${widget.roomPageArguments.roomModel.name}',
+                            hintText: 'Search containers, items...',
+                            roomModel: widget.roomPageArguments.roomModel,
                           ),
-                        const SizedBox(height: 16),
-
-                        // Location
-                        Text(
-                          'Location',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                        );
+                      },
+                      title: widget.roomPageArguments.roomModel.name,
+                      description:
+                          widget.roomPageArguments.roomModel.description,
+                      backgroundImageUrl:
+                          widget.roomPageArguments.roomModel.imageUrl,
+                      bottom: PreferredSize(
+                        preferredSize: Size(
+                          MediaQuery.of(context).size.width,
+                          50,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          state.roomModel.locationModel.toLocationString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary
-                                      .withOpacity(.6)),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
-                  ),
-                  TabBar(
-                    controller: _tabController,
-                    labelPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
-                    ),
-                    tabs: const [
-                      Text('Containers'),
-                      Text('Items'),
-                    ],
-                  ),
-                  Expanded(
-                    // Containers and Items
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: !state.isLoading
-                          ? [
-                              state.roomModel.containerList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .roomModel.containerList
-                                      .map((containerModel) {
-                                      return ContainerCardWidget(
-                                        containerModel: containerModel,
-                                        onDeletePressed: () {
-                                          _roomCubit
-                                              .deleteContainer(containerModel);
-                                        },
-                                        onEditPressed: () async {
-                                          Navigator.pushNamed(
-                                            context,
-                                            AddContainerPage.routeName,
-                                            arguments:
-                                                AddContainerPageArguments(
-                                              onContainerPressed:
-                                                  (containerModel) async {
-                                                _roomCubit.updateContainer(
-                                                    containerModel);
-                                              },
-                                              containerLocationModel:
-                                                  containerModel.locationModel,
-                                              isEditing: true,
-                                              containerModel: containerModel,
-                                            ),
-                                          );
-                                        },
-                                        onMovePressed: () {
-                                          context
-                                              .read<MoveCubit>()
-                                              .copyStorageModel(() {
-                                            _roomCubit.addContainer(
-                                                containerModel,
-                                                showSuccessSnackbar: false);
-                                          }, () {
-                                            _roomCubit.deleteContainer(
-                                                containerModel,
-                                                showSuccessSnackbar: false);
-                                          }, state.roomModel, containerModel);
-                                        },
-                                        onNavigateBack: () {
-                                          context.read<MoveCubit>().setParentStorageModel(state.roomModel);
-                                        },
-                                      );
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Containers present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                              state.roomModel.itemList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(
-                                      state.roomModel.itemList.map((itemModel) {
-                                      return ItemCardWidget(
-                                        itemModel: itemModel,
-                                        onDeletePressed: () {
-                                          _roomCubit.deleteItem(itemModel);
-                                        },
-                                        onEditPressed: () async {
-                                          Navigator.pushNamed(
-                                            context,
-                                            AddItemPage.routeName,
-                                            arguments: AddItemPageArguments(
-                                              onItemPressed: (itemModel) async {
-                                                _roomCubit
-                                                    .updateItem(itemModel);
-                                              },
-                                              itemLocationModel:
-                                                  itemModel.locationModel,
-                                              isEditing: true,
-                                              itemModel: itemModel,
-                                            ),
-                                          );
-                                        },
-                                        onMovePressed: () {
-                                          context
-                                              .read<MoveCubit>()
-                                              .copyStorageModel(() {
-                                            _roomCubit.addItem(itemModel,
-                                                showSuccessSnackbar: false);
-                                          }, () {
-                                            _roomCubit.deleteItem(itemModel,
-                                                showSuccessSnackbar: false);
-                                          }, state.roomModel, itemModel);
-                                        },
-                                        onNavigateBack: () {
-                                          context.read<MoveCubit>().setParentStorageModel(state.roomModel);
-                                        },
-                                      );
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Items present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                            ]
-                          : [
-                              const Center(child: LoadingWidget()),
-                              const Center(child: LoadingWidget()),
+                        child: Container(
+                          color: Theme.of(context).colorScheme.background,
+                          child: TabBar(
+                            controller: _tabController,
+                            labelPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                            tabs: const [
+                              Text('Containers'),
+                              Text('Items'),
                             ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ];
+                },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: !state.isLoading
+                      ? [
+                          state.roomModel.containerList.isNotEmpty
+                              ? _listOfWidgetsInGridView(state
+                                  .roomModel.containerList
+                                  .map((containerModel) {
+                                  return ContainerCardWidget(
+                                    containerModel: containerModel,
+                                    onDeletePressed: () {
+                                      _roomCubit
+                                          .deleteContainer(containerModel);
+                                    },
+                                    onEditPressed: () async {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AddContainerPage.routeName,
+                                        arguments: AddContainerPageArguments(
+                                          onContainerPressed:
+                                              (containerModel) async {
+                                            _roomCubit.updateContainer(
+                                                containerModel);
+                                          },
+                                          containerLocationModel:
+                                              containerModel.locationModel,
+                                          isEditing: true,
+                                          containerModel: containerModel,
+                                        ),
+                                      );
+                                    },
+                                    onMovePressed: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .copyStorageModel(() {
+                                        _roomCubit.addContainer(containerModel,
+                                            showSuccessSnackbar: false);
+                                      }, () {
+                                        _roomCubit.deleteContainer(
+                                            containerModel,
+                                            showSuccessSnackbar: false);
+                                      }, state.roomModel, containerModel);
+                                    },
+                                    onNavigateBack: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .setParentStorageModel(
+                                              state.roomModel);
+                                    },
+                                  );
+                                }).toList())
+                              : Center(
+                                  child: Text(
+                                  'No Containers present',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground),
+                                )),
+                          state.roomModel.itemList.isNotEmpty
+                              ? _listOfWidgetsInGridView(
+                                  state.roomModel.itemList.map((itemModel) {
+                                  return ItemCardWidget(
+                                    itemModel: itemModel,
+                                    onDeletePressed: () {
+                                      _roomCubit.deleteItem(itemModel);
+                                    },
+                                    onEditPressed: () async {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AddItemPage.routeName,
+                                        arguments: AddItemPageArguments(
+                                          onItemPressed: (itemModel) async {
+                                            _roomCubit.updateItem(itemModel);
+                                          },
+                                          itemLocationModel:
+                                              itemModel.locationModel,
+                                          isEditing: true,
+                                          itemModel: itemModel,
+                                        ),
+                                      );
+                                    },
+                                    onMovePressed: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .copyStorageModel(() {
+                                        _roomCubit.addItem(itemModel,
+                                            showSuccessSnackbar: false);
+                                      }, () {
+                                        _roomCubit.deleteItem(itemModel,
+                                            showSuccessSnackbar: false);
+                                      }, state.roomModel, itemModel);
+                                    },
+                                    onNavigateBack: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .setParentStorageModel(
+                                              state.roomModel);
+                                    },
+                                  );
+                                }).toList())
+                              : Center(
+                                  child: Text(
+                                  'No Items present',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground),
+                                )),
+                        ]
+                      : [
+                          const Center(child: LoadingWidget()),
+                          const Center(child: LoadingWidget()),
+                        ],
+                ),
               ),
               floatingActionButton: AddFloatingActionButton(
                 context: context,

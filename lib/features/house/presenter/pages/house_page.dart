@@ -4,7 +4,6 @@ import 'package:stuff_scout/core/models/location_model.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/services/id_service.dart';
 import 'package:stuff_scout/core/widgets/back_search_edit_app_bar.dart';
-import 'package:stuff_scout/core/widgets/header_title_image_widget.dart';
 import 'package:stuff_scout/core/widgets/loading_widget.dart';
 import 'package:stuff_scout/features/house/presenter/cubits/house_cubit.dart';
 import 'package:stuff_scout/features/house/presenter/pages/widgets/add_room_item_alert_dialog.dart';
@@ -44,7 +43,8 @@ class HousePage extends StatefulWidget {
 
 class _HousePageState extends State<HousePage>
     with SingleTickerProviderStateMixin {
-  static const double _titleContainerTopAndBottomPadding = 16;
+  final _testImage =
+      'https://t3.ftcdn.net/jpg/01/18/46/52/360_F_118465200_0q7Of6UnbA8kDlYEe3a4PuIyue27fbuV.jpg';
 
   final IdService _idService = sl<IdService>();
 
@@ -93,197 +93,167 @@ class _HousePageState extends State<HousePage>
         child: BlocBuilder<HouseCubit, HouseState>(
           builder: (context, state) {
             return Scaffold(
-              appBar: BackSearchEditAppBar(
-                context: context,
-                onSearchPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    SearchPage.routeName,
-                    arguments: SearchPageArguments(
-                      title:
-                          'Search in ${widget.housePageArguments.houseModel.name}',
-                      hintText: 'Search rooms, containers, items...',
-                      houseModel: widget.housePageArguments.houseModel,
-                    ),
-                  );
-                },
-              ),
-              body: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).colorScheme.primary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Nums.horizontalPaddingWidth),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                            height: _titleContainerTopAndBottomPadding),
-
-                        // Title and Image
-                        HeaderTitleImageWidget(
-                          title: state.houseModel.name,
-                          imageUrl: state.houseModel.imageUrl,
-                        ),
-                        const SizedBox(height: 4),
-
-                        // Description
-                        if (widget.housePageArguments.houseModel.description !=
-                            null)
-                          Text(
-                            widget.housePageArguments.houseModel.description!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary
-                                      .withOpacity(.6),
-                                ),
+              body: NestedScrollView(
+                headerSliverBuilder: (context, value) {
+                  return [
+                    BackSearchSliverAppBar(
+                      context: context,
+                      onSearchPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          SearchPage.routeName,
+                          arguments: SearchPageArguments(
+                            title:
+                                'Search in ${widget.housePageArguments.houseModel.name}',
+                            hintText: 'Search rooms, containers, items...',
+                            houseModel: widget.housePageArguments.houseModel,
                           ),
-                        const SizedBox(
-                            height: _titleContainerTopAndBottomPadding),
-                      ],
-                    ),
-                  ),
-                  TabBar(
-                    controller: _tabController,
-                    labelPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
-                    ),
-                    tabs: const [
-                      Text('Rooms'),
-                      Text('Items'),
-                    ],
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: !state.isLoading
-                          ? [
-                              state.houseModel.roomList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .houseModel.roomList
-                                      .map((roomModel) {
-                                      return RoomCardWidget(
-                                        roomModel: roomModel,
-                                        onDeletePressed: () {
-                                          _houseCubit.deleteRoom(roomModel);
-                                        },
-                                        onEditPressed: () {
-                                          Navigator.pushNamed(
-                                            context,
-                                            AddRoomPage.routeName,
-                                            arguments: AddRoomPageArguments(
-                                              onRoomPressed: (roomModel) async {
-                                                _houseCubit
-                                                    .updateRoom(roomModel);
-                                              },
-                                              roomLocationModel:
-                                                  roomModel.locationModel,
-                                              isEditing: true,
-                                              roomModel: roomModel,
-                                            ),
-                                          );
-                                        },
-                                        onMovePressed: () {
-                                          context
-                                              .read<MoveCubit>()
-                                              .copyStorageModel(() {
-                                            _houseCubit.addRoom(roomModel,
-                                                showSuccessSnackbar: false);
-                                          }, () {
-                                            _houseCubit.deleteRoom(roomModel,
-                                                showSuccessSnackbar: false);
-                                          }, state.houseModel, roomModel);
-                                        },
-                                        onNavigateBack: () {
-                                          context
-                                              .read<MoveCubit>()
-                                              .setParentStorageModel(
-                                                  state.houseModel);
-                                        },
-                                      );
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Rooms present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                              state.houseModel.itemList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .houseModel.itemList
-                                      .map((itemModel) {
-                                      return ItemCardWidget(
-                                        itemModel: itemModel,
-                                        onDeletePressed: () {
-                                          _houseCubit.deleteItem(itemModel);
-                                        },
-                                        onEditPressed: () {
-                                          Navigator.pushNamed(
-                                            context,
-                                            AddItemPage.routeName,
-                                            arguments: AddItemPageArguments(
-                                              onItemPressed: (itemModel) async {
-                                                _houseCubit
-                                                    .updateItem(itemModel);
-                                              },
-                                              itemLocationModel:
-                                                  itemModel.locationModel,
-                                              isEditing: true,
-                                              itemModel: itemModel,
-                                            ),
-                                          );
-                                        },
-                                        onMovePressed: () {
-                                          context
-                                              .read<MoveCubit>()
-                                              .copyStorageModel(() {
-                                            _houseCubit.addItem(itemModel,
-                                                showSuccessSnackbar: false);
-                                          }, () {
-                                            _houseCubit.deleteItem(itemModel,
-                                                showSuccessSnackbar: false);
-                                          }, state.houseModel, itemModel);
-                                        },
-                                        onNavigateBack: () {
-                                          context
-                                              .read<MoveCubit>()
-                                              .setParentStorageModel(
-                                                  state.houseModel);
-                                        },
-                                      );
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Items present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                            ]
-                          : [
-                              const Center(child: LoadingWidget()),
-                              const Center(child: LoadingWidget()),
+                        );
+                      },
+                      title: widget.housePageArguments.houseModel.name,
+                      description:
+                          widget.housePageArguments.houseModel.description,
+                      backgroundImageUrl:
+                          widget.housePageArguments.houseModel.imageUrl,
+                      bottom: PreferredSize(
+                        preferredSize: Size(
+                          MediaQuery.of(context).size.width,
+                          50,
+                        ),
+                        child: Container(
+                          color: Theme.of(context).colorScheme.background,
+                          child: TabBar(
+                            controller: _tabController,
+                            labelPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                            tabs: const [
+                              Text('Rooms'),
+                              Text('Items'),
                             ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ];
+                },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: !state.isLoading
+                      ? [
+                          state.houseModel.roomList.isNotEmpty
+                              ? _listOfWidgetsInGridView(
+                                  state.houseModel.roomList.map((roomModel) {
+                                  return RoomCardWidget(
+                                    roomModel: roomModel,
+                                    onDeletePressed: () {
+                                      _houseCubit.deleteRoom(roomModel);
+                                    },
+                                    onEditPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AddRoomPage.routeName,
+                                        arguments: AddRoomPageArguments(
+                                          onRoomPressed: (roomModel) async {
+                                            _houseCubit.updateRoom(roomModel);
+                                          },
+                                          roomLocationModel:
+                                              roomModel.locationModel,
+                                          isEditing: true,
+                                          roomModel: roomModel,
+                                        ),
+                                      );
+                                    },
+                                    onMovePressed: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .copyStorageModel(() {
+                                        _houseCubit.addRoom(roomModel,
+                                            showSuccessSnackbar: false);
+                                      }, () {
+                                        _houseCubit.deleteRoom(roomModel,
+                                            showSuccessSnackbar: false);
+                                      }, state.houseModel, roomModel);
+                                    },
+                                    onNavigateBack: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .setParentStorageModel(
+                                              state.houseModel);
+                                    },
+                                  );
+                                }).toList())
+                              : Center(
+                                  child: Text(
+                                  'No Rooms present',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground),
+                                )),
+                          state.houseModel.itemList.isNotEmpty
+                              ? _listOfWidgetsInGridView(
+                                  state.houseModel.itemList.map((itemModel) {
+                                  return ItemCardWidget(
+                                    itemModel: itemModel,
+                                    onDeletePressed: () {
+                                      _houseCubit.deleteItem(itemModel);
+                                    },
+                                    onEditPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AddItemPage.routeName,
+                                        arguments: AddItemPageArguments(
+                                          onItemPressed: (itemModel) async {
+                                            _houseCubit.updateItem(itemModel);
+                                          },
+                                          itemLocationModel:
+                                              itemModel.locationModel,
+                                          isEditing: true,
+                                          itemModel: itemModel,
+                                        ),
+                                      );
+                                    },
+                                    onMovePressed: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .copyStorageModel(() {
+                                        _houseCubit.addItem(itemModel,
+                                            showSuccessSnackbar: false);
+                                      }, () {
+                                        _houseCubit.deleteItem(itemModel,
+                                            showSuccessSnackbar: false);
+                                      }, state.houseModel, itemModel);
+                                    },
+                                    onNavigateBack: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .setParentStorageModel(
+                                              state.houseModel);
+                                    },
+                                  );
+                                }).toList())
+                              : Center(
+                                  child: Text(
+                                  'No Items present',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground),
+                                )),
+                        ]
+                      : [
+                          const Center(child: LoadingWidget()),
+                          const Center(child: LoadingWidget()),
+                        ],
+                ),
               ),
               floatingActionButton: AddFloatingActionButton(
                 context: context,

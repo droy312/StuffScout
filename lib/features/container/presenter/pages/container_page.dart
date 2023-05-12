@@ -10,7 +10,6 @@ import '../../../../core/widgets/add_container_item_alert_dialog.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
 import '../../../../core/widgets/back_search_edit_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
-import '../../../../core/widgets/header_title_image_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
 import '../../../../core/widgets/move_here_bottom_sheet.dart';
 import '../../../item/data/models/item_model.dart';
@@ -85,215 +84,176 @@ class _ContainerPageState extends State<ContainerPage>
         child: BlocBuilder<ContainerCubit, ContainerState>(
           builder: (context, state) {
             return Scaffold(
-              appBar: BackSearchEditAppBar(
-                context: context,
-                onSearchPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    SearchPage.routeName,
-                    arguments: SearchPageArguments(
-                      title: 'Search in ${state.containerModel.name}',
-                      hintText: 'Search containers, items...',
-                      containerModel: state.containerModel,
-                    ),
-                  );
-                },
-              ),
-              body: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).colorScheme.primary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Nums.horizontalPaddingWidth),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-
-                        // Title and Image
-                        HeaderTitleImageWidget(
-                          title: state.containerModel.name,
-                          imageUrl: state.containerModel.imageUrl,
-                        ),
-                        const SizedBox(height: 4),
-
-                        // Description
-                        if (state.containerModel.description != null)
-                          Text(
-                            state.containerModel.description!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary
-                                      .withOpacity(.6),
-                                ),
+              body: NestedScrollView(
+                headerSliverBuilder: (context, value) {
+                  return [
+                    BackSearchSliverAppBar(
+                      context: context,
+                      onSearchPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          SearchPage.routeName,
+                          arguments: SearchPageArguments(
+                            title:
+                                'Search in ${widget.containerPageArguments.containerModel.name}',
+                            hintText: 'Search containers, items...',
+                            containerModel:
+                                widget.containerPageArguments.containerModel,
                           ),
-                        const SizedBox(height: 16),
-
-                        // Location
-                        Text(
-                          'Location',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                        );
+                      },
+                      title: widget.containerPageArguments.containerModel.name,
+                      description: widget
+                          .containerPageArguments.containerModel.description,
+                      backgroundImageUrl:
+                          widget.containerPageArguments.containerModel.imageUrl,
+                      bottom: PreferredSize(
+                        preferredSize: Size(
+                          MediaQuery.of(context).size.width,
+                          50,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          state.containerModel.locationModel.toLocationString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary
-                                      .withOpacity(.6)),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
-                  ),
-                  TabBar(
-                    controller: _tabController,
-                    labelPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
-                    ),
-                    tabs: const [
-                      Text('Containers'),
-                      Text('Items'),
-                    ],
-                  ),
-                  Expanded(
-                    // Containers and Items
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: !state.isLoading
-                          ? [
-                              state.containerModel.containerList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .containerModel.containerList
-                                      .map((containerModel) {
-                                      return ContainerCardWidget(
-                                        containerModel: containerModel,
-                                        onDeletePressed: () {
-                                          _containerCubit
-                                              .deleteContainer(containerModel);
-                                        },
-                                        onEditPressed: () {
-                                          Navigator.pushNamed(
-                                            context,
-                                            AddContainerPage.routeName,
-                                            arguments:
-                                                AddContainerPageArguments(
-                                              onContainerPressed:
-                                                  (containerModel) async {
-                                                _containerCubit.updateContainer(
-                                                    containerModel);
-                                              },
-                                              containerLocationModel:
-                                                  containerModel.locationModel,
-                                              isEditing: true,
-                                              containerModel: containerModel,
-                                            ),
-                                          );
-                                        },
-                                        onMovePressed: () {
-                                          context
-                                              .read<MoveCubit>()
-                                              .copyStorageModel(() {
-                                            _containerCubit.addContainer(containerModel,
-                                                showSuccessSnackbar: false);
-                                          }, () {
-                                            _containerCubit.deleteContainer(containerModel,
-                                                showSuccessSnackbar: false);
-                                          }, state.containerModel, containerModel);
-                                        },
-                                        onNavigateBack: () {
-                                          context.read<MoveCubit>().setParentStorageModel(state.containerModel);
-                                        },
-                                      );
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Containers present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                              state.containerModel.itemList.isNotEmpty
-                                  ? _listOfWidgetsInGridView(state
-                                      .containerModel.itemList
-                                      .map((itemModel) {
-                                      return ItemCardWidget(
-                                        itemModel: itemModel,
-                                        onDeletePressed: () {
-                                          _containerCubit.deleteItem(itemModel);
-                                        },
-                                        onEditPressed: () {
-                                          Navigator.pushNamed(
-                                            context,
-                                            AddItemPage.routeName,
-                                            arguments: AddItemPageArguments(
-                                              onItemPressed: (itemModel) async {
-                                                _containerCubit
-                                                    .updateItem(itemModel);
-                                              },
-                                              itemLocationModel:
-                                                  itemModel.locationModel,
-                                              isEditing: true,
-                                              itemModel: itemModel,
-                                            ),
-                                          );
-                                        },
-                                        onMovePressed: () {
-                                          context
-                                              .read<MoveCubit>()
-                                              .copyStorageModel(() {
-                                            _containerCubit.addItem(itemModel,
-                                                showSuccessSnackbar: false);
-                                          }, () {
-                                            _containerCubit.deleteItem(itemModel,
-                                                showSuccessSnackbar: false);
-                                          }, state.containerModel, itemModel);
-                                        },
-                                        onNavigateBack: () {
-                                          context.read<MoveCubit>().setParentStorageModel(state.containerModel);
-                                        },
-                                      );
-                                    }).toList())
-                                  : Center(
-                                      child: Text(
-                                      'No Items present',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    )),
-                            ]
-                          : [
-                              const Center(child: LoadingWidget()),
-                              const Center(child: LoadingWidget()),
+                        child: Container(
+                          color: Theme.of(context).colorScheme.background,
+                          child: TabBar(
+                            controller: _tabController,
+                            labelPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                            tabs: const [
+                              Text('Containers'),
+                              Text('Items'),
                             ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ];
+                },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: !state.isLoading
+                      ? [
+                          state.containerModel.containerList.isNotEmpty
+                              ? _listOfWidgetsInGridView(state
+                                  .containerModel.containerList
+                                  .map((containerModel) {
+                                  return ContainerCardWidget(
+                                    containerModel: containerModel,
+                                    onDeletePressed: () {
+                                      _containerCubit
+                                          .deleteContainer(containerModel);
+                                    },
+                                    onEditPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AddContainerPage.routeName,
+                                        arguments: AddContainerPageArguments(
+                                          onContainerPressed:
+                                              (containerModel) async {
+                                            _containerCubit.updateContainer(
+                                                containerModel);
+                                          },
+                                          containerLocationModel:
+                                              containerModel.locationModel,
+                                          isEditing: true,
+                                          containerModel: containerModel,
+                                        ),
+                                      );
+                                    },
+                                    onMovePressed: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .copyStorageModel(() {
+                                        _containerCubit.addContainer(
+                                            containerModel,
+                                            showSuccessSnackbar: false);
+                                      }, () {
+                                        _containerCubit.deleteContainer(
+                                            containerModel,
+                                            showSuccessSnackbar: false);
+                                      }, state.containerModel, containerModel);
+                                    },
+                                    onNavigateBack: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .setParentStorageModel(
+                                              state.containerModel);
+                                    },
+                                  );
+                                }).toList())
+                              : Center(
+                                  child: Text(
+                                  'No Containers present',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground),
+                                )),
+                          state.containerModel.itemList.isNotEmpty
+                              ? _listOfWidgetsInGridView(state
+                                  .containerModel.itemList
+                                  .map((itemModel) {
+                                  return ItemCardWidget(
+                                    itemModel: itemModel,
+                                    onDeletePressed: () {
+                                      _containerCubit.deleteItem(itemModel);
+                                    },
+                                    onEditPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AddItemPage.routeName,
+                                        arguments: AddItemPageArguments(
+                                          onItemPressed: (itemModel) async {
+                                            _containerCubit
+                                                .updateItem(itemModel);
+                                          },
+                                          itemLocationModel:
+                                              itemModel.locationModel,
+                                          isEditing: true,
+                                          itemModel: itemModel,
+                                        ),
+                                      );
+                                    },
+                                    onMovePressed: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .copyStorageModel(() {
+                                        _containerCubit.addItem(itemModel,
+                                            showSuccessSnackbar: false);
+                                      }, () {
+                                        _containerCubit.deleteItem(itemModel,
+                                            showSuccessSnackbar: false);
+                                      }, state.containerModel, itemModel);
+                                    },
+                                    onNavigateBack: () {
+                                      context
+                                          .read<MoveCubit>()
+                                          .setParentStorageModel(
+                                              state.containerModel);
+                                    },
+                                  );
+                                }).toList())
+                              : Center(
+                                  child: Text(
+                                  'No Items present',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground),
+                                )),
+                        ]
+                      : [
+                          const Center(child: LoadingWidget()),
+                          const Center(child: LoadingWidget()),
+                        ],
+                ),
               ),
               floatingActionButton: AddFloatingActionButton(
                 context: context,
@@ -346,26 +306,26 @@ class _ContainerPageState extends State<ContainerPage>
                 builder: (context, state) {
                   return context.read<MoveCubit>().canMoveHere()
                       ? MoveHereBottomSheet(
-                    onCancelPressed: () {
-                      context.read<MoveCubit>().cancelMove();
-                    },
-                    onMoveHerePressed: () {
-                      context.read<MoveCubit>().moveStorageModel(
-                        context,
-                            () {
-                          if (state.storageModel is ContainerModel) {
-                            _containerCubit.addContainer(
-                                state.storageModel as ContainerModel,
-                                showSuccessSnackbar: false);
-                          } else if (state.storageModel is ItemModel) {
-                            _containerCubit.addItem(
-                                state.storageModel as ItemModel,
-                                showSuccessSnackbar: false);
-                          }
-                        },
-                      );
-                    },
-                  )
+                          onCancelPressed: () {
+                            context.read<MoveCubit>().cancelMove();
+                          },
+                          onMoveHerePressed: () {
+                            context.read<MoveCubit>().moveStorageModel(
+                              context,
+                              () {
+                                if (state.storageModel is ContainerModel) {
+                                  _containerCubit.addContainer(
+                                      state.storageModel as ContainerModel,
+                                      showSuccessSnackbar: false);
+                                } else if (state.storageModel is ItemModel) {
+                                  _containerCubit.addItem(
+                                      state.storageModel as ItemModel,
+                                      showSuccessSnackbar: false);
+                                }
+                              },
+                            );
+                          },
+                        )
                       : const SizedBox();
                 },
               ),
