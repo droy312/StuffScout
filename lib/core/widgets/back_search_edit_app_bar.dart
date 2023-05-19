@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:stuff_scout/core/nums.dart';
 import 'package:stuff_scout/core/widgets/back_icon_button.dart';
@@ -9,7 +11,7 @@ class BackSearchSliverAppBar extends SliverAppBar {
     required BuildContext context,
     required String title,
     String? description,
-    String? backgroundImageUrl,
+    String? backgroundImageFilePath,
     PreferredSize? bottom,
     Function()? onSearchPressed,
   }) : super(
@@ -45,12 +47,12 @@ class BackSearchSliverAppBar extends SliverAppBar {
               ),
               child: Stack(
                 children: [
-                  if (backgroundImageUrl != null) ...[
+                  if (backgroundImageFilePath != null) ...[
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 200,
-                      child: Image.network(
-                        backgroundImageUrl,
+                      child: Image.file(
+                        File(backgroundImageFilePath),
                         fit: BoxFit.cover,
                       ),
                     ),

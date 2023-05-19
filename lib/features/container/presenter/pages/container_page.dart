@@ -104,7 +104,7 @@ class _ContainerPageState extends State<ContainerPage>
                             widget.containerPageArguments.containerModel.name,
                         description: widget
                             .containerPageArguments.containerModel.description,
-                        backgroundImageUrl: widget
+                        backgroundImageFilePath: widget
                             .containerPageArguments.containerModel.imageUrl,
                         bottom: PreferredSize(
                           preferredSize: Size(

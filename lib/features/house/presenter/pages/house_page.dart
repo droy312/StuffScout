@@ -108,7 +108,7 @@ class _HousePageState extends State<HousePage>
                         title: widget.housePageArguments.houseModel.name,
                         description:
                             widget.housePageArguments.houseModel.description,
-                        backgroundImageUrl:
+                        backgroundImageFilePath:
                             widget.housePageArguments.houseModel.imageUrl,
                         bottom: PreferredSize(
                           preferredSize: Size(

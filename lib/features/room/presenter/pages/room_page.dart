@@ -103,7 +103,7 @@ class _RoomPageState extends State<RoomPage>
                         title: widget.roomPageArguments.roomModel.name,
                         description:
                             widget.roomPageArguments.roomModel.description,
-                        backgroundImageUrl:
+                        backgroundImageFilePath:
                             widget.roomPageArguments.roomModel.imageUrl,
                         bottom: PreferredSize(
                           preferredSize: Size(
