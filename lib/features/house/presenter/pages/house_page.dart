@@ -43,9 +43,6 @@ class HousePage extends StatefulWidget {
 
 class _HousePageState extends State<HousePage>
     with SingleTickerProviderStateMixin {
-  final _testImage =
-      'https://t3.ftcdn.net/jpg/01/18/46/52/360_F_118465200_0q7Of6UnbA8kDlYEe3a4PuIyue27fbuV.jpg';
-
   final IdService _idService = sl<IdService>();
 
   late final TabController _tabController;
@@ -53,15 +50,10 @@ class _HousePageState extends State<HousePage>
   late final HouseCubit _houseCubit;
 
   Widget _listOfWidgetsInGridView(List<Widget> list) {
-    return GridView.count(
+    return SliverGrid.count(
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      padding: const EdgeInsets.symmetric(
-        horizontal: Nums.horizontalPaddingWidth,
-        vertical: 16,
-      ),
       crossAxisCount: 2,
-      physics: const BouncingScrollPhysics(),
       children: list,
     );
   }
@@ -96,42 +88,46 @@ class _HousePageState extends State<HousePage>
               body: NestedScrollView(
                 headerSliverBuilder: (context, value) {
                   return [
-                    BackSearchSliverAppBar(
-                      context: context,
-                      onSearchPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          SearchPage.routeName,
-                          arguments: SearchPageArguments(
-                            title:
-                                'Search in ${widget.housePageArguments.houseModel.name}',
-                            hintText: 'Search rooms, containers, items...',
-                            houseModel: widget.housePageArguments.houseModel,
-                          ),
-                        );
-                      },
-                      title: widget.housePageArguments.houseModel.name,
-                      description:
-                          widget.housePageArguments.houseModel.description,
-                      backgroundImageUrl:
-                          widget.housePageArguments.houseModel.imageUrl,
-                      bottom: PreferredSize(
-                        preferredSize: Size(
-                          MediaQuery.of(context).size.width,
-                          50,
-                        ),
-                        child: Container(
-                          color: Theme.of(context).colorScheme.background,
-                          child: TabBar(
-                            controller: _tabController,
-                            labelPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 12,
+                    SliverOverlapAbsorber(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context),
+                      sliver: BackSearchSliverAppBar(
+                        context: context,
+                        onSearchPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            SearchPage.routeName,
+                            arguments: SearchPageArguments(
+                              title:
+                                  'Search in ${widget.housePageArguments.houseModel.name}',
+                              hintText: 'Search rooms, containers, items...',
+                              houseModel: widget.housePageArguments.houseModel,
                             ),
-                            tabs: const [
-                              Text('Rooms'),
-                              Text('Items'),
-                            ],
+                          );
+                        },
+                        title: widget.housePageArguments.houseModel.name,
+                        description:
+                            widget.housePageArguments.houseModel.description,
+                        backgroundImageUrl:
+                            widget.housePageArguments.houseModel.imageUrl,
+                        bottom: PreferredSize(
+                          preferredSize: Size(
+                            MediaQuery.of(context).size.width,
+                            50,
+                          ),
+                          child: Container(
+                            color: Theme.of(context).colorScheme.background,
+                            child: TabBar(
+                              controller: _tabController,
+                              labelPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 12,
+                              ),
+                              tabs: const [
+                                Text('Rooms'),
+                                Text('Items'),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -143,47 +139,69 @@ class _HousePageState extends State<HousePage>
                   children: !state.isLoading
                       ? [
                           state.houseModel.roomList.isNotEmpty
-                              ? _listOfWidgetsInGridView(
-                                  state.houseModel.roomList.map((roomModel) {
-                                  return RoomCardWidget(
-                                    roomModel: roomModel,
-                                    onDeletePressed: () {
-                                      _houseCubit.deleteRoom(roomModel);
-                                    },
-                                    onEditPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        AddRoomPage.routeName,
-                                        arguments: AddRoomPageArguments(
-                                          onRoomPressed: (roomModel) async {
-                                            _houseCubit.updateRoom(roomModel);
-                                          },
-                                          roomLocationModel:
-                                              roomModel.locationModel,
-                                          isEditing: true,
-                                          roomModel: roomModel,
+                              ? Builder(builder: (context) {
+                                  return CustomScrollView(
+                                    key: const PageStorageKey('roomList'),
+                                    slivers: [
+                                      SliverOverlapInjector(
+                                          handle: NestedScrollView
+                                              .sliverOverlapAbsorberHandleFor(
+                                                  context)),
+                                      SliverPadding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal:
+                                              Nums.horizontalPaddingWidth,
+                                          vertical: 16,
                                         ),
-                                      );
-                                    },
-                                    onMovePressed: () {
-                                      context
-                                          .read<MoveCubit>()
-                                          .copyStorageModel(() {
-                                        _houseCubit.addRoom(roomModel,
-                                            showSuccessSnackbar: false);
-                                      }, () {
-                                        _houseCubit.deleteRoom(roomModel,
-                                            showSuccessSnackbar: false);
-                                      }, state.houseModel, roomModel);
-                                    },
-                                    onNavigateBack: () {
-                                      context
-                                          .read<MoveCubit>()
-                                          .setParentStorageModel(
-                                              state.houseModel);
-                                    },
+                                        sliver: _listOfWidgetsInGridView(state
+                                            .houseModel.roomList
+                                            .map((roomModel) {
+                                          return RoomCardWidget(
+                                            roomModel: roomModel,
+                                            onDeletePressed: () {
+                                              _houseCubit.deleteRoom(roomModel);
+                                            },
+                                            onEditPressed: () {
+                                              Navigator.pushNamed(
+                                                context,
+                                                AddRoomPage.routeName,
+                                                arguments: AddRoomPageArguments(
+                                                  onRoomPressed:
+                                                      (roomModel) async {
+                                                    _houseCubit
+                                                        .updateRoom(roomModel);
+                                                  },
+                                                  roomLocationModel:
+                                                      roomModel.locationModel,
+                                                  isEditing: true,
+                                                  roomModel: roomModel,
+                                                ),
+                                              );
+                                            },
+                                            onMovePressed: () {
+                                              context
+                                                  .read<MoveCubit>()
+                                                  .copyStorageModel(() {
+                                                _houseCubit.addRoom(roomModel,
+                                                    showSuccessSnackbar: false);
+                                              }, () {
+                                                _houseCubit.deleteRoom(
+                                                    roomModel,
+                                                    showSuccessSnackbar: false);
+                                              }, state.houseModel, roomModel);
+                                            },
+                                            onNavigateBack: () {
+                                              context
+                                                  .read<MoveCubit>()
+                                                  .setParentStorageModel(
+                                                      state.houseModel);
+                                            },
+                                          );
+                                        }).toList()),
+                                      ),
+                                    ],
                                   );
-                                }).toList())
+                                })
                               : Center(
                                   child: Text(
                                   'No Rooms present',
@@ -196,47 +214,69 @@ class _HousePageState extends State<HousePage>
                                               .onBackground),
                                 )),
                           state.houseModel.itemList.isNotEmpty
-                              ? _listOfWidgetsInGridView(
-                                  state.houseModel.itemList.map((itemModel) {
-                                  return ItemCardWidget(
-                                    itemModel: itemModel,
-                                    onDeletePressed: () {
-                                      _houseCubit.deleteItem(itemModel);
-                                    },
-                                    onEditPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        AddItemPage.routeName,
-                                        arguments: AddItemPageArguments(
-                                          onItemPressed: (itemModel) async {
-                                            _houseCubit.updateItem(itemModel);
-                                          },
-                                          itemLocationModel:
-                                              itemModel.locationModel,
-                                          isEditing: true,
-                                          itemModel: itemModel,
+                              ? Builder(builder: (context) {
+                                  return CustomScrollView(
+                                    key: const PageStorageKey('itemList'),
+                                    slivers: [
+                                      SliverOverlapInjector(
+                                          handle: NestedScrollView
+                                              .sliverOverlapAbsorberHandleFor(
+                                                  context)),
+                                      SliverPadding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal:
+                                              Nums.horizontalPaddingWidth,
+                                          vertical: 16,
                                         ),
-                                      );
-                                    },
-                                    onMovePressed: () {
-                                      context
-                                          .read<MoveCubit>()
-                                          .copyStorageModel(() {
-                                        _houseCubit.addItem(itemModel,
-                                            showSuccessSnackbar: false);
-                                      }, () {
-                                        _houseCubit.deleteItem(itemModel,
-                                            showSuccessSnackbar: false);
-                                      }, state.houseModel, itemModel);
-                                    },
-                                    onNavigateBack: () {
-                                      context
-                                          .read<MoveCubit>()
-                                          .setParentStorageModel(
-                                              state.houseModel);
-                                    },
+                                        sliver: _listOfWidgetsInGridView(state
+                                            .houseModel.itemList
+                                            .map((itemModel) {
+                                          return ItemCardWidget(
+                                            itemModel: itemModel,
+                                            onDeletePressed: () {
+                                              _houseCubit.deleteItem(itemModel);
+                                            },
+                                            onEditPressed: () {
+                                              Navigator.pushNamed(
+                                                context,
+                                                AddItemPage.routeName,
+                                                arguments: AddItemPageArguments(
+                                                  onItemPressed:
+                                                      (itemModel) async {
+                                                    _houseCubit
+                                                        .updateItem(itemModel);
+                                                  },
+                                                  itemLocationModel:
+                                                      itemModel.locationModel,
+                                                  isEditing: true,
+                                                  itemModel: itemModel,
+                                                ),
+                                              );
+                                            },
+                                            onMovePressed: () {
+                                              context
+                                                  .read<MoveCubit>()
+                                                  .copyStorageModel(() {
+                                                _houseCubit.addItem(itemModel,
+                                                    showSuccessSnackbar: false);
+                                              }, () {
+                                                _houseCubit.deleteItem(
+                                                    itemModel,
+                                                    showSuccessSnackbar: false);
+                                              }, state.houseModel, itemModel);
+                                            },
+                                            onNavigateBack: () {
+                                              context
+                                                  .read<MoveCubit>()
+                                                  .setParentStorageModel(
+                                                      state.houseModel);
+                                            },
+                                          );
+                                        }).toList()),
+                                      ),
+                                    ],
                                   );
-                                }).toList())
+                                })
                               : Center(
                                   child: Text(
                                   'No Items present',

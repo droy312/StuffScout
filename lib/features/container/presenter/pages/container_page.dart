@@ -44,15 +44,10 @@ class _ContainerPageState extends State<ContainerPage>
   late final ContainerCubit _containerCubit;
 
   Widget _listOfWidgetsInGridView(List<Widget> list) {
-    return GridView.count(
+    return SliverGrid.count(
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      padding: const EdgeInsets.symmetric(
-        horizontal: Nums.horizontalPaddingWidth,
-        vertical: 16,
-      ),
       crossAxisCount: 2,
-      physics: const BouncingScrollPhysics(),
       children: list,
     );
   }
@@ -87,43 +82,48 @@ class _ContainerPageState extends State<ContainerPage>
               body: NestedScrollView(
                 headerSliverBuilder: (context, value) {
                   return [
-                    BackSearchSliverAppBar(
-                      context: context,
-                      onSearchPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          SearchPage.routeName,
-                          arguments: SearchPageArguments(
-                            title:
-                                'Search in ${widget.containerPageArguments.containerModel.name}',
-                            hintText: 'Search containers, items...',
-                            containerModel:
-                                widget.containerPageArguments.containerModel,
-                          ),
-                        );
-                      },
-                      title: widget.containerPageArguments.containerModel.name,
-                      description: widget
-                          .containerPageArguments.containerModel.description,
-                      backgroundImageUrl:
-                          widget.containerPageArguments.containerModel.imageUrl,
-                      bottom: PreferredSize(
-                        preferredSize: Size(
-                          MediaQuery.of(context).size.width,
-                          50,
-                        ),
-                        child: Container(
-                          color: Theme.of(context).colorScheme.background,
-                          child: TabBar(
-                            controller: _tabController,
-                            labelPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 12,
+                    SliverOverlapAbsorber(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context),
+                      sliver: BackSearchSliverAppBar(
+                        context: context,
+                        onSearchPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            SearchPage.routeName,
+                            arguments: SearchPageArguments(
+                              title:
+                                  'Search in ${widget.containerPageArguments.containerModel.name}',
+                              hintText: 'Search containers, items...',
+                              containerModel:
+                                  widget.containerPageArguments.containerModel,
                             ),
-                            tabs: const [
-                              Text('Containers'),
-                              Text('Items'),
-                            ],
+                          );
+                        },
+                        title:
+                            widget.containerPageArguments.containerModel.name,
+                        description: widget
+                            .containerPageArguments.containerModel.description,
+                        backgroundImageUrl: widget
+                            .containerPageArguments.containerModel.imageUrl,
+                        bottom: PreferredSize(
+                          preferredSize: Size(
+                            MediaQuery.of(context).size.width,
+                            50,
+                          ),
+                          child: Container(
+                            color: Theme.of(context).colorScheme.background,
+                            child: TabBar(
+                              controller: _tabController,
+                              labelPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 12,
+                              ),
+                              tabs: const [
+                                Text('Containers'),
+                                Text('Items'),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -135,53 +135,76 @@ class _ContainerPageState extends State<ContainerPage>
                   children: !state.isLoading
                       ? [
                           state.containerModel.containerList.isNotEmpty
-                              ? _listOfWidgetsInGridView(state
-                                  .containerModel.containerList
-                                  .map((containerModel) {
-                                  return ContainerCardWidget(
-                                    containerModel: containerModel,
-                                    onDeletePressed: () {
-                                      _containerCubit
-                                          .deleteContainer(containerModel);
-                                    },
-                                    onEditPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        AddContainerPage.routeName,
-                                        arguments: AddContainerPageArguments(
-                                          onContainerPressed:
-                                              (containerModel) async {
-                                            _containerCubit.updateContainer(
-                                                containerModel);
-                                          },
-                                          containerLocationModel:
-                                              containerModel.locationModel,
-                                          isEditing: true,
-                                          containerModel: containerModel,
+                              ? Builder(builder: (context) {
+                                  return CustomScrollView(
+                                    key: const PageStorageKey('containerList'),
+                                    slivers: [
+                                      SliverOverlapInjector(
+                                          handle: NestedScrollView
+                                              .sliverOverlapAbsorberHandleFor(
+                                                  context)),
+                                      SliverPadding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal:
+                                              Nums.horizontalPaddingWidth,
+                                          vertical: 16,
                                         ),
-                                      );
-                                    },
-                                    onMovePressed: () {
-                                      context
-                                          .read<MoveCubit>()
-                                          .copyStorageModel(() {
-                                        _containerCubit.addContainer(
-                                            containerModel,
-                                            showSuccessSnackbar: false);
-                                      }, () {
-                                        _containerCubit.deleteContainer(
-                                            containerModel,
-                                            showSuccessSnackbar: false);
-                                      }, state.containerModel, containerModel);
-                                    },
-                                    onNavigateBack: () {
-                                      context
-                                          .read<MoveCubit>()
-                                          .setParentStorageModel(
-                                              state.containerModel);
-                                    },
+                                        sliver: _listOfWidgetsInGridView(state
+                                            .containerModel.containerList
+                                            .map((containerModel) {
+                                          return ContainerCardWidget(
+                                            containerModel: containerModel,
+                                            onDeletePressed: () {
+                                              _containerCubit.deleteContainer(
+                                                  containerModel);
+                                            },
+                                            onEditPressed: () {
+                                              Navigator.pushNamed(
+                                                context,
+                                                AddContainerPage.routeName,
+                                                arguments:
+                                                    AddContainerPageArguments(
+                                                  onContainerPressed:
+                                                      (containerModel) async {
+                                                    _containerCubit
+                                                        .updateContainer(
+                                                            containerModel);
+                                                  },
+                                                  containerLocationModel:
+                                                      containerModel
+                                                          .locationModel,
+                                                  isEditing: true,
+                                                  containerModel:
+                                                      containerModel,
+                                                ),
+                                              );
+                                            },
+                                            onMovePressed: () {
+                                              context
+                                                  .read<MoveCubit>()
+                                                  .copyStorageModel(() {
+                                                _containerCubit.addContainer(
+                                                    containerModel,
+                                                    showSuccessSnackbar: false);
+                                              }, () {
+                                                _containerCubit.deleteContainer(
+                                                    containerModel,
+                                                    showSuccessSnackbar: false);
+                                              }, state.containerModel,
+                                                      containerModel);
+                                            },
+                                            onNavigateBack: () {
+                                              context
+                                                  .read<MoveCubit>()
+                                                  .setParentStorageModel(
+                                                      state.containerModel);
+                                            },
+                                          );
+                                        }).toList()),
+                                      ),
+                                    ],
                                   );
-                                }).toList())
+                                })
                               : Center(
                                   child: Text(
                                   'No Containers present',
@@ -194,49 +217,72 @@ class _ContainerPageState extends State<ContainerPage>
                                               .onBackground),
                                 )),
                           state.containerModel.itemList.isNotEmpty
-                              ? _listOfWidgetsInGridView(state
-                                  .containerModel.itemList
-                                  .map((itemModel) {
-                                  return ItemCardWidget(
-                                    itemModel: itemModel,
-                                    onDeletePressed: () {
-                                      _containerCubit.deleteItem(itemModel);
-                                    },
-                                    onEditPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        AddItemPage.routeName,
-                                        arguments: AddItemPageArguments(
-                                          onItemPressed: (itemModel) async {
-                                            _containerCubit
-                                                .updateItem(itemModel);
-                                          },
-                                          itemLocationModel:
-                                              itemModel.locationModel,
-                                          isEditing: true,
-                                          itemModel: itemModel,
+                              ? Builder(builder: (context) {
+                                  return CustomScrollView(
+                                    key: const PageStorageKey('itemList'),
+                                    slivers: [
+                                      SliverOverlapInjector(
+                                          handle: NestedScrollView
+                                              .sliverOverlapAbsorberHandleFor(
+                                                  context)),
+                                      SliverPadding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal:
+                                              Nums.horizontalPaddingWidth,
+                                          vertical: 16,
                                         ),
-                                      );
-                                    },
-                                    onMovePressed: () {
-                                      context
-                                          .read<MoveCubit>()
-                                          .copyStorageModel(() {
-                                        _containerCubit.addItem(itemModel,
-                                            showSuccessSnackbar: false);
-                                      }, () {
-                                        _containerCubit.deleteItem(itemModel,
-                                            showSuccessSnackbar: false);
-                                      }, state.containerModel, itemModel);
-                                    },
-                                    onNavigateBack: () {
-                                      context
-                                          .read<MoveCubit>()
-                                          .setParentStorageModel(
-                                              state.containerModel);
-                                    },
+                                        sliver: _listOfWidgetsInGridView(state
+                                            .containerModel.itemList
+                                            .map((itemModel) {
+                                          return ItemCardWidget(
+                                            itemModel: itemModel,
+                                            onDeletePressed: () {
+                                              _containerCubit
+                                                  .deleteItem(itemModel);
+                                            },
+                                            onEditPressed: () {
+                                              Navigator.pushNamed(
+                                                context,
+                                                AddItemPage.routeName,
+                                                arguments: AddItemPageArguments(
+                                                  onItemPressed:
+                                                      (itemModel) async {
+                                                    _containerCubit
+                                                        .updateItem(itemModel);
+                                                  },
+                                                  itemLocationModel:
+                                                      itemModel.locationModel,
+                                                  isEditing: true,
+                                                  itemModel: itemModel,
+                                                ),
+                                              );
+                                            },
+                                            onMovePressed: () {
+                                              context
+                                                  .read<MoveCubit>()
+                                                  .copyStorageModel(() {
+                                                _containerCubit.addItem(
+                                                    itemModel,
+                                                    showSuccessSnackbar: false);
+                                              }, () {
+                                                _containerCubit.deleteItem(
+                                                    itemModel,
+                                                    showSuccessSnackbar: false);
+                                              }, state.containerModel,
+                                                      itemModel);
+                                            },
+                                            onNavigateBack: () {
+                                              context
+                                                  .read<MoveCubit>()
+                                                  .setParentStorageModel(
+                                                      state.containerModel);
+                                            },
+                                          );
+                                        }).toList()),
+                                      ),
+                                    ],
                                   );
-                                }).toList())
+                                })
                               : Center(
                                   child: Text(
                                   'No Items present',
