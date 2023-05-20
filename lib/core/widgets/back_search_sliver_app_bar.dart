@@ -50,7 +50,7 @@ class BackSearchSliverAppBar extends SliverAppBar {
                   if (backgroundImageFilePath != null) ...[
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: 200,
+                      height: 220,
                       child: Image.file(
                         File(backgroundImageFilePath),
                         fit: BoxFit.cover,
@@ -115,7 +115,7 @@ class BackSearchSliverAppBar extends SliverAppBar {
                         'Description',
                         style: TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context).colorScheme.primary),
+                            color: Theme.of(context).colorScheme.onPrimary),
                       ),
                     ),
                   ),
