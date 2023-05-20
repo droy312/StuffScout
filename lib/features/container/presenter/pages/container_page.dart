@@ -8,7 +8,7 @@ import '../../../../core/nums.dart';
 import '../../../../core/pages/add_container_page.dart';
 import '../../../../core/widgets/add_container_item_alert_dialog.dart';
 import '../../../../core/widgets/add_floating_action_button.dart';
-import '../../../../core/widgets/back_search_edit_app_bar.dart';
+import '../../../../core/widgets/back_search_sliver_app_bar.dart';
 import '../../../../core/widgets/container_card_widget.dart';
 import '../../../../core/widgets/item_card_widget.dart';
 import '../../../../core/widgets/move_here_bottom_sheet.dart';
